@@ -1,0 +1,2478 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Art Prompt Creator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { box-sizing: border-box; }
+    html, body, #app-wrapper { height: 100%; }
+    * { font-family: 'Quicksand', sans-serif; }
+    h1, h2, h3, .btn-main, .chip-btn { font-family: 'Poppins', sans-serif; }
+    .pastel-bg { background: linear-gradient(135deg, #ffeef6 0%, #fff5f0 50%, #f0f9ff 100%); position: relative; overflow: hidden; }
+    .btn-main { background: linear-gradient(135deg, #ff88cc, #ff66bb); border: 2px solid #ff55aa; color: white; font-weight: 800; padding: 16px 32px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(255, 102, 187, 0.4); }
+    .btn-main:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 102, 187, 0.6); }
+    .btn-secondary { background: linear-gradient(135deg, #a78bfa, #c084fc); border: 2px solid #a78bfa; color: white; font-weight: 700; padding: 12px 24px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; font-size: 13px; box-shadow: 0 4px 12px rgba(167, 139, 250, 0.3); }
+    .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(167, 139, 250, 0.4); }
+    .btn-secondary.active { background: linear-gradient(135deg, #ff88cc, #ff66bb); border-color: #ff55aa; }
+    .btn-clear { background: linear-gradient(135deg, #ff9999, #ff7777); border: 2px solid #ff8888; color: white; font-weight: 700; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; font-size: 12px; box-shadow: 0 4px 12px rgba(255, 136, 136, 0.3); }
+    .btn-clear:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255, 136, 136, 0.4); }
+    .chip-btn { background: #ffd4e5; color: #8b6b7d; border: 2px solid #ffc0d9; padding: 10px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; font-weight: 600; font-size: 13px; box-shadow: 0 3px 12px rgba(255, 192, 217, 0.2); white-space: nowrap; }
+    .chip-btn:hover { transform: scale(1.08); background: #fff5fb; }
+    .chip-btn.active { background: #ff99cc; color: white; transform: scale(1.12); box-shadow: 0 6px 20px rgba(255, 102, 187, 0.3); }
+    .category-btn { background: #e6ccff; color: #7d6b88; border: none; padding: 14px 20px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; font-weight: 700; font-size: 14px; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; }
+    .category-btn:hover { transform: translateY(-4px); }
+    .category-btn.active { color: white; transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); }
+    .category-notebook { background: #ffc9e3; border: 2px solid #ffb3d9; }
+    .category-notebook.active { background: linear-gradient(135deg, #ffb3d9, #ffa0d2); box-shadow: 0 12px 30px rgba(255, 179, 217, 0.4); }
+    .category-coloring { background: #c9e9ff; border: 2px solid #99d9ff; }
+    .category-coloring.active { background: linear-gradient(135deg, #99d9ff, #7acfff); box-shadow: 0 12px 30px rgba(122, 207, 255, 0.4); }
+    .category-tshirt { background: #ffdcc9; border: 2px solid #ffccb3; }
+    .category-tshirt.active { background: linear-gradient(135deg, #ffccb3, #ffb399); box-shadow: 0 12px 30px rgba(255, 179, 153, 0.4); }
+    .category-3d { background: #dcc9ff; border: 2px solid #ccb3ff; }
+    .category-3d.active { background: linear-gradient(135deg, #ccb3ff, #bb99ff); box-shadow: 0 12px 30px rgba(187, 153, 255, 0.4); }
+    .language-btn { background: #e6ccff; color: #7d6b88; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; font-weight: 700; flex: 1; }
+    .language-btn:hover { transform: translateY(-2px); }
+    .language-btn.active { background: #ff99cc; color: white; transform: translateY(-3px); }
+    .card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); }
+    .section-title { color: #d888cc; font-size: 15px; font-weight: 700; margin-bottom: 12px; font-family: 'Poppins', sans-serif; }
+    .prompt-output { background: rgba(255, 224, 242, 0.5); border: 2px solid #ffc0e0; border-radius: 12px; padding: 16px; margin-top: 16px; }
+    .copy-btn { background: #ff99cc; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 12px; transition: all 0.2s ease; }
+    .copy-btn:hover { transform: translateY(-2px); }
+    .input-field { background: white; border: 2px solid #e0e0e0; padding: 12px 16px; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; width: 100%; }
+    .input-field:focus { outline: none; border-color: #ff88cc; box-shadow: 0 0 12px rgba(255, 136, 204, 0.2); }
+    .buttons-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    #style-container, #character-container, #body-type-container, #hair-style-container, #hair-color-container, #pose-container, #background-container, #accessories-container, #camera-angle-container, #color-palette-container { display: flex; flex-wrap: wrap; gap: 8px; position: relative; }
+    .accessories-placeholder { color: #d888cc; font-size: 13px; font-weight: 600; padding: 12px; background: rgba(255, 192, 217, 0.3); border-radius: 8px; border: 1px solid #ffc0e0; }
+    @media (max-width: 640px) { .buttons-row { flex-direction: column; } .btn-main, .btn-secondary, .btn-clear { width: 100%; } }
+    .hidden { display: none !important; }
+    .word-count { font-size: 12px; color: #d888cc; font-weight: 700; margin-top: 8px; }
+    .word-count.warning { color: #ff6b35; }
+    .prompt-text { color: #333; font-size: 14px; line-height: 1.6; word-break: break-word; }
+    .text-label { color: #d888cc; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .custom-input-row { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+    .custom-input-row input { flex: 1; }
+    .custom-input-row button { white-space: nowrap; }
+    .custom-accessories-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid #ffc0e0; }
+    .custom-accessories-section .section-title { font-size: 13px; margin-bottom: 8px; }
+    #sunglasses-dropdown-container { position: relative; margin-top: 12px; }
+    .sunglasses-toggle-btn { background: #ffd4e5; color: #8b6b7d; border: 2px solid #ffc0d9; padding: 10px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; font-weight: 600; font-size: 13px; box-shadow: 0 3px 12px rgba(255, 192, 217, 0.2); display: flex; justify-content: space-between; align-items: center; width: auto; }
+    .sunglasses-toggle-btn:hover { transform: scale(1.08); background: #fff5fb; }
+    .sunglasses-toggle-btn.active { background: #ff99cc; color: white; transform: scale(1.12); box-shadow: 0 6px 20px rgba(255, 102, 187, 0.3); }
+    .sunglasses-menu { position: absolute; top: 100%; left: 0; margin-top: 8px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(200, 200, 230, 0.4); border-radius: 12px; padding: 8px; box-shadow: 0 8px 32px rgba(200, 180, 220, 0.25); z-index: 1000; max-height: 400px; overflow-y: auto; min-width: 280px; animation: slideDown 0.3s ease-out; }
+    .sunglasses-menu.hidden { display: none !important; }
+    .sunglasses-option { padding: 12px 14px; margin: 4px 0; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 240, 245, 0.6); border: 1px solid rgba(255, 200, 220, 0.3); }
+    .sunglasses-option:hover { background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%); border: 1px solid rgba(255, 179, 217, 0.5); transform: translateX(4px); }
+    .sunglasses-option-title { font-size: 13px; font-weight: 600; color: #2D3748; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+    .sunglasses-option-description { font-size: 11px; color: #718096; line-height: 1.4; }
+    .sunglasses-checkmark { display: inline-block; color: #81C784; font-weight: bold; margin-left: 8px; animation: checkmarkPop 0.3s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes checkmarkPop { 0% { transform: scale(0); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+    .section { margin-bottom: 24px; padding: 16px; background: rgba(255, 192, 217, 0.1); border-radius: 12px; border: 2px solid #ffc0d9; }
+    .section h3 { color: #d888cc; font-weight: 700; font-size: 15px; margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; }
+    .section-description { color: #999; font-size: 12px; margin: 0 0 12px 0; }
+    .subsection-title { font-size: 16px; font-weight: 600; color: #4A5568; margin-bottom: 8px; margin-top: 20px; }
+    .subsection-description { font-size: 13px; color: #718096; margin-bottom: 15px; font-style: italic; }
+    .complete-looks-section { margin-bottom: 30px; }
+    .cards-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
+    .outfit-card { background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 250, 252, 0.9) 100%); border: 2px solid rgba(255, 192, 203, 0.3); border-radius: 16px; padding: 20px 15px; cursor: pointer; transition: all 0.3s ease; text-align: center; position: relative; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(255, 192, 203, 0.15); }
+    .outfit-card:hover { transform: translateY(-5px); border-color: rgba(255, 182, 193, 0.5); box-shadow: 0 8px 20px rgba(255, 192, 203, 0.25); background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 245, 250, 1) 100%); }
+    .outfit-card.selected { border-color: rgba(255, 105, 180, 0.7); background: linear-gradient(135deg, rgba(255, 182, 193, 0.8) 0%, rgba(255, 192, 203, 0.9) 100%); box-shadow: 0 6px 16px rgba(255, 105, 180, 0.3); }
+    .outfit-card-emoji { font-size: 40px; display: block; margin-bottom: 12px; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); }
+    .outfit-card-title { font-size: 15px; font-weight: 700; color: #2D3748; margin-bottom: 8px; line-height: 1.3; }
+    .outfit-card.selected .outfit-card-title { color: white; }
+    .outfit-card-description { font-size: 11px; color: #718096; line-height: 1.5; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255, 192, 203, 0.3); }
+    .outfit-card.selected .outfit-card-description { color: rgba(255, 255, 255, 0.9); border-top-color: rgba(255, 255, 255, 0.3); }
+    .outfit-card-checkmark { position: absolute; top: 10px; right: 10px; background: #81C784; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; opacity: 0; transform: scale(0); transition: all 0.3s ease; }
+    .outfit-card.selected .outfit-card-checkmark { opacity: 1; transform: scale(1); }
+    .build-your-own-section { margin-bottom: 20px; }
+    .buttons-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+    .option-button { background: rgba(255, 255, 255, 0.7); border: 2px solid rgba(255, 192, 203, 0.4); border-radius: 20px; padding: 10px 20px; font-size: 14px; color: #4A5568; cursor: pointer; transition: all 0.3s ease; font-weight: 500; backdrop-filter: blur(5px); }
+    .option-button:hover { background: rgba(255, 240, 245, 0.9); border-color: rgba(255, 182, 193, 0.6); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 192, 203, 0.2); }
+    .option-button.selected { background: linear-gradient(135deg, rgba(255, 182, 193, 0.8) 0%, rgba(255, 192, 203, 0.9) 100%); border-color: rgba(255, 105, 180, 0.7); color: white; font-weight: 600; box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3); }
+    #shoes-section { opacity: 0; transition: opacity 0.3s ease; }
+    #shoes-section.visible { display: block !important; opacity: 1; }
+    .custom-input-container { margin-top: 10px; padding: 10px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; border: 1px solid rgba(255, 192, 203, 0.3); animation: slideDown 0.3s ease-out; }
+    .custom-input-container.hidden { display: none; }
+    .custom-text-input { width: 100%; padding: 10px 14px; border: 2px solid rgba(255, 192, 203, 0.4); border-radius: 8px; font-size: 14px; background: white; transition: border-color 0.3s ease; font-family: inherit; }
+    .custom-text-input:focus { outline: none; border-color: rgba(255, 105, 180, 0.6); box-shadow: 0 0 0 3px rgba(255, 192, 203, 0.1); }
+    .custom-text-input::placeholder { color: #999; font-style: italic; }
+  </style>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="w-full h-full pastel-bg overflow-auto">
+   <div class="w-full min-h-full p-4 md:p-8">
+    <div class="max-w-3xl mx-auto">
+     <div class="text-center mb-8">
+      <h1 id="main-title" class="text-5xl md:text-5xl font-black mb-2" style="background: linear-gradient(135deg, #ff99cc, #ffccdd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">✨ AI Art Prompt Creator ✨</h1>
+      <p id="subtitle" class="text-gray-600 text-base font-600">Clean & Optimized Prompts</p>
+     </div>
+     <div class="card p-6 md:p-8">
+      <div class="mb-8">
+       <div class="section-title">Language / Idioma</div>
+       <div class="flex gap-3">
+        <button onclick="setLanguage('en')" id="lang-en" class="language-btn active flex-1">🇬🇧 ENGLISH</button>
+        <button onclick="setLanguage('es')" id="lang-es" class="language-btn flex-1">🇪🇸 ESPAÑOL</button>
+       </div>
+      </div>
+      <div class="mb-8">
+       <div class="section-title">Product Type</div>
+       <div id="category-container" class="flex flex-col gap-3"></div>
+      </div>
+      <div class="mb-8">
+       <div class="section-title">Visual Style</div>
+       <div id="style-container"></div>
+      </div>
+      <div id="character-section" class="mb-8">
+       <div class="section-title">Character / Personaje</div>
+       <div id="character-container"></div>
+      </div>
+      <div id="gender-section" class="mb-8 hidden">
+       <div class="section-title" id="gender-section-title">Choose Gender / Elige Género</div>
+       <div class="flex gap-3">
+        <button onclick="setNeutralGender('female')" id="gender-female" class="btn-secondary flex-1">👩 Femenino</button>
+        <button onclick="setNeutralGender('male')" id="gender-male" class="btn-secondary flex-1">👨 Masculino</button>
+       </div>
+      </div>
+      <div id="physical-traits-section" class="mb-8">
+       <div class="section-title">Physical Traits</div>
+       <div id="physical-traits-container"></div>
+      </div>
+      <div class="section">
+       <h3>Body Type / Outfit / Tipo de Cuerpo y Vestimenta</h3>
+       <div class="complete-looks-section">
+        <h4 class="subsection-title">Complete Looks (outfit + shoes included) / Looks Completos (outfit + zapatos incluidos)</h4>
+        <p class="subsection-description">Select a pre-styled complete look / Selecciona un look completo pre-estilizado</p>
+        <div id="complete-looks-container" class="cards-container"></div>
+       </div>
+       <div class="build-your-own-section">
+        <h4 class="subsection-title">Or Build Your Own Look / O Crea Tu Propio Look</h4>
+        <p class="subsection-description">Select outfit only (choose shoes separately) / Selecciona solo el outfit (elige zapatos por separado)</p>
+        <div id="build-your-own-container" class="buttons-container"></div>
+       </div>
+      </div>
+      <div class="section" id="shoes-section" style="display: none;">
+       <h3>Shoes / Zapatos</h3>
+       <p class="section-description">Available only when building your own look / Disponible solo al crear tu propio look</p>
+       <div id="shoes-container" class="buttons-container"></div>
+       <div id="custom-shoes-container" class="custom-input-container hidden">
+        <input type="text" id="custom-shoes-input" class="custom-text-input" placeholder="Describe your custom shoes (e.g., white platform sneakers with pink laces) / Describe tus zapatos personalizados" onchange="updateCustomShoes(this.value)">
+       </div>
+      </div>
+      <div id="hair-style-section" class="mb-8">
+       <div class="section-title">Hair Style</div>
+       <div id="hair-style-container"></div><button class="option-button" onclick="selectHairStyle('Custom Hair Style')">✏️ Custom Hair Style</button>
+       <div id="custom-hair-style-container" class="custom-input-container hidden">
+        <input type="text" id="custom-hair-style-input" class="custom-text-input" placeholder="Describe your custom hair style (e.g., shoulder-length straight with bangs)" onchange="updateCustomHairStyle(this.value)">
+       </div>
+      </div>
+      <div id="hair-color-section" class="mb-8 hidden">
+       <div class="section-title">Hair Color</div>
+       <div id="hair-color-container"></div><button class="option-button" onclick="selectHairColor('Custom Hair Color')">✏️ Custom Hair Color</button>
+       <div id="custom-hair-color-container" class="custom-input-container hidden">
+        <input type="text" id="custom-hair-color-input" class="custom-text-input" placeholder="Describe your custom hair color (e.g., pastel pink with blue highlights)" onchange="updateCustomHairColor(this.value)">
+       </div>
+      </div>
+      <div id="pose-section" class="mb-8">
+       <div class="section-title">Pose & Expression / Pose y Expresión</div>
+       <div id="pose-container"></div><button class="option-button" onclick="selectPose('Custom Pose')">✏️ Custom Pose</button>
+       <div id="custom-pose-container" class="custom-input-container hidden">
+        <input type="text" id="custom-pose-input" class="custom-text-input" placeholder="Describe your custom pose (e.g., jumping with excitement, pointing at camera)" onchange="updateCustomPose(this.value)">
+       </div>
+      </div>
+      <div id="background-section" class="mb-8">
+       <div class="section-title">Background / Fondo</div>
+       <div id="background-container"></div><button class="option-button" onclick="selectBackground('Custom Background')">✏️ Custom Background</button>
+       <div id="custom-background-container" class="custom-input-container hidden">
+        <input type="text" id="custom-background-input" class="custom-text-input" placeholder="Describe your custom background (e.g., cherry blossom park, neon city street)" onchange="updateCustomBackground(this.value)">
+       </div>
+      </div>
+      <div class="section">
+       <h3>Camera Angle (Optional) / Ángulo de Cámara (Opcional)</h3>
+       <p class="section-description">Leave unselected for normal view. Choose an angle for dramatic effect. Click again to deselect. / Dejar sin seleccionar para vista normal. Elige un ángulo para efecto dramático. Click de nuevo para deseleccionar.</p>
+       <div id="camera-angle-container" class="buttons-container"></div>
+       <div id="custom-camera-angle-container" class="custom-input-container hidden">
+        <input type="text" id="custom-camera-angle-input" class="custom-text-input" placeholder="Describe your custom camera angle (e.g., dutch angle, tilted perspective) / Describe tu ángulo personalizado" onchange="updateCustomCameraAngle(this.value)">
+       </div>
+      </div>
+      <div class="section" id="color-palette-section">
+       <h3>Color Palette (Optional) / Paleta de Colores (Opcional)</h3>
+       <p class="section-description">Random palette is suggested by default. Choose a specific palette or leave as Random. / Paleta aleatoria sugerida por defecto. Elige una paleta específica o deja Random.</p>
+       <div id="color-palette-container" class="buttons-container"></div>
+       <div id="custom-color-palette-container" class="custom-input-container hidden">
+        <input type="text" id="custom-color-palette-input" class="custom-text-input" placeholder="Describe your custom palette (e.g., cotton candy pink, rose quartz, icy blue, lavender) / Describe tu paleta personalizada" onchange="updateCustomColorPalette(this.value)">
+       </div>
+      </div>
+      <div id="accessories-section" class="mb-8">
+       <div class="section-title">Accessories / Accesorios</div>
+       <div id="accessories-placeholder" class="accessories-placeholder">
+        Primero selecciona Género (Hombre o Mujer) para ver los accesorios recomendados.
+       </div>
+       <div id="accessories-container"></div>
+       <div id="sunglasses-dropdown-container" style="display: none;">
+        <button id="sunglasses-toggle-btn" class="sunglasses-toggle-btn"><span id="sunglasses-btn-text">🕶️ Sunglasses</span> <span id="sunglasses-arrow" style="margin-left: 8px;">▼</span></button>
+        <div id="sunglasses-menu" class="sunglasses-menu hidden"></div>
+       </div>
+       <div id="custom-accessories-container" class="custom-accessories-section hidden">
+        <div class="section-title">Custom Accessories / Accesorios Personalizados</div>
+        <div class="custom-input-row">
+         <input type="text" id="custom-accessory-input" class="input-field" placeholder="Add custom accessory...">
+         <button onclick="addCustomAccessory()" class="btn-secondary">+ Add</button>
+        </div>
+        <div id="custom-accessories-buttons"></div>
+       </div>
+      </div>
+      <div class="section">
+       <h3>Custom Action / Scene (Optional) / Acción Personalizada (Opcional)</h3>
+       <p class="section-description">Add a specific action or scene / Agrega una acción o escena específica</p><input type="text" id="custom-action-input" class="custom-text-input" placeholder="Example: drinking coffee, walking a dog, taking a selfie, holding a book...">
+      </div>
+      <div class="buttons-row mb-8">
+       <button onclick="generatePrompt()" class="btn-main flex-1" id="generate-btn">GENERATE PROMPT</button>
+       <button onclick="randomize()" class="btn-secondary flex-1" id="surprise-btn">RANDOMIZE</button>
+       <button onclick="clearAll()" class="btn-clear flex-1" id="clear-btn">CLEAR</button>
+      </div>
+      <div id="prompt-output" class="hidden mb-8">
+       <div class="mb-6">
+        <h3 style="color: #d888cc; font-weight: 800; font-size: 16px; margin-bottom: 12px;">🇬🇧 ENGLISH PROMPT</h3>
+        <div class="prompt-output">
+         <div class="flex justify-between items-center mb-3">
+          <span class="text-label">ENGLISH VERSION</span>
+          <button onclick="copyPromptEnglish()" class="copy-btn">COPY</button>
+         </div>
+         <p id="prompt-text-en" class="prompt-text"></p>
+         <div class="word-count" id="word-count-en"></div>
+        </div>
+       </div>
+       <div>
+        <h3 style="color: #d888cc; font-weight: 800; font-size: 16px; margin-bottom: 12px;">🇪🇸 SPANISH PROMPT</h3>
+        <div class="prompt-output">
+         <div class="flex justify-between items-center mb-3">
+          <span class="text-label">VERSIÓN EN ESPAÑOL</span>
+          <button onclick="copyPromptSpanish()" class="copy-btn">COPY</button>
+         </div>
+         <p id="prompt-text-es" class="prompt-text"></p>
+         <div class="word-count" id="word-count-es"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="card p-6 md:p-8 mt-8">
+      <h2 style="color: #d888cc; font-weight: 800; font-size: 20px; margin-bottom: 16px;">💡 TIPS FOR BETTER PROMPTS</h2>
+      <div class="space-y-3">
+       <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">✨ <strong>Be Specific:</strong> More details = better results. Choose style, character type, and accessories.</p>
+       </div>
+       <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">🎨 <strong>Style Matters:</strong> Different styles work best for different products. Notebook = minimalist, Coloring = line art, T-Shirt = bold graphics, 3D = renders.</p>
+       </div>
+       <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">👗 <strong>Accessories Add Personality:</strong> Choose gender first (for neutral characters) to see accessory options. Mix and match for unique looks!</p>
+       </div>
+       <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">🎲 <strong>Use Randomize:</strong> Stuck? Click RANDOMIZE for inspiration and unexpected combinations.</p>
+       </div>
+       <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">📋 <strong>Word Limit:</strong> Keep prompts under 120 words for best AI generation results.</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <script>
+    // ============ COLORING FUNCTIONS ============
+    function isColoringStyle() {
+      const coloringStyles = ['Mandala', 'Zentangle', 'Floral', 'Fantasy', 'Kawaii Cute'];
+      return selectedCategory === 'coloring' && coloringStyles.includes(selectedStyle);
+    }
+
+    function getColoringStylePrompt(character, pose, wearingParts) {
+      const style = getStyleEN();
+      const coloringBase = 'clean bold black outlines only, pure white background, no color no shading no gradients no textures no gray tones, high contrast bold black lines, vector line art style, high quality 8k illustration, perfect for printing and coloring';
+
+      const coloringPrompts = {
+        'Mandala': `${character} surrounded by intricate mandala patterns, geometric circular designs with detailed ornamental elements, presented as a mandala coloring page, ${coloringBase}, trending on ArtStation, professional masterpiece`,
+        'Zentangle': `${character} adorned with zentangle patterns, intricate abstract decorative linework with detailed geometric and organic shapes, presented as a zentangle coloring page, ${coloringBase}, trending on ArtStation, professional masterpiece`,
+        'Floral': `${character} adorned with floral elements, flowers leaves and botanical details, presented as a simple line art coloring page, ${coloringBase}, trending on ArtStation, cinematic lighting and dynamic composition, professional masterpiece`,
+        'Fantasy': `${character} in a magical fantasy scene with detailed fantasy elements, stars, magical ornaments and mystical decorations, pure black and white line art only, clean crisp black ink outlines, ${coloringBase}, trending on ArtStation, professional masterpiece`,
+        'Kawaii Cute': `Kawaii ${character} coloring page illustration, big round sparkly eyes, adorable sweet expression, kawaii decorative style, ${pose ? pose + ', ' : ''}${wearingParts && wearingParts.length > 0 ? 'wearing ' + wearingParts.join(', ') + ', ' : ''}${coloringBase}, ready to color`
+      };
+      
+      for (const [key, prompt] of Object.entries(coloringPrompts)) {
+        if (style && style.toLowerCase().includes(key.toLowerCase())) {
+          return prompt;
+        }
+      }
+      
+      return `${character} presented as a coloring page illustration, ${coloringBase}`;
+    }
+    // ============================================
+
+    let currentLanguage = 'en';
+    let selectedCategory = 'notebook';
+    let selectedStyle = '';
+    let selectedCharacter = '';
+    let selectedNeutralGender = null;
+    let selectedPhysicalTrait = '';
+    let customOutfitItems = [];
+    let customAccessoryItems = [];
+    let selectedHairStyle = '';
+    let selectedHairColor = '';
+    let selectedPose = '';
+    let selectedBackground = '';
+    let selectedAccessories = [];
+    let selectedSunglasses = null;
+    let selectedCameraAngle = null;
+    let selectedColorPalette = null;
+
+    let customHairStyleValue = '';
+    let customHairColorValue = '';
+    let customOutfitValue = '';
+    let customShoesValue = '';
+    let customPoseValue = '';
+    let customBackgroundValue = '';
+    let customCameraAngleValue = '';
+    let customColorPaletteValue = '';
+
+    const categories = [
+      { en: 'Notebook', es: 'Cuaderno', id: 'notebook' },
+      { en: 'Coloring', es: 'Coloreado', id: 'coloring' },
+      { en: 'T-Shirt', es: 'Camiseta', id: 'tshirt' },
+      { en: '3D', es: '3D', id: '3d' }
+    ];
+
+    const styles = {
+      notebook: [
+        { en: 'Minimalist', es: 'Minimalista' },
+        { en: 'Watercolor', es: 'Acuarela' },
+        { en: 'Geometric', es: 'Geométrico' },
+        { en: 'Kawaii', es: 'Kawaii' }
+      ],
+      coloring: [
+        { en: 'Mandala', es: 'Mandala' },
+        { en: 'Zentangle', es: 'Zentangle' },
+        { en: 'Floral', es: 'Floral' },
+        { en: 'Fantasy', es: 'Fantasía' },
+        { en: 'Kawaii Cute', es: 'Kawaii Cute' }
+      ],
+      tshirt: [
+        { en: 'Retro', es: 'Retro' },
+        { en: 'Pop Art', es: 'Pop Art' },
+        { en: 'Grunge', es: 'Grunge' },
+        { en: 'Typography', es: 'Tipografía' }
+      ],
+      '3d': [
+        { en: 'Glossy 3D Chibi', es: 'Chibi 3D Brillante' },
+        { en: 'Bold 3D Chibi', es: 'Chibi 3D Audaz' },
+        { en: 'Hyper Realistic 3D Doll', es: 'Muñeca 3D Hiperrealista' },
+        { en: '3D Octane Render', es: 'Render Octane 3D' },
+        { en: '3D Cinematic Lighting', es: 'Iluminación Cinemática 3D' },
+        { en: '3D Vinyl Toy Figure', es: 'Figura Juguete Vinilo 3D' },
+        { en: '3D Low Poly Cute', es: 'Low Poly Lindo 3D' },
+        { en: '3D Holographic Shiny', es: 'Holográfico Brillante 3D' },
+        { en: '3D Metallic Chrome', es: 'Metálico Chrome 3D' },
+        { en: '3D Claymation Soft', es: 'Claymation Suave 3D' },
+        { en: '3D Matte Painting', es: 'Pintura Mate 3D' },
+        { en: '3D Airbrushed Glossy', es: 'Aerógrafo Brillante 3D' },
+        { en: '3D High Detail Sculpture', es: 'Escultura Alto Detalle 3D' }
+      ]
+    };
+
+    const characters = [
+      { en: 'Girl', es: 'Chica', gender: 'female' },
+      { en: 'Boy', es: 'Chico', gender: 'male' },
+      { en: 'Woman', es: 'Mujer', gender: 'female' },
+      { en: 'Man', es: 'Hombre', gender: 'male' },
+      { en: 'Fairy', es: 'Hada', gender: 'female' },
+      { en: 'Witch', es: 'Bruja', gender: 'female' },
+      { en: 'Mermaid', es: 'Sirena', gender: 'female' },
+      { en: 'Elf', es: 'Elfa', gender: 'female' },
+      { en: 'Princess', es: 'Princesa', gender: 'female' },
+      { en: 'Angel', es: 'Ángel', gender: 'female' },
+      { en: 'Unicorn', es: 'Unicornio', gender: 'neutral' },
+      { en: 'Cat', es: 'Gato', gender: 'neutral' },
+      { en: 'Dog', es: 'Perro', gender: 'neutral' },
+      { en: 'Bunny', es: 'Conejito', gender: 'neutral' },
+      { en: 'Panda', es: 'Panda', gender: 'neutral' },
+      { en: 'Fox', es: 'Zorro', gender: 'neutral' },
+      { en: 'Dragon', es: 'Dragón', gender: 'neutral' },
+      { en: 'Phoenix', es: 'Fénix', gender: 'neutral' },
+      { en: 'Wolf', es: 'Lobo', gender: 'neutral' },
+      { en: 'Tiger', es: 'Tigre', gender: 'neutral' },
+      { en: 'Lion', es: 'León', gender: 'neutral' },
+      { en: 'Bear', es: 'Oso', gender: 'neutral' }
+    ];
+
+    const physicalTraits = {
+      female: [
+        { en: 'Latina - Caramel Skin', es: 'Latina - Piel Caramelo' },
+        { en: 'Asian', es: 'Asiática' },
+        { en: 'Blonde', es: 'Rubia' },
+        { en: 'Rusa - Fair Skin', es: 'Rusa - Piel Clara' }
+      ],
+      male: [
+        { en: 'Latino - Caramel Skin', es: 'Latino - Piel Caramelo' },
+        { en: 'Asian', es: 'Asiático' },
+        { en: 'Blonde', es: 'Rubio' },
+        { en: 'Ruso - Fair Skin', es: 'Ruso - Piel Clara' }
+      ],
+      neutral: [
+        { en: 'Caramel Skin', es: 'Piel Caramelo' },
+        { en: 'Asian', es: 'Asiático' },
+        { en: 'Blonde', es: 'Rubio' },
+        { en: 'Fair Skin', es: 'Piel Clara' }
+      ]
+    };
+
+    const hairStyles = {
+      female: [
+        { en: 'Long Straight Silky', es: 'Largo Liso Sedoso', desc: 'long straight silky hair' },
+        { en: 'Long Loose Waves', es: 'Ondas Sueltas Largas', desc: 'long loose voluminous waves' },
+        { en: 'Voluminous Curly Afro', es: 'Afro Rizado Voluminoso', desc: 'voluminous curly afro' },
+        { en: 'Long Box Braids', es: 'Trenzas Box Largas', desc: 'long box braids' },
+        { en: 'Space Buns', es: 'Space Buns', desc: 'double space buns' },
+        { en: 'Long Pigtails', es: 'Coletas Largas', desc: 'cute long pigtails' },
+        { en: 'High Ponytail', es: 'Coleta Alta', desc: 'sleek high ponytail' },
+        { en: 'Half-Up Half-Down', es: 'Mitad Arriba Mitad Abajo', desc: 'half-up half-down style' },
+        { en: 'Sleek Bob Cut', es: 'Bob Elegante', desc: 'chin-length sleek bob cut' }
+      ],
+      male: [
+        { en: 'Long Straight', es: 'Largo Liso', desc: 'long straight hair' },
+        { en: 'Long Waves', es: 'Ondas Largas', desc: 'long wavy hair' },
+        { en: 'Curly Afro', es: 'Afro Rizado', desc: 'curly afro style' },
+        { en: 'Box Braids', es: 'Trenzas Box', desc: 'box braids' },
+        { en: 'High Ponytail', es: 'Coleta Alta', desc: 'high ponytail' }
+      ]
+    };
+
+    const hairColors = [
+      { en: 'Black Glossy', es: 'Negro Brilloso' },
+      { en: 'Brown', es: 'Marrón' },
+      { en: 'Honey Blonde', es: 'Rubio Miel' },
+      { en: 'Red', es: 'Rojo' },
+      { en: 'Blonde', es: 'Rubio' },
+      { en: 'Cotton Candy Pink', es: 'Rosa Chicle' },
+      { en: 'Platinum Silver Blonde', es: 'Rubio Platinado Plata' },
+      { en: 'Sunset Ombre', es: 'Ombré Atardecer' },
+      { en: 'Rose Gold', es: 'Oro Rosa' },
+      { en: 'Electric Blue to Pink', es: 'Azul Eléctrico a Rosa' },
+      { en: 'Mint to Teal', es: 'Menta a Azul Verdoso' },
+      { en: 'Bubblegum Purple', es: 'Púrpura Chicle' },
+      { en: 'Iridescent Holo', es: 'Holográfico Iridiscente' },
+      { en: 'Peach to Coral', es: 'Melocotón a Coral' }
+    ];
+
+    const poses = [
+      { en: 'Sassy Standing', es: 'De Pie Descarada' },
+      { en: 'Happy Waving', es: 'Saludando Feliz' },
+      { en: 'Leaning Forward Playful', es: 'Inclinada Juguetona' },
+      { en: 'Peace Sign Head Tilt', es: 'Senal Paz Inclinada' },
+      { en: 'Blowing Kiss Heart Eyes', es: 'Soplando Beso Ojos Corazon' },
+      { en: 'Fierce Arms Crossed', es: 'Brazos Cruzados Feroz' },
+      { en: 'Hair Flip Surprised', es: 'Volteo Cabello Sorprendida' },
+      { en: 'Sitting Chin Rest', es: 'Sentada Barbilla' },
+      { en: 'Victory Pose Big Grin', es: 'Pose Victoria Sonrisa Grande' },
+      { en: 'Heart Hands Shy Blush', es: 'Manos Corazon Timida' },
+      { en: 'Blowing Kiss Classic', es: 'Soplando Beso Clasico' },
+      { en: 'Holding Accessory', es: 'Sosteniendo Accesorio' },
+      { en: 'Surprised Shocked', es: 'Sorprendida Impactada' },
+      { en: 'Leaning Cool', es: 'Inclinada Genial' },
+      { en: 'Duo Group Pose', es: 'Pose Duo Grupo' }
+    ];
+
+    const backgrounds = {
+      notebook: [
+        { en: 'Transparent PNG', es: 'PNG Transparente' },
+        { en: 'Solid White', es: 'Blanco Sólido' },
+        { en: 'Solid Black', es: 'Negro Sólido' },
+        { en: 'Pastel Gradient', es: 'Gradiente Pastel' },
+        { en: 'Sparkly Glitter', es: 'Brillo Brillante' },
+        { en: 'Floating Shadow', es: 'Sombra Flotante' },
+        { en: 'Pink Hearts', es: 'Corazones Rosa' },
+        { en: 'Cream Solid', es: 'Crema Sólida' }
+      ],
+      coloring: [
+        { en: 'Transparent PNG', es: 'PNG Transparente' },
+        { en: 'Solid White', es: 'Blanco Sólido' },
+        { en: 'Solid Black', es: 'Negro Sólido' },
+        { en: 'Pastel Gradient', es: 'Gradiente Pastel' },
+        { en: 'Sparkly Glitter', es: 'Brillo Brillante' }
+      ],
+      tshirt: [
+        { en: 'Transparent PNG', es: 'PNG Transparente' },
+        { en: 'Solid White', es: 'Blanco Sólido' },
+        { en: 'Solid Black', es: 'Negro Sólido' },
+        { en: 'Pastel Gradient', es: 'Gradiente Pastel' }
+      ],
+      '3d': [
+        { en: 'Transparent PNG', es: 'PNG Transparente' },
+        { en: 'Solid White', es: 'Blanco Sólido' },
+        { en: 'Solid Black', es: 'Negro Sólido' },
+        { en: 'Pastel Gradient', es: 'Gradiente Pastel' },
+        { en: 'Sparkly Glitter', es: 'Brillo Brillante' }
+      ]
+    };
+
+    const cameraAngles = [
+      { en: 'Front View', es: 'Vista Frontal', prompt: 'shot from front view, facing camera directly' },
+      { en: 'Side Profile', es: 'Perfil Lateral', prompt: 'side profile view, facing sideways' },
+      { en: 'Three-Quarter View', es: 'Vista Tres Cuartos', prompt: 'three-quarter view angle, slight side angle' },
+      { en: 'Close-Up Portrait', es: 'Retrato Cercano', prompt: 'close-up portrait shot, focus on face and upper body' },
+      { en: 'Full Body Shot', es: 'Cuerpo Completo', prompt: 'full body shot, entire character visible' },
+      { en: 'Low Angle', es: 'Ángulo Bajo', prompt: 'low angle shot, camera slightly below eye level looking up' },
+      { en: 'Worms Eye View', es: 'Vista de Gusano', prompt: 'EXTREME LOW ANGLE, camera on ground, character standing ABOVE camera, looking down at viewer, feet CLOSE and LARGE, head far and smaller, dramatic perspective from below, heroic pose' },
+      { en: 'High Angle', es: 'Ángulo Alto', prompt: 'high angle shot, camera above looking down at character, elevated perspective' },
+      { en: 'Birds Eye View', es: 'Vista de Pajaro', prompt: 'bird eye view, extreme overhead shot from directly above, top-down perspective, character looking up' },
+      { en: 'Over the Shoulder', es: 'Sobre el Hombro', prompt: 'over the shoulder shot, camera behind character' }
+    ];
+
+    const colorPalettes = [
+      { en: 'Random (Suggested)', es: 'Aleatorio (Sugerido)', prompt: 'vibrant colorful palette with harmonious balanced tones', isDefault: true },
+      { en: 'Pastel Colors', es: 'Colores Pastel', prompt: 'soft pastel color palette: cotton candy pink, baby blue, mint green, lavender, peach, cream' },
+      { en: 'Vibrant Colors', es: 'Colores Vibrantes', prompt: 'vibrant bold color palette: electric blue, hot pink, sunshine yellow, lime green, orange red' },
+      { en: 'Neon Colors', es: 'Colores Neón', prompt: 'neon glow color palette: neon pink, electric blue, acid green, cyber yellow, hot magenta' },
+      { en: 'Jewel Tones', es: 'Tonos Joya', prompt: 'rich jewel tone palette: emerald green, sapphire blue, ruby red, amethyst purple, gold' },
+      { en: 'Earth Tones', es: 'Tonos Tierra', prompt: 'warm earth tone palette: terracotta, sage green, sandy beige, warm brown, dusty rose' }
+    ];
+
+    const accessoriesList = [
+      { en: 'Regular Glasses', es: 'Gafas Regulares', desc: 'wearing regular glasses, eyeglasses' },
+      { en: 'Crown', es: 'Corona', desc: 'wearing ornate jeweled crown, golden tiara' },
+      { en: 'Necklace', es: 'Collar', desc: 'wearing elegant gold chain necklace' },
+      { en: 'Hat', es: 'Sombrero', desc: 'wearing stylish hat' },
+      { en: 'Earrings', es: 'Pendientes', desc: 'wearing large statement hoop earrings, gold' },
+      { en: 'Bracelets', es: 'Pulseras', desc: 'wearing layered gold bracelets, bangles' },
+      { en: 'Hair Bow', es: 'Lazo', desc: 'wearing oversized silk hair bow' },
+      { en: 'Hair Clips', es: 'Clips Cabello', desc: 'wearing decorative pearl hair clips' },
+      { en: 'Butterfly Clips', es: 'Clips Mariposa', desc: 'wearing colorful butterfly hair clips' },
+      { en: 'Flower Crown', es: 'Corona de Flores', desc: 'wearing delicate flower crown' },
+      { en: 'Gold Cuffs', es: 'Puños Oro', desc: 'wearing chunky gold arm cuffs' },
+      { en: 'Diamond Studs', es: 'Diamantes', desc: 'wearing sparkling diamond stud earrings' },
+      { en: 'Pearl Choker', es: 'Collar Perlas', desc: 'wearing elegant pearl choker necklace' },
+      { en: 'Designer Bag', es: 'Bolso Diseñador', desc: 'carrying luxury designer handbag' },
+      { en: 'Lip Gloss', es: 'Brillo Labios', desc: 'wearing glossy sparkling lip gloss' },
+      { en: 'Star Hair Pins', es: 'Clips Estrellas', desc: 'wearing decorative gold star hair pins' },
+      { en: 'Halo Ring', es: 'Anillo Halo', desc: 'wearing ornate halo engagement ring' },
+      { en: 'Choker Ribbon', es: 'Choker Cinta', desc: 'wearing delicate velvet ribbon choker' },
+      { en: 'Nail Charms', es: 'Encantos Uñas', desc: 'wearing nail art with rhinestone charms' },
+      { en: 'Oversized Bow Belt', es: 'Cinturon Lazo', desc: 'wearing oversized silk bow belt' },
+      { en: 'Septum Ring', es: 'Piercing Tabique', desc: 'wearing gold septum ring piercing' },
+      { en: 'Body Chain', es: 'Cadena Corporal', desc: 'wearing delicate gold body chain' },
+      { en: 'Ring Set', es: 'Juego de Anillos', desc: 'wearing multiple gold rings on fingers' },
+      { en: 'Chain Belt', es: 'Cinturon Cadena', desc: 'wearing gold chain belt' },
+      { en: 'Mini Designer Bag', es: 'Bolso Mini', desc: 'carrying luxury mini designer bag' }
+    ];
+
+    const sunglassesVariations = [
+      { id: 1, name: "Chunky Oversized Aviator", description: "marco negro grueso bold, lentes gradient orange/pink" },
+      { id: 2, name: "Cat-Eye Oversized", description: "forma felina elevada, marco metálico dorado, lentes tint rosa" },
+      { id: 3, name: "Shield Futurista", description: "lentes grandes continuas sin puente, vibe sci-fi blanco mate" },
+      { id: 4, name: "Square Bold", description: "marcos geométricos angulares negro mate, lentes gradient purple" },
+      { id: 5, name: "Butterfly Rounded", description: "forma mariposa suave, marco transparente, lentes ice blue" },
+      { id: 6, name: "Rimless Minimalist", description: "sin marco, lentes grandes gradient pink/lavanda" },
+      { id: 7, name: "Vintage Cat-Eye Modern", description: "retro con twist chunky, marco blanco puro, lentes tint melocotón" },
+      { id: 8, name: "Transparent Clear Frame", description: "marco acrílico invisible, lentes tintadas rosa pastel" }
+    ];
+
+    const completeOutfitsFemale = [
+      { emoji: '👗', title: { en: 'Fashionable', es: 'A la Moda' }, desc: { en: 'trendy fashionable youthful outfit: stylish modern clothes, cute top with coverage, high-waisted jeans, fashionable sneakers, fully clothed', es: 'outfit juvenil de moda: ropa moderna elegante, top lindo con cobertura, jeans de tiro alto, tenis fashion, completamente vestida' } },
+      { emoji: '💼', title: { en: 'Boss Baddie', es: 'Jefa Poderosa' }, desc: { en: 'fierce fabulous boss outfit: tailored blazer, blouse, high-waisted pants, classy heels, gold accessories, fully clothed', es: 'outfit de jefa fabulosa: blazer entallado, blusa, pantalón de tiro alto, tacones elegantes, accesorios dorados, completamente vestida' } },
+      { emoji: '🎉', title: { en: 'Party Ready', es: 'Lista para Fiesta' }, desc: { en: 'fun festive party outfit: sparkly top or dress with coverage, cute skirt, party heels, playful glamorous vibe, fully clothed', es: 'outfit festivo de fiesta: top o vestido brillante con cobertura, falda linda, tacones de fiesta, vibe glamoroso divertido, completamente vestida' } },
+      { emoji: '✨', title: { en: 'Glam Diva', es: 'Diva Glamorosa' }, desc: { en: 'luxe dramatic diva outfit: elegant glamorous dress with full coverage, dramatic sleeves, statement jewelry, bold luxurious look, fully clothed', es: 'outfit de diva lujoso: vestido glamoroso elegante con cobertura completa, mangas dramáticas, joyería llamativa, look lujoso audaz, completamente vestida' } },
+      { emoji: '🛹', title: { en: 'Street Style', es: 'Estilo Urbano' }, desc: { en: 'urban casual street style outfit: trendy hoodie or jacket, cargo pants, sneakers, layered accessories, cool street vibe, fully clothed', es: 'outfit estilo urbano casual: hoodie o chaqueta trendy, pantalones cargo, tenis, accesorios en capas, vibe urbano cool, completamente vestida' } },
+      { emoji: '🧸', title: { en: 'Cozy Queen', es: 'Reina Acogedora' }, desc: { en: 'cozy queen outfit: soft hoodie or sweater, comfy joggers or leggings, cute accessories, relaxed adorable look, fully clothed', es: 'outfit de reina acogedora: hoodie o suéter suave, joggers o leggings cómodos, accesorios lindos, look relajado adorable, completamente vestida' } },
+      { emoji: '🖤', title: { en: 'Edgy Art', es: 'Arte Rebelde' }, desc: { en: 'dark cool edgy outfit: black leather jacket, graphic tee, ripped jeans, boots, dark accessories, edgy artistic vibe, fully clothed', es: 'outfit rebelde oscuro: chaqueta de cuero negra, camiseta gráfica, jeans rotos, botas, accesorios oscuros, vibe artístico rebelde, completamente vestida' } },
+      { emoji: '👶', title: { en: 'Sweet Baby', es: 'Bebé Dulce' }, desc: { en: 'adorable tiny sweet outfit: cute dress or romper with full coverage, bows, pastel colors, innocent cute look, fully clothed', es: 'outfit dulce adorable: vestido o enterito lindo con cobertura completa, moños, colores pastel, look inocente tierno, completamente vestida' } },
+      { emoji: '🎀', title: { en: 'Kawaii Cute', es: 'Kawaii Tierno' }, desc: { en: 'sweet pastel kawaii outfit: cute top with ruffles, high-waisted skirt, bows, pastel colors, adorable sweet look, fully clothed', es: 'outfit kawaii pastel dulce: top lindo con volantes, falda de tiro alto, moños, colores pastel, look adorable dulce, completamente vestida' } },
+      { emoji: '⚡', title: { en: 'Sporty Star', es: 'Estrella Deportiva' }, desc: { en: 'athletic active gym outfit: sports top with coverage, leggings, sneakers, energetic sporty look, fully clothed', es: 'outfit deportivo activo: top deportivo con cobertura, leggings, tenis, look deportivo energético, completamente vestida' } },
+      { emoji: '🌈', title: { en: 'Y2K Vibes', es: 'Vibra Y2K' }, desc: { en: 'retro bold Y2K outfit: shiny top or jacket, low-rise pants with coverage, platform shoes, bold accessories, nostalgic trendy look, fully clothed', es: 'outfit Y2K retro audaz: top o chaqueta brillante, pantalones de tiro bajo con cobertura, zapatos de plataforma, accesorios audaces, look nostálgico trendy, completamente vestida' } },
+      { emoji: '🦸', title: { en: 'Super Hero', es: 'Súper Heroína' }, desc: { en: 'powerful brave super hero outfit: cape, bodysuit with full coverage, boots, emblem, heroic strong look, fully clothed', es: 'outfit de súper heroína valiente: capa, traje de cuerpo con cobertura completa, botas, emblema, look heroico fuerte, completamente vestida' } }
+    ];
+
+    const completeOutfitsMale = [
+      { emoji: '💼', title: { en: 'Boss Gentleman', es: 'Caballero Jefe' }, desc: { en: 'tailored suit, dress shirt, tie, oxford shoes, watch, professional elegant look, fully clothed', es: 'traje entallado, camisa formal, corbata, zapatos oxford, reloj, look profesional elegante, completamente vestido' } },
+      { emoji: '🛹', title: { en: 'Street King', es: 'Rey Urbano' }, desc: { en: 'oversized hoodie, cargo pants, high-top sneakers, chain, urban cool vibe, fully clothed', es: 'hoodie oversized, pantalones cargo, tenis botín, cadena, vibe urbano cool, completamente vestido' } },
+      { emoji: '⚡', title: { en: 'Athletic Pro', es: 'Atleta Pro' }, desc: { en: 'sports jersey, athletic shorts, performance sneakers, sweatband, sporty energetic look, fully clothed', es: 'jersey deportivo, shorts atléticos, tenis de rendimiento, banda para sudor, look deportivo energético, completamente vestido' } },
+      { emoji: '🎮', title: { en: 'Gamer Vibes', es: 'Vibra Gamer' }, desc: { en: 'graphic gaming tee, joggers, comfortable sneakers, headset, casual cool look, fully clothed', es: 'camiseta gráfica de gaming, joggers, tenis cómodos, audífonos, look casual cool, completamente vestido' } },
+      { emoji: '🖤', title: { en: 'Edgy Rebel', es: 'Rebelde Audaz' }, desc: { en: 'leather jacket, ripped jeans, combat boots, chains, rebellious edgy vibe, fully clothed', es: 'chaqueta de cuero, jeans rotos, botas militares, cadenas, vibe rebelde audaz, completamente vestido' } },
+      { emoji: '🧸', title: { en: 'Cozy King', es: 'Rey Acogedor' }, desc: { en: 'oversized hoodie, sweatpants, slides, beanie, relaxed comfortable look, fully clothed', es: 'hoodie oversized, pants deportivo, sandalias slide, gorro, look relajado cómodo, completamente vestido' } },
+      { emoji: '🎤', title: { en: 'Hip Hop Star', es: 'Estrella Hip Hop' }, desc: { en: 'designer hoodie, baggy jeans, fresh sneakers, gold chains, cap, hip hop swagger, fully clothed', es: 'hoodie de marca, jeans baggy, tenis frescos, cadenas doradas, gorra, estilo hip hop, completamente vestido' } },
+      { emoji: '🏀', title: { en: 'Basketball Ready', es: 'Listo para Básquet' }, desc: { en: 'basketball jersey, shorts, high-top sneakers, wristbands, athletic sporty look, fully clothed', es: 'jersey de básquetbol, shorts, tenis botín, muñequeras, look atlético deportivo, completamente vestido' } },
+      { emoji: '⚽', title: { en: 'Soccer Pro', es: 'Futbolista Pro' }, desc: { en: 'soccer jersey, athletic pants, cleats, shin guards, athletic soccer look, fully clothed', es: 'jersey de fútbol, pantalones atléticos, tacos, espinilleras, look atlético de fútbol, completamente vestido' } },
+      { emoji: '🎸', title: { en: 'Rockstar', es: 'Rockero' }, desc: { en: 'band tee, leather pants, boots, studded accessories, rockstar rebel look, fully clothed', es: 'camiseta de banda, pantalones de cuero, botas, accesorios con tachuelas, look rockero rebelde, completamente vestido' } },
+      { emoji: '🌴', title: { en: 'Summer Chill', es: 'Verano Relajado' }, desc: { en: 'tank top, board shorts, flip flops, sunglasses, relaxed summer vibe, fully clothed', es: 'camiseta sin mangas, shorts de playa, chancletas, lentes de sol, vibe veraniego relajado, completamente vestido' } },
+      { emoji: '🦸', title: { en: 'Super Hero', es: 'Súper Héroe' }, desc: { en: 'cape, fitted bodysuit, boots, emblem, mask, heroic powerful look, fully clothed', es: 'capa, traje de cuerpo ajustado, botas, emblema, máscara, look heroico poderoso, completamente vestido' } }
+    ];
+
+    const buildYourOwnFemale = [
+      { en: 'hoodie and sweatpants', es: 'hoodie y pants deportivo' },
+      { en: 'designer top with denim jeans', es: 'top de marca con jeans' },
+      { en: 'oversized cozy sweater with leggings', es: 'suéter oversized con leggings' },
+      { en: 'leather jacket with ripped jeans', es: 'chaqueta de cuero con jeans rotos' },
+      { en: 'satin pajama set', es: 'conjunto de pijama de satén' },
+      { en: 'bomber jacket with joggers', es: 'chaqueta bomber con joggers' },
+      { en: 'tank top with baggy jeans', es: 'camiseta sin mangas con jeans baggy' },
+      { en: 'cute onesie', es: 'enterito lindo' },
+      { en: 'colorful romper', es: 'romper colorido' },
+      { en: 'overalls', es: 'overol' },
+      { en: 'princess dress', es: 'vestido de princesa' },
+      { en: 'denim jacket with shorts', es: 'chaqueta de mezclilla con shorts' },
+      { en: 'striped shirt with leggings', es: 'camisa a rayas con leggings' },
+      { en: 'dungarees', es: 'peto' },
+      { en: 'sequined cocktail dress', es: 'vestido de cóctel con lentejuelas' },
+      { en: 'velvet bodycon dress', es: 'vestido bodycon de terciopelo' },
+      { en: 'silk slip dress', es: 'vestido slip de seda' },
+      { en: 'distressed boyfriend jeans with graphic tee', es: 'jeans boyfriend desgastados con camiseta gráfica' },
+      { en: 'linen button-up with chino shorts', es: 'camisa de lino con shorts chinos' },
+      { en: 'crop top with high-waisted jeans', es: 'crop top con jeans de tiro alto' },
+      { en: 'bodysuit with palazzo pants', es: 'bodysuit con pantalones palazzo' }
+    ];
+
+    const buildYourOwnMale = [
+      { en: 'hoodie and joggers', es: 'hoodie y joggers' },
+      { en: 'suit and tie', es: 'traje y corbata' },
+      { en: 'leather jacket with jeans', es: 'chaqueta de cuero con jeans' },
+      { en: 'bomber jacket with cargo pants', es: 'chaqueta bomber con pantalones cargo' },
+      { en: 'athletic jersey with shorts', es: 'jersey atlético con shorts' },
+      { en: 'graphic tee with baggy jeans', es: 'camiseta gráfica con jeans baggy' },
+      { en: 'oversized hoodie with sweatpants', es: 'hoodie oversized con pants deportivo' },
+      { en: 'tank top with basketball shorts', es: 'camiseta sin mangas con shorts de básquet' },
+      { en: 'denim jacket with black jeans', es: 'chaqueta de mezclilla con jeans negros' },
+      { en: 'tracksuit (matching set)', es: 'conjunto deportivo' },
+      { en: 'tuxedo', es: 'esmoquin' },
+      { en: 'flannel shirt with jeans', es: 'camisa de franela con jeans' },
+      { en: 'varsity jacket with jeans', es: 'chaqueta varsity con jeans' },
+      { en: 'band tee with ripped jeans', es: 'camiseta de banda con jeans rotos' },
+      { en: 'plain white tee with joggers', es: 'camiseta blanca básica con joggers' },
+      { en: 'casual blazer with jeans', es: 'blazer casual con jeans' },
+      { en: 'camouflage cargo outfit', es: 'outfit cargo camuflado' },
+      { en: 'tech wear outfit', es: 'outfit tech wear' },
+      { en: 'baseball uniform', es: 'uniforme de béisbol' },
+      { en: 'skater style (hoodie + loose jeans)', es: 'estilo skater (hoodie + jeans sueltos)' },
+      { en: 'biker style (leather vest + jeans)', es: 'estilo motociclista (chaleco de cuero + jeans)' }
+    ];
+
+    const shoesFemale = [
+      { emoji: '👟', name: { en: 'Sneakers', es: 'Tenis' } },
+      { emoji: '🩴', name: { en: 'Fuzzy Slippers', es: 'Pantuflas Peludas' } },
+      { emoji: '👟', name: { en: 'Air Max Sneakers', es: 'Tenis Air Max' } },
+      { emoji: '👟', name: { en: 'Jordan Sneakers', es: 'Tenis Jordan' } },
+      { emoji: '👠', name: { en: 'Dressy Shoes', es: 'Zapatos Elegantes' } },
+      { emoji: '👢', name: { en: 'Thigh High Boots', es: 'Botas Altas' } },
+      { emoji: '👡', name: { en: 'Strap Sandals', es: 'Sandalias con Tiras' } },
+      { emoji: '👡', name: { en: 'Open Toe Sandals', es: 'Sandalias Abiertas' } },
+      { emoji: '👞', name: { en: 'Mary Jane Shoes', es: 'Zapatos Mary Jane' } },
+      { emoji: '👢', name: { en: 'Ankle Boots', es: 'Botines' } },
+      { emoji: '👠', name: { en: 'Heels', es: 'Tacones' } }
+    ];
+
+    const shoesMale = [
+      { emoji: '👟', name: { en: 'Sneakers', es: 'Tenis' } },
+      { emoji: '👟', name: { en: 'Air Max Sneakers', es: 'Tenis Air Max' } },
+      { emoji: '👟', name: { en: 'Jordan Sneakers', es: 'Tenis Jordan' } },
+      { emoji: '👞', name: { en: 'Dress Shoes', es: 'Zapatos Formales' } },
+      { emoji: '👢', name: { en: 'Timberland Boots', es: 'Botas Timberland' } },
+      { emoji: '👢', name: { en: 'Combat Boots', es: 'Botas Militares' } },
+      { emoji: '🥿', name: { en: 'Slides', es: 'Sandalias Slide' } },
+      { emoji: '👟', name: { en: 'High-Top Sneakers', es: 'Tenis Botín' } },
+      { emoji: '👞', name: { en: 'Loafers', es: 'Mocasines' } },
+      { emoji: '👟', name: { en: 'Running Shoes', es: 'Tenis para Correr' } },
+      { emoji: '🩴', name: { en: 'Flip Flops', es: 'Chancletas' } }
+    ];
+
+    let selectedOutfitType = null;
+    let selectedCompleteOutfit = null;
+    let selectedBuildYourOwnOutfit = null;
+    let selectedShoes = null;
+
+    function renderOutfits() {
+      const gender = getGender();
+      const lang = currentLanguage;
+      const completeOutfits = gender === 'female' ? completeOutfitsFemale : completeOutfitsMale;
+      const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
+      
+      const completeContainer = document.getElementById('complete-looks-container');
+      if (completeContainer) {
+        completeContainer.innerHTML = completeOutfits.map((outfit, index) => {
+          const title = typeof outfit.title === 'object' ? outfit.title[lang] : outfit.title;
+          const desc = typeof outfit.desc === 'object' ? outfit.desc[lang] : outfit.desc;
+          
+          return `
+            <div class="outfit-card" onclick="selectCompleteOutfit(${index})">
+              <span class="outfit-card-checkmark">✓</span>
+              <span class="outfit-card-emoji">${outfit.emoji}</span>
+              <div class="outfit-card-title">${title}</div>
+              <div class="outfit-card-description">${desc.substring(0, 60)}...</div>
+            </div>
+          `;
+        }).join('');
+      }
+      
+      const buildContainer = document.getElementById('build-your-own-container');
+      if (buildContainer) {
+        buildContainer.innerHTML = buildYourOwn.map((outfit, index) => {
+          const text = typeof outfit === 'object' ? outfit[lang] : outfit;
+          const safeText = text.replace(/'/g, "\\'");
+          
+          return `<button class="option-button" onclick="selectBuildYourOwnOutfit('${safeText}')">${text}</button>`;
+        }).join('') + `
+          <button class="option-button" onclick="selectBuildYourOwnOutfit('Custom Outfit')">
+            ✏️ ${lang === 'en' ? 'Custom Outfit' : 'Outfit Personalizado'}
+          </button>
+        `;
+      }
+      
+      renderShoes();
+      renderCameraAngles();
+      renderColorPalettes();
+    }
+
+    function renderShoes() {
+      const gender = getGender();
+      const lang = currentLanguage;
+      const shoes = gender === 'female' ? shoesFemale : shoesMale;
+      
+      const shoesContainer = document.getElementById('shoes-container');
+      if (shoesContainer) {
+        shoesContainer.innerHTML = shoes.map(shoe => {
+          const name = typeof shoe.name === 'object' ? shoe.name[lang] : shoe.name;
+          return `<button class="option-button" onclick="selectShoes('${name}')">${shoe.emoji} ${name}</button>`;
+        }).join('') + `
+          <button class="option-button" onclick="selectShoes('Custom Shoes')">
+            ✏️ ${lang === 'en' ? 'Custom Shoes' : 'Zapatos Personalizados'}
+          </button>
+        `;
+      }
+    }
+
+    function renderCameraAngles() {
+      const lang = currentLanguage;
+      const container = document.getElementById('camera-angle-container');
+      
+      if (container) {
+        container.innerHTML = cameraAngles.map(angle => {
+          const text = angle[lang];
+          return `<button class="option-button" onclick="selectCameraAngle('${angle.en}')">${text}</button>`;
+        }).join('') + `
+          <button class="option-button" onclick="selectCameraAngle('Custom Camera Angle')">
+            ✏️ ${lang === 'en' ? 'Custom Angle' : 'Ángulo Personalizado'}
+          </button>
+        `;
+      }
+    }
+
+    function selectCameraAngle(angle) {
+      if (selectedCameraAngle === angle) {
+        selectedCameraAngle = null;
+        const customContainer = document.getElementById('custom-camera-angle-container');
+        if (customContainer) {
+          customContainer.classList.add('hidden');
+          customCameraAngleValue = '';
+        }
+        document.querySelectorAll('#camera-angle-container .option-button').forEach(btn => {
+          btn.classList.remove('selected');
+        });
+        return;
+      }
+      
+      selectedCameraAngle = angle;
+      const customContainer = document.getElementById('custom-camera-angle-container');
+      if (customContainer) {
+        if (angle === 'Custom Camera Angle' || angle === 'Custom Angle') {
+          customContainer.classList.remove('hidden');
+        } else {
+          customContainer.classList.add('hidden');
+          customCameraAngleValue = '';
+        }
+      }
+      
+      document.querySelectorAll('#camera-angle-container .option-button').forEach(btn => {
+        const btnText = btn.textContent.trim();
+        const matchingAngle = cameraAngles.find(a => a.en === angle || a.es === angle);
+        
+        if (matchingAngle) {
+          if (btnText.includes(matchingAngle.en) || btnText.includes(matchingAngle.es)) {
+            btn.classList.add('selected');
+          } else {
+            btn.classList.remove('selected');
+          }
+        } else if (btnText.includes(angle)) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
+
+    function updateCustomCameraAngle(value) {
+      customCameraAngleValue = cleanText(value);
+    }
+
+    function renderColorPalettes() {
+      const lang = currentLanguage;
+      const container = document.getElementById('color-palette-container');
+      
+      if (container) {
+        container.innerHTML = colorPalettes.map((palette, index) => {
+          const text = palette[lang];
+          const emoji = palette.isDefault ? ' ⭐' : '';
+          const selectedClass = palette.isDefault ? ' selected' : '';
+          return `<button class="option-button${selectedClass}" onclick="selectColorPalette(${index})">${text}${emoji}</button>`;
+        }).join('') + `
+          <button class="option-button" onclick="selectColorPalette('custom')">
+            ✏️ ${lang === 'en' ? 'Custom Palette' : 'Paleta Personalizada'}
+          </button>
+        `;
+      }
+    }
+
+    function selectColorPalette(paletteIndexOrCustom) {
+      if (paletteIndexOrCustom === 'custom') {
+        selectedColorPalette = 'custom';
+        const customContainer = document.getElementById('custom-color-palette-container');
+        if (customContainer) {
+          customContainer.classList.remove('hidden');
+        }
+      } else {
+        selectedColorPalette = colorPalettes[paletteIndexOrCustom];
+        const customContainer = document.getElementById('custom-color-palette-container');
+        if (customContainer) {
+          customContainer.classList.add('hidden');
+          customColorPaletteValue = '';
+        }
+      }
+      
+      document.querySelectorAll('#color-palette-container .option-button').forEach((btn, index) => {
+        if (paletteIndexOrCustom === 'custom' && btn.onclick && btn.onclick.toString().includes('custom')) {
+          btn.classList.add('selected');
+        } else if (typeof paletteIndexOrCustom === 'number' && index === paletteIndexOrCustom) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
+
+    function updateCustomColorPalette(value) {
+      customColorPaletteValue = cleanText(value);
+    }
+
+    function selectCompleteOutfit(index) {
+      selectedOutfitType = 'complete';
+      const gender = getGender();
+      const completeOutfits = gender === 'female' ? completeOutfitsFemale : completeOutfitsMale;
+      selectedCompleteOutfit = completeOutfits[index];
+      selectedBuildYourOwnOutfit = null;
+      selectedShoes = null;
+      
+      document.querySelectorAll('.outfit-card').forEach((card, i) => {
+        if (i === index) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+      
+      document.querySelectorAll('#build-your-own-container .option-button').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      
+      const shoesSection = document.getElementById('shoes-section');
+      if (shoesSection) {
+        shoesSection.classList.remove('visible');
+        shoesSection.style.display = 'none';
+      }
+    }
+
+    function selectBuildYourOwnOutfit(outfit) {
+      selectedOutfitType = 'build-your-own';
+      selectedBuildYourOwnOutfit = outfit;
+      selectedCompleteOutfit = null;
+      
+      document.querySelectorAll('.outfit-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      document.querySelectorAll('#build-your-own-container .option-button').forEach(btn => {
+        if (btn.textContent.includes(outfit) || btn.onclick.toString().includes(outfit)) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+      
+      const shoesSection = document.getElementById('shoes-section');
+      if (shoesSection) {
+        shoesSection.style.display = 'block';
+        setTimeout(() => shoesSection.classList.add('visible'), 10);
+      }
+    }
+
+    function selectShoes(shoes) {
+      selectedShoes = shoes;
+      
+      const customShoesContainer = document.getElementById('custom-shoes-container');
+      if (customShoesContainer) {
+        if (shoes === 'Custom Shoes' || shoes === 'Zapatos Personalizados') {
+          customShoesContainer.classList.remove('hidden');
+        } else {
+          customShoesContainer.classList.add('hidden');
+          customShoesValue = '';
+        }
+      }
+      
+      document.querySelectorAll('#shoes-container .option-button').forEach(btn => {
+        if (btn.textContent.includes(shoes)) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
+
+    function updateCustomShoes(value) {
+      customShoesValue = cleanText(value);
+    }
+
+    function selectHairStyle(style) {
+      selectedHairStyle = style;
+      
+      const container = document.getElementById('custom-hair-style-container');
+      if (container) {
+        if (style === 'Custom Hair Style') {
+          container.classList.remove('hidden');
+        } else {
+          container.classList.add('hidden');
+          customHairStyleValue = '';
+        }
+      }
+    }
+
+    function updateCustomHairStyle(value) {
+      customHairStyleValue = cleanText(value);
+    }
+
+    function selectHairColor(color) {
+      selectedHairColor = color;
+      
+      const container = document.getElementById('custom-hair-color-container');
+      if (container) {
+        if (color === 'Custom Hair Color') {
+          container.classList.remove('hidden');
+        } else {
+          container.classList.add('hidden');
+          customHairColorValue = '';
+        }
+      }
+    }
+
+    function updateCustomHairColor(value) {
+      customHairColorValue = cleanText(value);
+    }
+
+    function updateCustomOutfit(value) {
+      customOutfitValue = cleanText(value);
+    }
+
+    function selectPose(pose) {
+      selectedPose = pose;
+      
+      const container = document.getElementById('custom-pose-container');
+      if (container) {
+        if (pose === 'Custom Pose') {
+          container.classList.remove('hidden');
+        } else {
+          container.classList.add('hidden');
+          customPoseValue = '';
+        }
+      }
+    }
+
+    function updateCustomPose(value) {
+      customPoseValue = cleanText(value);
+    }
+
+    function selectBackground(bg) {
+      selectedBackground = bg;
+      
+      const container = document.getElementById('custom-background-container');
+      if (container) {
+        if (bg === 'Custom Background') {
+          container.classList.remove('hidden');
+        } else {
+          container.classList.add('hidden');
+          customBackgroundValue = '';
+        }
+      }
+    }
+
+    function updateCustomBackground(value) {
+      customBackgroundValue = cleanText(value);
+    }
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      document.getElementById('lang-en').classList.remove('active');
+      document.getElementById('lang-es').classList.remove('active');
+      document.getElementById(`lang-${lang}`).classList.add('active');
+      updateLabels();
+      renderAll();
+    }
+
+    function updateLabels() {
+      const labels = currentLanguage === 'en' ? {
+        surprise: 'RANDOMIZE',
+        clear: 'CLEAR',
+        generate: 'GENERATE PROMPT'
+      } : {
+        surprise: 'ALEATORIO',
+        clear: 'LIMPIAR',
+        generate: 'GENERAR PROMPT'
+      };
+
+      document.getElementById('surprise-btn').textContent = labels.surprise;
+      document.getElementById('clear-btn').textContent = labels.clear;
+      document.getElementById('generate-btn').textContent = labels.generate;
+    }
+
+    function addCustomAccessory() {
+      const input = document.getElementById('custom-accessory-input').value.trim();
+      if (input) {
+        customAccessoryItems.push(input);
+        document.getElementById('custom-accessory-input').value = '';
+        renderCustomAccessories();
+      }
+    }
+
+    function removeCustomAccessory(index) {
+      customAccessoryItems.splice(index, 1);
+      renderCustomAccessories();
+    }
+
+    function renderCustomAccessories() {
+      const container = document.getElementById('custom-accessories-buttons');
+      container.innerHTML = '';
+      customAccessoryItems.forEach((item, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'chip-btn active';
+        btn.style.display = 'flex';
+        btn.style.alignItems = 'center';
+        btn.style.gap = '6px';
+        btn.innerHTML = `${item} <span style="cursor: pointer; font-weight: bold;">×</span>`;
+        btn.onclick = (e) => {
+          e.preventDefault();
+          removeCustomAccessory(index);
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function setNeutralGender(gender) {
+      selectedNeutralGender = selectedNeutralGender === gender ? null : gender;
+      
+      document.getElementById('gender-female').classList.remove('active');
+      document.getElementById('gender-male').classList.remove('active');
+      
+      if (selectedNeutralGender === 'female') {
+        document.getElementById('gender-female').classList.add('active');
+      } else if (selectedNeutralGender === 'male') {
+        document.getElementById('gender-male').classList.add('active');
+      }
+      
+      selectedPhysicalTrait = '';
+      selectedHairStyle = '';
+      selectedHairColor = '';
+      selectedAccessories = [];
+      selectedSunglasses = null;
+      customAccessoryItems = [];
+      customHairStyleValue = '';
+      customHairColorValue = '';
+      customOutfitValue = '';
+      customShoesValue = '';
+      customPoseValue = '';
+      customBackgroundValue = '';
+      
+      renderPhysicalTraits();
+      renderHairStyles();
+      renderHairColors();
+      renderAccessories();
+      renderOutfits();
+    }
+
+    function renderAll() {
+      renderCategories();
+      renderStyles();
+      renderCharacters();
+      renderPhysicalTraits();
+      renderHairStyles();
+      renderHairColors();
+      renderPoses();
+      renderBackgrounds();
+      renderAccessories();
+      renderCustomAccessories();
+      renderOutfits();
+    }
+
+    function renderCategories() {
+      const container = document.getElementById('category-container');
+      container.innerHTML = '';
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = `category-btn category-${cat.id} ${selectedCategory === cat.id ? 'active' : ''}`;
+        const emojis = { notebook: '📓', coloring: '🖌', tshirt: '👕', '3d': '3️⃣' };
+        const label = currentLanguage === 'en' ? cat.en : cat.es;
+        btn.textContent = `${emojis[cat.id]} ${label}`;
+        btn.onclick = () => { 
+          selectedCategory = cat.id;
+          selectedStyle = '';
+          selectedBackground = '';
+          renderCategories();
+          renderStyles();
+          renderBackgrounds();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function renderStyles() {
+      const container = document.getElementById('style-container');
+      container.innerHTML = '';
+      const styleList = styles[selectedCategory] || [];
+      styleList.forEach(style => {
+        const btn = document.createElement('button');
+        const styleName = currentLanguage === 'en' ? style.en : style.es;
+        btn.className = `chip-btn ${selectedStyle === styleName ? 'active' : ''}`;
+        btn.textContent = styleName;
+        btn.onclick = () => { 
+          selectedStyle = selectedStyle === styleName ? '' : styleName; 
+          renderStyles(); 
+          hideColorPaletteIfColoring();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function hideColorPaletteIfColoring() {
+      const coloringStyles = ['Mandala', 'Zentangle', 'Floral', 'Fantasy', 'Kawaii Cute'];
+      const colorPaletteSection = document.getElementById('color-palette-section');
+      
+      if (selectedCategory === 'coloring' && coloringStyles.includes(selectedStyle)) {
+        colorPaletteSection.style.display = 'none';
+      } else {
+        colorPaletteSection.style.display = 'block';
+      }
+    }
+
+    function renderCharacters() {
+      const container = document.getElementById('character-container');
+      container.innerHTML = '';
+      characters.forEach(char => {
+        const btn = document.createElement('button');
+        const charName = currentLanguage === 'en' ? char.en : char.es;
+        btn.className = `chip-btn ${selectedCharacter === charName ? 'active' : ''}`;
+        btn.textContent = charName;
+        btn.onclick = () => { 
+          if (selectedCharacter === charName) {
+            selectedCharacter = '';
+            selectedNeutralGender = null;
+          } else {
+            selectedCharacter = charName; 
+            selectedNeutralGender = null;
+          }
+          
+          selectedPhysicalTrait = '';
+          selectedHairStyle = '';
+          selectedHairColor = '';
+          selectedAccessories = [];
+          selectedSunglasses = null;
+          customAccessoryItems = [];
+          customHairStyleValue = '';
+          customHairColorValue = '';
+          customOutfitValue = '';
+          customShoesValue = '';
+          customPoseValue = '';
+          customBackgroundValue = '';
+          
+          renderCharacters();
+          renderGenderSection();
+          renderPhysicalTraits();
+          renderHairStyles();
+          renderHairColors();
+          renderAccessories();
+          renderOutfits();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function renderGenderSection() {
+      const section = document.getElementById('gender-section');
+      const character = characters.find(c => {
+        const charName = currentLanguage === 'en' ? c.en : c.es;
+        return charName === selectedCharacter;
+      });
+
+      if (!character || character.gender !== 'neutral') {
+        section.classList.add('hidden');
+        selectedNeutralGender = null;
+        return;
+      }
+
+      section.classList.remove('hidden');
+      
+      const titleEl = document.getElementById('gender-section-title');
+      const charName = currentLanguage === 'en' ? character.en : character.es;
+      if (currentLanguage === 'en') {
+        titleEl.textContent = `Choose ${charName} Gender`;
+      } else {
+        titleEl.textContent = `Elige Género del ${charName}`;
+      }
+
+      document.getElementById('gender-female').classList.remove('active');
+      document.getElementById('gender-male').classList.remove('active');
+      
+      if (selectedNeutralGender === 'female') {
+        document.getElementById('gender-female').classList.add('active');
+      } else if (selectedNeutralGender === 'male') {
+        document.getElementById('gender-male').classList.add('active');
+      }
+    }
+
+    function renderPhysicalTraits() {
+      const container = document.getElementById('physical-traits-container');
+      const section = document.getElementById('physical-traits-section');
+      
+      if (!selectedCharacter) {
+        section.classList.add('hidden');
+        return;
+      }
+
+      section.classList.remove('hidden');
+      container.innerHTML = '';
+
+      const character = characters.find(c => {
+        const charName = currentLanguage === 'en' ? c.en : c.es;
+        return charName === selectedCharacter;
+      });
+      
+      if (!character) {
+        section.classList.add('hidden');
+        return;
+      }
+
+      let gender = character.gender || 'neutral';
+      
+      if (gender === 'neutral' && selectedNeutralGender) {
+        gender = selectedNeutralGender;
+      } else if (gender === 'neutral') {
+        section.classList.add('hidden');
+        return;
+      }
+
+      const traitsList = physicalTraits[gender] || [];
+      
+      traitsList.forEach(trait => {
+        const btn = document.createElement('button');
+        const traitName = currentLanguage === 'en' ? trait.en : trait.es;
+        btn.className = `chip-btn ${selectedPhysicalTrait === traitName ? 'active' : ''}`;
+        btn.textContent = traitName;
+        btn.onclick = () => { 
+          selectedPhysicalTrait = selectedPhysicalTrait === traitName ? '' : traitName; 
+          renderPhysicalTraits();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function renderHairStyles() {
+      const container = document.getElementById('hair-style-container');
+      const section = document.getElementById('hair-style-section');
+      const colorSection = document.getElementById('hair-color-section');
+      
+      if (!selectedCharacter) {
+        section.classList.add('hidden');
+        colorSection.classList.add('hidden');
+        return;
+      }
+
+      section.classList.remove('hidden');
+      container.innerHTML = '';
+
+      const character = characters.find(c => {
+        const charName = currentLanguage === 'en' ? c.en : c.es;
+        return charName === selectedCharacter;
+      });
+      
+      if (!character) {
+        section.classList.add('hidden');
+        colorSection.classList.add('hidden');
+        return;
+      }
+
+      let gender = character.gender || 'neutral';
+      
+      if (gender === 'neutral' && selectedNeutralGender) {
+        gender = selectedNeutralGender;
+      } else if (gender === 'neutral') {
+        section.classList.add('hidden');
+        colorSection.classList.add('hidden');
+        return;
+      }
+
+      let styleList = [];
+      if (gender === 'male') {
+        styleList = hairStyles['male'] || [];
+      } else if (gender === 'female') {
+        styleList = hairStyles['female'] || [];
+      } else {
+        styleList = hairStyles['female'] || [];
+      }
+      
+      styleList.forEach(style => {
+        const btn = document.createElement('button');
+        const styleName = currentLanguage === 'en' ? style.en : style.es;
+        btn.className = `chip-btn ${selectedHairStyle === styleName ? 'active' : ''}`;
+        btn.textContent = styleName;
+        btn.onclick = () => { 
+          selectedHairStyle = selectedHairStyle === styleName ? '' : styleName;
+          if (selectedHairStyle) {
+            colorSection.classList.remove('hidden');
+          } else {
+            colorSection.classList.add('hidden');
+            selectedHairColor = '';
+            renderHairColors();
+          }
+          renderHairStyles();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function renderHairColors() {
+      const container = document.getElementById('hair-color-container');
+      container.innerHTML = '';
+      
+      hairColors.forEach(color => {
+        const btn = document.createElement('button');
+        const colorName = currentLanguage === 'en' ? color.en : color.es;
+        btn.className = `chip-btn ${selectedHairColor === colorName ? 'active' : ''}`;
+        btn.textContent = colorName;
+        btn.onclick = () => { 
+          selectedHairColor = selectedHairColor === colorName ? '' : colorName; 
+          renderHairColors(); 
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function renderPoses() {
+      const container = document.getElementById('pose-container');
+      container.innerHTML = '';
+      poses.forEach(pose => {
+        const btn = document.createElement('button');
+        const poseName = currentLanguage === 'en' ? pose.en : pose.es;
+        btn.className = `chip-btn ${selectedPose === poseName ? 'active' : ''}`;
+        btn.textContent = poseName;
+        btn.onclick = () => { 
+          selectedPose = selectedPose === poseName ? '' : poseName; 
+          renderPoses(); 
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function renderBackgrounds() {
+      const container = document.getElementById('background-container');
+      container.innerHTML = '';
+      const bgList = backgrounds[selectedCategory] || [];
+      bgList.forEach(bg => {
+        const btn = document.createElement('button');
+        const bgName = currentLanguage === 'en' ? bg.en : bg.es;
+        btn.className = `chip-btn ${selectedBackground === bgName ? 'active' : ''}`;
+        btn.textContent = bgName;
+        btn.onclick = () => { 
+          selectedBackground = selectedBackground === bgName ? '' : bgName; 
+          renderBackgrounds(); 
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function renderAccessories() {
+      const container = document.getElementById('accessories-container');
+      const placeholder = document.getElementById('accessories-placeholder');
+      const customSection = document.getElementById('custom-accessories-container');
+      const sunglassesDropdown = document.getElementById('sunglasses-dropdown-container');
+      
+      const character = characters.find(c => {
+        const charName = currentLanguage === 'en' ? c.en : c.es;
+        return charName === selectedCharacter;
+      });
+
+      if (!character) {
+        placeholder.style.display = 'block';
+        container.innerHTML = '';
+        sunglassesDropdown.style.display = 'none';
+        customSection.classList.add('hidden');
+        return;
+      }
+
+      let gender = character.gender || 'neutral';
+      if (gender === 'neutral' && !selectedNeutralGender) {
+        placeholder.style.display = 'block';
+        container.innerHTML = '';
+        sunglassesDropdown.style.display = 'none';
+        customSection.classList.add('hidden');
+        return;
+      }
+
+      if (gender === 'neutral' && selectedNeutralGender) {
+        gender = selectedNeutralGender;
+      }
+
+      placeholder.style.display = 'none';
+      sunglassesDropdown.style.display = 'block';
+      customSection.classList.remove('hidden');
+      container.innerHTML = '';
+      
+      accessoriesList.forEach(acc => {
+        const btn = document.createElement('button');
+        const accName = currentLanguage === 'en' ? acc.en : acc.es;
+        
+        const isSelected = selectedAccessories.includes(accName);
+        
+        btn.className = `chip-btn ${isSelected ? 'active' : ''}`;
+        btn.textContent = accName;
+        btn.onclick = () => { 
+          if (isSelected) {
+            selectedAccessories = selectedAccessories.filter(a => a !== accName);
+          } else {
+            selectedAccessories.push(accName);
+          }
+          renderAccessories();
+        };
+        container.appendChild(btn);
+      });
+      
+      initSunglassesDropdown();
+    }
+
+    function initSunglassesDropdown() {
+      const toggleBtn = document.getElementById('sunglasses-toggle-btn');
+      const menu = document.getElementById('sunglasses-menu');
+      const arrow = document.getElementById('sunglasses-arrow');
+
+      if (!toggleBtn || !menu) return;
+
+      menu.innerHTML = sunglassesVariations.map(variation => `
+        <div class="sunglasses-option" data-id="${variation.id}">
+          <div class="sunglasses-option-title">
+            ${variation.name}
+            <span class="sunglasses-checkmark" style="display: ${selectedSunglasses?.id === variation.id ? 'inline' : 'none'}">✓</span>
+          </div>
+          <div class="sunglasses-option-description">
+            ${variation.description}
+          </div>
+        </div>
+      `).join('');
+
+      toggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+        toggleBtn.classList.toggle('active');
+        arrow.textContent = menu.classList.contains('hidden') ? '▼' : '▲';
+      };
+
+      menu.querySelectorAll('.sunglasses-option').forEach(option => {
+        option.onclick = (e) => {
+          e.stopPropagation();
+          const id = parseInt(option.dataset.id);
+          selectedSunglasses = sunglassesVariations.find(v => v.id === id);
+          
+          menu.querySelectorAll('.sunglasses-checkmark').forEach(checkmark => {
+            checkmark.style.display = 'none';
+          });
+          option.querySelector('.sunglasses-checkmark').style.display = 'inline';
+          
+          menu.classList.add('hidden');
+          toggleBtn.classList.remove('active');
+          arrow.textContent = '▼';
+        };
+      });
+
+      document.addEventListener('click', (e) => {
+        const container = document.getElementById('sunglasses-dropdown-container');
+        if (container && !container.contains(e.target)) {
+          menu.classList.add('hidden');
+          toggleBtn.classList.remove('active');
+          arrow.textContent = '▼';
+        }
+      });
+    }
+
+    function cleanText(text) {
+      return text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{27BF}]|[\u{2300}-\u{23FF}]|[\u{2000}-\u{206F}]|[\u{3000}-\u{303F}]/gu, '').replace(/^\s*[-–~~~~✓~~~]\s*/, '').trim();
+    }
+
+    function countWords(text) {
+      return text.trim().split(/\s+/).filter(w => w.length > 0).length;
+    }
+
+    function getStyleEN() {
+      const styleList = styles[selectedCategory] || [];
+      const styleObj = styleList.find(s => {
+        const currentName = currentLanguage === 'es' ? s.es : s.en;
+        return currentName === selectedStyle;
+      });
+      return styleObj ? styleObj.en : selectedStyle;
+    }
+
+    function getStyleES() {
+      const styleList = styles[selectedCategory] || [];
+      const styleObj = styleList.find(s => s.en === getStyleEN());
+      return styleObj ? styleObj.es : selectedStyle;
+    }
+
+    function generatePrompt() {
+      if (!selectedStyle || !selectedCharacter) {
+        return;
+      }
+
+      const promptEn = generatePromptEN();
+      const promptEs = generatePromptES();
+      displayPrompt(promptEn, promptEs);
+    }
+
+    function generatePromptEN() {
+      if (isColoringStyle()) {
+        const character = cleanText(selectedCharacter);
+        let subjectText = '';
+        if (character && character !== '') {
+          subjectText = character;
+        } else {
+          const gender = getGender();
+          subjectText = gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character';
+        }
+
+        let wearingParts = [];
+        const charGender = characters.find(c => {
+          const charName = currentLanguage === 'en' ? c.en : c.es;
+          return charName === selectedCharacter;
+        })?.gender;
+
+        if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
+          const descEN = typeof selectedCompleteOutfit.desc === 'object' ? selectedCompleteOutfit.desc.en : selectedCompleteOutfit.desc;
+          wearingParts.push(descEN);
+        } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfit) {
+          if (selectedBuildYourOwnOutfit === 'Custom Outfit' || selectedBuildYourOwnOutfit === 'Outfit Personalizado') {
+            if (customOutfitValue) {
+              wearingParts.push(customOutfitValue);
+            }
+          } else {
+            const gender = getGender();
+            const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
+            const outfitObj = buildYourOwn.find(o => 
+              (typeof o === 'object' && (o.en === selectedBuildYourOwnOutfit || o.es === selectedBuildYourOwnOutfit)) ||
+              o === selectedBuildYourOwnOutfit
+            );
+            const outfitEN = typeof outfitObj === 'object' ? outfitObj.en : outfitObj;
+            wearingParts.push(outfitEN);
+          }
+          
+          if (selectedShoes) {
+            if (selectedShoes === 'Custom Shoes' || selectedShoes === 'Zapatos Personalizados') {
+              if (customShoesValue) {
+                wearingParts.push(customShoesValue);
+              }
+            } else {
+              const gender = getGender();
+              const shoes = gender === 'female' ? shoesFemale : shoesMale;
+              const shoeObj = shoes.find(s => 
+                (typeof s.name === 'object' && (s.name.en === selectedShoes || s.name.es === selectedShoes)) ||
+                s.name === selectedShoes
+              );
+              const shoeEN = shoeObj && typeof shoeObj.name === 'object' ? shoeObj.name.en : selectedShoes;
+              wearingParts.push(shoeEN);
+            }
+          }
+        }
+
+        wearingParts = wearingParts.concat(customOutfitItems);
+
+        if (selectedAccessories.length > 0) {
+          const accessoryDescs = selectedAccessories.map(accName => {
+            const acc = accessoriesList.find(a => (currentLanguage === 'en' ? a.en : a.es) === accName);
+            return acc ? acc.desc : accName;
+          });
+          wearingParts.push(...accessoryDescs);
+        }
+
+        if (customAccessoryItems.length > 0) {
+          wearingParts.push(...customAccessoryItems);
+        }
+
+        let pose = cleanText(selectedPose);
+        if (selectedPose === 'Custom Pose' && customPoseValue) {
+          pose = customPoseValue;
+        }
+
+        const coloringPrompt = getColoringStylePrompt(
+          subjectText, 
+          pose, 
+          wearingParts
+        );
+        
+        return coloringPrompt;
+      }
+
+      // Non-coloring styles...
+      const styleEN = getStyleEN();
+      const character = cleanText(selectedCharacter);
+      const physTrait = cleanText(selectedPhysicalTrait);
+      let hairStyle = cleanText(selectedHairStyle);
+      let hairColor = cleanText(selectedHairColor);
+      let pose = cleanText(selectedPose);
+      let bg = cleanText(selectedBackground);
+      const gender = getGender();
+      
+      if (selectedHairStyle === 'Custom Hair Style' && customHairStyleValue) {
+        hairStyle = customHairStyleValue;
+      }
+      
+      if (selectedHairColor === 'Custom Hair Color' && customHairColorValue) {
+        hairColor = customHairColorValue;
+      }
+      
+      if (selectedPose === 'Custom Pose' && customPoseValue) {
+        pose = customPoseValue;
+      }
+      
+      if (selectedBackground === 'Custom Background' && customBackgroundValue) {
+        bg = customBackgroundValue;
+      }
+      
+      let wearingParts = [];
+      const charGender = characters.find(c => {
+        const charName = currentLanguage === 'en' ? c.en : c.es;
+        return charName === selectedCharacter;
+      })?.gender;
+
+      if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
+        const descEN = typeof selectedCompleteOutfit.desc === 'object' ? selectedCompleteOutfit.desc.en : selectedCompleteOutfit.desc;
+        wearingParts.push(descEN);
+      } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfit) {
+        if (selectedBuildYourOwnOutfit === 'Custom Outfit' || selectedBuildYourOwnOutfit === 'Outfit Personalizado') {
+          if (customOutfitValue) {
+            wearingParts.push(customOutfitValue);
+          }
+        } else {
+          const gender = getGender();
+          const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
+          const outfitObj = buildYourOwn.find(o => 
+            (typeof o === 'object' && (o.en === selectedBuildYourOwnOutfit || o.es === selectedBuildYourOwnOutfit)) ||
+            o === selectedBuildYourOwnOutfit
+          );
+          const outfitEN = typeof outfitObj === 'object' ? outfitObj.en : outfitObj;
+          wearingParts.push(outfitEN);
+        }
+        
+        if (selectedShoes) {
+          if (selectedShoes === 'Custom Shoes' || selectedShoes === 'Zapatos Personalizados') {
+            if (customShoesValue) {
+              wearingParts.push(customShoesValue);
+            }
+          } else {
+            const gender = getGender();
+            const shoes = gender === 'female' ? shoesFemale : shoesMale;
+            const shoeObj = shoes.find(s => 
+              (typeof s.name === 'object' && (s.name.en === selectedShoes || s.name.es === selectedShoes)) ||
+              s.name === selectedShoes
+            );
+            const shoeEN = shoeObj && typeof shoeObj.name === 'object' ? shoeObj.name.en : selectedShoes;
+            wearingParts.push(shoeEN);
+          }
+        }
+      }
+
+      wearingParts = wearingParts.concat(customOutfitItems);
+
+      if (selectedAccessories.length > 0) {
+        const accessoryDescs = selectedAccessories.map(accName => {
+          const acc = accessoriesList.find(a => (currentLanguage === 'en' ? a.en : a.es) === accName);
+          return acc ? acc.desc : accName;
+        });
+        wearingParts.push(...accessoryDescs);
+      }
+
+      if (selectedSunglasses) {
+        wearingParts.push(`wearing ${selectedSunglasses.description}, trendy 2025-2026 sunglasses style, high fashion modern eyewear`);
+      }
+
+      if (customAccessoryItems.length > 0) {
+        wearingParts.push(...customAccessoryItems);
+      }
+      
+      const customActionInput = document.getElementById('custom-action-input');
+      const customAction = customActionInput ? cleanText(customActionInput.value) : '';
+
+      const isGlossyChibi = styleEN === 'Glossy 3D Chibi';
+      const isBoldChibi = styleEN === 'Bold 3D Chibi';
+
+      let prompt = '';
+
+      if (isGlossyChibi) {
+        let ethnicity = physTrait || 'mixed';
+        let hairDesc = '';
+        if (hairColor && hairStyle) {
+          hairDesc = `${hairColor} ${hairStyle}`;
+        } else if (hairStyle) {
+          hairDesc = hairStyle;
+        } else {
+          hairDesc = 'stylish hair';
+        }
+
+        let wearingClause = '';
+        if (wearingParts.length > 0) {
+          wearingClause = `wearing ${wearingParts.join(', ')}, `;
+        }
+
+        let poseClause = '';
+        if (pose) {
+          if (selectedCameraAngle) {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
+            if (!angleObj || !(angleObj.prompt.includes('pose') || angleObj.prompt.includes('heroic'))) {
+              poseClause = `${pose}, `;
+            }
+          } else {
+            poseClause = `${pose}, `;
+          }
+        }
+        
+        let bgClause = bg ? `${bg} background` : 'solid pastel background';
+        let actionClause = customAction ? `, ${customAction}` : '';
+        
+        let viewClause = '';
+        if (!selectedCameraAngle || selectedCameraAngle === null) {
+          viewClause = 'shot from front view, ';
+        }
+
+        let cameraClause = '';
+        if (selectedCameraAngle && selectedCameraAngle !== null) {
+          if (selectedCameraAngle === 'Custom Camera Angle' && customCameraAngleValue) {
+            cameraClause = `, ${customCameraAngleValue}`;
+          } else {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
+            if (angleObj && angleObj.prompt) {
+              cameraClause = `, ${angleObj.prompt}`;
+            }
+          }
+        }
+        
+        let colorClause = '';
+        if (selectedColorPalette) {
+          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
+            colorClause = `, color palette: ${customColorPaletteValue}`;
+          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
+            colorClause = `, ${selectedColorPalette.prompt}`;
+          }
+        }
+
+        let subjectText = '';
+        if (character && character !== '') {
+          subjectText = character;
+        } else {
+          subjectText = gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character';
+        }
+
+        let facialFeatures = 'expressive sparkling eyes with lashes, glossy full lips, winged eyeliner, glamorous makeup';
+
+        prompt = `A glossy ultra-edgy chibi style illustration of a ${subjectText} of ${ethnicity} ethnicity, smooth rich skin, ${facialFeatures}, ${hairDesc}, ${wearingClause}${poseClause}fully clothed modest glamorous look, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, glossy 3D chibi cartoon, bold outlines, smooth shading, soft highlights, high quality, single character only`;
+
+      } else if (isBoldChibi) {
+        let ethnicity = physTrait || 'mixed';
+        let hairDesc = '';
+        if (hairColor && hairStyle) {
+          hairDesc = `${hairColor} ${hairStyle}`;
+        } else if (hairStyle) {
+          hairDesc = hairStyle;
+        } else {
+          hairDesc = 'stylish hair';
+        }
+
+        let wearingClause = '';
+        if (wearingParts.length > 0) {
+          wearingClause = `wearing ${wearingParts.join(', ')}, `;
+        }
+
+        let poseClause = '';
+        if (pose) {
+          if (selectedCameraAngle) {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
+            if (!angleObj || !(angleObj.prompt.includes('pose') || angleObj.prompt.includes('heroic'))) {
+              poseClause = `${pose}, `;
+            }
+          } else {
+            poseClause = `${pose}, `;
+          }
+        }
+        
+        let bgClause = bg ? `${bg} background` : 'pastel background';
+        let actionClause = customAction ? `, ${customAction}` : '';
+        
+        let viewClause = '';
+        if (!selectedCameraAngle || selectedCameraAngle === null) {
+          viewClause = 'shot from front, ';
+        }
+
+        let cameraClause = '';
+        if (selectedCameraAngle && selectedCameraAngle !== null) {
+          if (selectedCameraAngle === 'Custom Camera Angle' && customCameraAngleValue) {
+            cameraClause = `, ${customCameraAngleValue}`;
+          } else {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
+            if (angleObj && angleObj.prompt) {
+              cameraClause = `, ${angleObj.prompt}`;
+            }
+          }
+        }
+        
+        let colorClause = '';
+        if (selectedColorPalette) {
+          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
+            colorClause = `, color palette: ${customColorPaletteValue}`;
+          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
+            colorClause = `, ${selectedColorPalette.prompt}`;
+          }
+        }
+
+        let subjectText = '';
+        if (character && character !== '') {
+          subjectText = character;
+        } else {
+          subjectText = gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character';
+        }
+
+        prompt = `A bold 3D chibi ${subjectText} of ${ethnicity} ethnicity, expressive glossy eyes, natural lips, ${hairDesc} with glossy finish, ${wearingClause}${poseClause}fully clothed, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, clean 3D chibi art, bold outlines, smooth shading, vibrant colors, high quality`;
+
+      } else {
+        let wearingClause = '';
+        if (wearingParts.length > 0) {
+          wearingClause = `, wearing ${wearingParts.join(', ')}`;
+        }
+
+        prompt = `A ${styleEN} illustration of a ${character}`;
+        if (physTrait) prompt += ` with ${physTrait}`;
+        if (hairColor && hairStyle) prompt += `, ${hairColor} ${hairStyle}`;
+        else if (hairStyle) prompt += `, ${hairStyle}`;
+        
+        prompt += wearingClause;
+
+        if (pose) prompt += `, ${pose}`;
+        if (bg) prompt += `, ${bg} background`;
+        if (customAction) prompt += `, ${customAction}`;
+        
+        if (selectedCameraAngle && selectedCameraAngle !== null) {
+          if (selectedCameraAngle === 'Custom Camera Angle' && customCameraAngleValue) {
+            prompt += `, ${customCameraAngleValue}`;
+          } else {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
+            if (angleObj && angleObj.prompt) {
+              prompt += `, ${angleObj.prompt}`;
+            }
+          }
+        }
+        
+        if (selectedColorPalette) {
+          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
+            prompt += `, color palette: ${customColorPaletteValue}`;
+          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
+            prompt += `, ${selectedColorPalette.prompt}`;
+          }
+        }
+
+        prompt += `, high quality, professional illustration`;
+      }
+
+      return prompt;
+    }
+
+    function generatePromptES() {
+      if (isColoringStyle()) {
+        const character = cleanText(selectedCharacter);
+        let subjectText = '';
+        if (character && character !== '') {
+          subjectText = character;
+        } else {
+          const gender = getGender();
+          subjectText = gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje';
+        }
+
+        let wearingParts = [];
+        const charGender = characters.find(c => {
+          const charName = currentLanguage === 'en' ? c.en : c.es;
+          return charName === selectedCharacter;
+        })?.gender;
+
+        if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
+          const descES = typeof selectedCompleteOutfit.desc === 'object' ? selectedCompleteOutfit.desc.es : selectedCompleteOutfit.desc;
+          wearingParts.push(descES);
+        } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfit) {
+          if (selectedBuildYourOwnOutfit === 'Custom Outfit' || selectedBuildYourOwnOutfit === 'Outfit Personalizado') {
+            if (customOutfitValue) {
+              wearingParts.push(customOutfitValue);
+            }
+          } else {
+            const gender = getGender();
+            const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
+            const outfitObj = buildYourOwn.find(o => 
+              (typeof o === 'object' && (o.en === selectedBuildYourOwnOutfit || o.es === selectedBuildYourOwnOutfit)) ||
+              o === selectedBuildYourOwnOutfit
+            );
+            const outfitES = typeof outfitObj === 'object' ? outfitObj.es : outfitObj;
+            wearingParts.push(outfitES);
+          }
+          
+          if (selectedShoes) {
+            if (selectedShoes === 'Custom Shoes' || selectedShoes === 'Zapatos Personalizados') {
+              if (customShoesValue) {
+                wearingParts.push(customShoesValue);
+              }
+            } else {
+              const gender = getGender();
+              const shoes = gender === 'female' ? shoesFemale : shoesMale;
+              const shoeObj = shoes.find(s => 
+                (typeof s.name === 'object' && (s.name.en === selectedShoes || s.name.es === selectedShoes)) ||
+                s.name === selectedShoes
+              );
+              const shoeES = shoeObj && typeof shoeObj.name === 'object' ? shoeObj.name.es : selectedShoes;
+              wearingParts.push(shoeES);
+            }
+          }
+        }
+
+        wearingParts = wearingParts.concat(customOutfitItems);
+
+        if (selectedAccessories.length > 0) {
+          const accessoryDescs = selectedAccessories.map(accName => {
+            const acc = accessoriesList.find(a => (currentLanguage === 'en' ? a.en : a.es) === accName);
+            return acc ? acc.desc : accName;
+          });
+          wearingParts.push(...accessoryDescs);
+        }
+
+        if (customAccessoryItems.length > 0) {
+          wearingParts.push(...customAccessoryItems);
+        }
+
+        let pose = cleanText(selectedPose);
+        if (selectedPose === 'Custom Pose' && customPoseValue) {
+          pose = customPoseValue;
+        }
+
+        const coloringPrompt = getColoringStylePrompt(
+          subjectText,
+          pose,
+          wearingParts
+        );
+        
+        return coloringPrompt;
+      }
+
+      // Non-coloring styles - same as EN but in Spanish...
+      const styleES = getStyleES();
+      const character = cleanText(selectedCharacter);
+      const physTrait = cleanText(selectedPhysicalTrait);
+      let hairStyle = cleanText(selectedHairStyle);
+      let hairColor = cleanText(selectedHairColor);
+      let pose = cleanText(selectedPose);
+      let bg = cleanText(selectedBackground);
+      const gender = getGender();
+      
+      if (selectedHairStyle === 'Custom Hair Style' && customHairStyleValue) {
+        hairStyle = customHairStyleValue;
+      }
+      
+      if (selectedHairColor === 'Custom Hair Color' && customHairColorValue) {
+        hairColor = customHairColorValue;
+      }
+      
+      if (selectedPose === 'Custom Pose' && customPoseValue) {
+        pose = customPoseValue;
+      }
+      
+      if (selectedBackground === 'Custom Background' && customBackgroundValue) {
+        bg = customBackgroundValue;
+      }
+      
+      let wearingParts = [];
+      const charGender = characters.find(c => {
+        const charName = currentLanguage === 'en' ? c.en : c.es;
+        return charName === selectedCharacter;
+      })?.gender;
+
+      if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
+        const descES = typeof selectedCompleteOutfit.desc === 'object' ? selectedCompleteOutfit.desc.es : selectedCompleteOutfit.desc;
+        wearingParts.push(descES);
+      } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfit) {
+        if (selectedBuildYourOwnOutfit === 'Custom Outfit' || selectedBuildYourOwnOutfit === 'Outfit Personalizado') {
+          if (customOutfitValue) {
+            wearingParts.push(customOutfitValue);
+          }
+        } else {
+          const gender = getGender();
+          const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
+          const outfitObj = buildYourOwn.find(o => 
+            (typeof o === 'object' && (o.en === selectedBuildYourOwnOutfit || o.es === selectedBuildYourOwnOutfit)) ||
+            o === selectedBuildYourOwnOutfit
+          );
+          const outfitES = typeof outfitObj === 'object' ? outfitObj.es : outfitObj;
+          wearingParts.push(outfitES);
+        }
+        
+        if (selectedShoes) {
+          if (selectedShoes === 'Custom Shoes' || selectedShoes === 'Zapatos Personalizados') {
+            if (customShoesValue) {
+              wearingParts.push(customShoesValue);
+            }
+          } else {
+            const gender = getGender();
+            const shoes = gender === 'female' ? shoesFemale : shoesMale;
+            const shoeObj = shoes.find(s => 
+              (typeof s.name === 'object' && (s.name.en === selectedShoes || s.name.es === selectedShoes)) ||
+              s.name === selectedShoes
+            );
+            const shoeES = shoeObj && typeof shoeObj.name === 'object' ? shoeObj.name.es : selectedShoes;
+            wearingParts.push(shoeES);
+          }
+        }
+      }
+
+      wearingParts = wearingParts.concat(customOutfitItems);
+
+      if (selectedAccessories.length > 0) {
+        const accessoryDescs = selectedAccessories.map(accName => {
+          const acc = accessoriesList.find(a => (currentLanguage === 'en' ? a.en : a.es) === accName);
+          return acc ? acc.desc : accName;
+        });
+        wearingParts.push(...accessoryDescs);
+      }
+
+      if (selectedSunglasses) {
+        wearingParts.push(`vistiendo ${selectedSunglasses.description}, estilo gafas de sol moderno, moda alta`);
+      }
+
+      if (customAccessoryItems.length > 0) {
+        wearingParts.push(...customAccessoryItems);
+      }
+      
+      const customActionInput = document.getElementById('custom-action-input');
+      const customAction = customActionInput ? cleanText(customActionInput.value) : '';
+
+      const styleEN = getStyleEN();
+      const isGlossyChibi = styleEN === 'Glossy 3D Chibi';
+      const isBoldChibi = styleEN === 'Bold 3D Chibi';
+
+      let prompt = '';
+
+      if (isGlossyChibi) {
+        let ethnicity = physTrait || 'mixta';
+        let hairDesc = '';
+        if (hairColor && hairStyle) {
+          hairDesc = `${hairColor} ${hairStyle}`;
+        } else if (hairStyle) {
+          hairDesc = hairStyle;
+        } else {
+          hairDesc = 'pelo elegante';
+        }
+
+        let wearingClause = '';
+        if (wearingParts.length > 0) {
+          wearingClause = `vistiendo ${wearingParts.join(', ')}, `;
+        }
+
+        let poseClause = '';
+        if (pose) {
+          if (selectedCameraAngle) {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
+            if (!angleObj || !(angleObj.prompt.includes('pose') || angleObj.prompt.includes('heroic'))) {
+              poseClause = `${pose}, `;
+            }
+          } else {
+            poseClause = `${pose}, `;
+          }
+        }
+        
+        let bgClause = bg ? `fondo ${bg}` : 'fondo pastel sólido';
+        let actionClause = customAction ? `, ${customAction}` : '';
+        
+        let viewClause = '';
+        if (!selectedCameraAngle || selectedCameraAngle === null) {
+          viewClause = 'toma frontal, ';
+        }
+
+        let cameraClause = '';
+        if (selectedCameraAngle && selectedCameraAngle !== null) {
+          if (selectedCameraAngle === 'Custom Camera Angle' || selectedCameraAngle === 'Ángulo Personalizado') {
+            if (customCameraAngleValue) {
+              cameraClause = `, ${customCameraAngleValue}`;
+            }
+          } else {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
+            if (angleObj && angleObj.prompt) {
+              cameraClause = `, ${angleObj.prompt}`;
+            }
+          }
+        }
+        
+        let colorClause = '';
+        if (selectedColorPalette) {
+          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
+            colorClause = `, paleta de colores: ${customColorPaletteValue}`;
+          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
+            colorClause = `, ${selectedColorPalette.prompt}`;
+          }
+        }
+
+        let subjectText = '';
+        if (character && character !== '') {
+          subjectText = character;
+        } else {
+          subjectText = gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje';
+        }
+
+        let facialFeatures = 'ojos expresivos brillantes con pestañas, labios glossy carnosos, delineador alado, maquillaje glamoroso';
+
+        prompt = `Una ilustración estilo chibi 3D brillante ultra exagerado de una ${subjectText} de etnia ${ethnicity}, piel suave, ${facialFeatures}, ${hairDesc}, ${wearingClause}${poseClause}look glamoroso modesto completamente vestida, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, dibujo chibi 3D brillante, contornos marcados, sombreado suave, reflejos suaves, alta calidad, solo un personaje`;
+
+      } else if (isBoldChibi) {
+        let ethnicity = physTrait || 'mixta';
+        let hairDesc = '';
+        if (hairColor && hairStyle) {
+          hairDesc = `${hairColor} ${hairStyle}`;
+        } else if (hairStyle) {
+          hairDesc = hairStyle;
+        } else {
+          hairDesc = 'pelo elegante';
+        }
+
+        let wearingClause = '';
+        if (wearingParts.length > 0) {
+          wearingClause = `vistiendo ${wearingParts.join(', ')}, `;
+        }
+
+        let poseClause = '';
+        if (pose) {
+          if (selectedCameraAngle) {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
+            if (!angleObj || !(angleObj.prompt.includes('pose') || angleObj.prompt.includes('heroic'))) {
+              poseClause = `${pose}, `;
+            }
+          } else {
+            poseClause = `${pose}, `;
+          }
+        }
+        
+        let bgClause = bg ? `fondo ${bg}` : 'fondo sólido pastel';
+        let actionClause = customAction ? `, ${customAction}` : '';
+        
+        let viewClause = '';
+        if (!selectedCameraAngle || selectedCameraAngle === null) {
+          viewClause = 'toma frontal, ';
+        }
+
+        let cameraClause = '';
+        if (selectedCameraAngle && selectedCameraAngle !== null) {
+          if (selectedCameraAngle === 'Custom Camera Angle' || selectedCameraAngle === 'Ángulo Personalizado') {
+            if (customCameraAngleValue) {
+              cameraClause = `, ${customCameraAngleValue}`;
+            }
+          } else {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
+            if (angleObj && angleObj.prompt) {
+              cameraClause = `, ${angleObj.prompt}`;
+            }
+          }
+        }
+        
+        let colorClause = '';
+        if (selectedColorPalette) {
+          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
+            colorClause = `, paleta de colores: ${customColorPaletteValue}`;
+          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
+            colorClause = `, ${selectedColorPalette.prompt}`;
+          }
+        }
+
+        let subjectText = '';
+        if (character && character !== '') {
+          subjectText = character;
+        } else {
+          subjectText = gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje';
+        }
+
+        prompt = `Una ilustración estilo chibi 3D audaz de un ${subjectText} de etnia ${ethnicity}, rasgos masculinos, expresión confiada, ojos expresivos glossy, labios naturales, cejas definidas, ${hairDesc} con acabado ultra glossy, ${wearingClause}${poseClause}look modesto completamente vestido, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, estilo arte chibi 3D limpio, contornos marcados, sombreado suave, cabello brillante, colores vibrantes, alta calidad, solo un personaje masculino`;
+
+      } else {
+        let wearingClause = '';
+        if (wearingParts.length > 0) {
+          wearingClause = `, vistiendo ${wearingParts.join(', ')}`;
+        }
+
+        prompt = `Una ilustración ${styleES} de una ${character}`;
+        if (physTrait) prompt += ` con ${physTrait}`;
+        if (hairColor && hairStyle) prompt += `, ${hairColor} ${hairStyle}`;
+        else if (hairStyle) prompt += `, ${hairStyle}`;
+        
+        prompt += wearingClause;
+
+        if (pose) prompt += `, ${pose}`;
+        if (bg) prompt += `, fondo ${bg}`;
+        if (customAction) prompt += `, ${customAction}`;
+        
+        if (selectedCameraAngle && selectedCameraAngle !== null) {
+          if (selectedCameraAngle === 'Custom Camera Angle' || selectedCameraAngle === 'Ángulo Personalizado') {
+            if (customCameraAngleValue) {
+              prompt += `, ${customCameraAngleValue}`;
+            }
+          } else {
+            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
+            if (angleObj && angleObj.prompt) {
+              prompt += `, ${angleObj.prompt}`;
+            }
+          }
+        }
+        
+        if (selectedColorPalette) {
+          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
+            prompt += `, paleta de colores: ${customColorPaletteValue}`;
+          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
+            prompt += `, ${selectedColorPalette.prompt}`;
+          }
+        }
+
+        prompt += `, alta calidad, ilustración profesional`;
+      }
+
+      return prompt;
+    }
+
+    function displayPrompt(promptEn, promptEs) {
+      const textEn = document.getElementById('prompt-text-en');
+      textEn.textContent = promptEn;
+      const countEn = document.getElementById('word-count-en');
+      countEn.textContent = `Words: ${countWords(promptEn)} / 120`;
+      
+      const textEs = document.getElementById('prompt-text-es');
+      textEs.textContent = promptEs;
+      const countEs = document.getElementById('word-count-es');
+      countEs.textContent = `Palabras: ${countWords(promptEs)} / 120`;
+      
+      const output = document.getElementById('prompt-output');
+      output.classList.remove('hidden');
+    }
+
+    function copyPromptEnglish() {
+      const text = document.getElementById('prompt-text-en').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✓ COPIED!';
+        setTimeout(() => { btn.textContent = originalText; }, 2000);
+      });
+    }
+
+    function copyPromptSpanish() {
+      const text = document.getElementById('prompt-text-es').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✓ COPIADO!';
+        setTimeout(() => { btn.textContent = originalText; }, 2000);
+      });
+    }
+
+    function getGender() {
+      if (!selectedCharacter) return 'neutral';
+      const character = characters.find(c => {
+        const charName = currentLanguage === 'en' ? c.en : c.es;
+        return charName === selectedCharacter;
+      });
+      if (!character) return 'neutral';
+      
+      let gender = character.gender || 'neutral';
+      if (gender === 'neutral' && selectedNeutralGender) {
+        gender = selectedNeutralGender;
+      }
+      return gender;
+    }
+
+    function randomize() {
+      selectedCategory = categories[Math.floor(Math.random() * categories.length)].id;
+      renderCategories();
+      
+      const styleList = styles[selectedCategory];
+      selectedStyle = currentLanguage === 'en' ? styleList[Math.floor(Math.random() * styleList.length)].en : styleList[Math.floor(Math.random() * styleList.length)].es;
+      renderStyles();
+      hideColorPaletteIfColoring();
+      
+      const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
+      selectedCharacter = currentLanguage === 'en' ? randomCharacter.en : randomCharacter.es;
+      renderCharacters();
+      
+      renderGenderSection();
+      if (characters.find(c => {
+        const charName = currentLanguage === 'en' ? c.en : c.es;
+        return charName === selectedCharacter;
+      })?.gender === 'neutral') {
+        selectedNeutralGender = Math.random() > 0.5 ? 'female' : 'male';
+        renderGenderSection();
+      }
+      
+      renderPhysicalTraits();
+      if (Math.random() > 0.5) {
+        const character = characters.find(c => {
+          const charName = currentLanguage === 'en' ? c.en : c.es;
+          return charName === selectedCharacter;
+        });
+        let gender = character?.gender || 'neutral';
+        if (gender === 'neutral' && selectedNeutralGender) {
+          gender = selectedNeutralGender;
+        } else if (gender === 'neutral') {
+          renderPhysicalTraits();
+          return;
+        }
+        const traits = physicalTraits[gender] || [];
+        if (traits.length > 0) {
+          const randomTrait = traits[Math.floor(Math.random() * traits.length)];
+          selectedPhysicalTrait = currentLanguage === 'en' ? randomTrait.en : randomTrait.es;
+        }
+      }
+      renderPhysicalTraits();
+      
+      renderHairStyles();
+      if (Math.random() > 0.4) {
+        const character = characters.find(c => {
+          const charName = currentLanguage === 'en' ? c.en : c.es;
+          return charName === selectedCharacter;
+        });
+        let gender = character?.gender || 'neutral';
+        if (gender === 'neutral' && selectedNeutralGender) {
+          gender = selectedNeutralGender;
+        } else if (gender === 'neutral') {
+          renderHairStyles();
+          return;
+        }
+        let styleList = [];
+        if (gender === 'male') {
+          styleList = hairStyles['male'] || [];
+        } else if (gender === 'female') {
+          styleList = hairStyles['female'] || [];
+        }
+        if (styleList.length > 0) {
+          const randomStyle = styleList[Math.floor(Math.random() * styleList.length)];
+          selectedHairStyle = currentLanguage === 'en' ? randomStyle.en : randomStyle.es;
+        }
+      }
+      renderHairStyles();
+      
+      renderHairColors();
+      if (selectedHairStyle && Math.random() > 0.3) {
+        const randomColor = hairColors[Math.floor(Math.random() * hairColors.length)];
+        selectedHairColor = currentLanguage === 'en' ? randomColor.en : randomColor.es;
+      }
+      renderHairColors();
+      
+      const randomPose = poses[Math.floor(Math.random() * poses.length)];
+      selectedPose = currentLanguage === 'en' ? randomPose.en : randomPose.es;
+      renderPoses();
+      
+      const randomBg = backgrounds[selectedCategory][Math.floor(Math.random() * backgrounds[selectedCategory].length)];
+      selectedBackground = currentLanguage === 'en' ? randomBg.en : randomBg.es;
+      renderBackgrounds();
+
+      if (Math.random() > 0.6) {
+        const randomCamera = cameraAngles[Math.floor(Math.random() * cameraAngles.length)];
+        selectedCameraAngle = currentLanguage === 'en' ? randomCamera.en : randomCamera.es;
+      } else {
+        selectedCameraAngle = null;
+      }
+      renderCameraAngles();
+
+      selectedColorPalette = colorPalettes[0];
+      renderColorPalettes();
+      
+      selectedAccessories = [];
+      if (Math.random() > 0.5) {
+        const num = Math.floor(Math.random() * 3) + 1;
+        for (let i = 0; i < num; i++) {
+          const acc = accessoriesList[Math.floor(Math.random() * accessoriesList.length)];
+          const accName = currentLanguage === 'en' ? acc.en : acc.es;
+          if (!selectedAccessories.includes(accName)) {
+            selectedAccessories.push(accName);
+          }
+        }
+      }
+      
+      selectedSunglasses = null;
+      if (Math.random() > 0.6) {
+        selectedSunglasses = sunglassesVariations[Math.floor(Math.random() * sunglassesVariations.length)];
+      }
+      
+      renderAccessories();
+      
+      customOutfitItems = [];
+      customAccessoryItems = [];
+      customCameraAngleValue = '';
+      customColorPaletteValue = '';
+      document.getElementById('custom-accessory-input').value = '';
+      
+      renderCustomAccessories();
+      renderOutfits();
+      generatePrompt();
+    }
+
+    function clearAll() {
+      selectedStyle = '';
+      selectedCharacter = '';
+      selectedNeutralGender = null;
+      selectedPhysicalTrait = '';
+      selectedHairStyle = '';
+      selectedHairColor = '';
+      selectedPose = '';
+      selectedBackground = '';
+      selectedCameraAngle = null;
+      selectedColorPalette = colorPalettes[0];
+      selectedAccessories = [];
+      selectedSunglasses = null;
+      customOutfitItems = [];
+      customAccessoryItems = [];
+      customHairStyleValue = '';
+      customHairColorValue = '';
+      customOutfitValue = '';
+      customShoesValue = '';
+      customPoseValue = '';
+      customBackgroundValue = '';
+      customCameraAngleValue = '';
+      customColorPaletteValue = '';
+      selectedOutfitType = null;
+      selectedCompleteOutfit = null;
+      selectedBuildYourOwnOutfit = null;
+      selectedShoes = null;
+      
+      document.getElementById('custom-accessory-input').value = '';
+      document.getElementById('custom-action-input').value = '';
+      
+      renderAll();
+      renderGenderSection();
+      document.getElementById('prompt-output').classList.add('hidden');
+    }
+
+    renderAll();
+    renderGenderSection();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d09a4a3172cb9e6',t:'MTc3MTU0NDc4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
