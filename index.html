@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Art Prompt Creator</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/_sdk/element_sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { box-sizing: border-box; }
@@ -108,7 +107,7 @@
     <div class="max-w-3xl mx-auto">
      <div class="text-center mb-8">
       <h1 id="main-title" class="text-5xl md:text-5xl font-black mb-2" style="background: linear-gradient(135deg, #ff99cc, #ffccdd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">✨ AI Art Prompt Creator ✨</h1>
-      <p id="subtitle" class="text-gray-600 text-base font-600">Clean & Optimized Prompts</p>
+      <p id="subtitle" class="text-gray-600 text-base font-600">Clean &amp; Optimized Prompts</p>
      </div>
      <div class="card p-6 md:p-8">
       <div class="mb-8">
@@ -159,51 +158,55 @@
        <p class="section-description">Available only when building your own look / Disponible solo al crear tu propio look</p>
        <div id="shoes-container" class="buttons-container"></div>
        <div id="custom-shoes-container" class="custom-input-container hidden">
-        <input type="text" id="custom-shoes-input" class="custom-text-input" placeholder="Describe your custom shoes (e.g., white platform sneakers with pink laces) / Describe tus zapatos personalizados" onchange="updateCustomShoes(this.value)">
+        <input type="text" id="custom-shoes-input" class="custom-text-input" placeholder="Describe your custom shoes / Describe tus zapatos personalizados" onchange="updateCustomShoes(this.value)">
        </div>
       </div>
       <div id="hair-style-section" class="mb-8">
        <div class="section-title">Hair Style</div>
-       <div id="hair-style-container"></div><button class="option-button" onclick="selectHairStyle('Custom Hair Style')">✏️ Custom Hair Style</button>
+       <div id="hair-style-container"></div>
+       <button class="option-button" onclick="selectHairStyle('Custom Hair Style')">✏️ Custom Hair Style</button>
        <div id="custom-hair-style-container" class="custom-input-container hidden">
         <input type="text" id="custom-hair-style-input" class="custom-text-input" placeholder="Describe your custom hair style (e.g., shoulder-length straight with bangs)" onchange="updateCustomHairStyle(this.value)">
        </div>
       </div>
       <div id="hair-color-section" class="mb-8 hidden">
        <div class="section-title">Hair Color</div>
-       <div id="hair-color-container"></div><button class="option-button" onclick="selectHairColor('Custom Hair Color')">✏️ Custom Hair Color</button>
+       <div id="hair-color-container"></div>
+       <button class="option-button" onclick="selectHairColor('Custom Hair Color')">✏️ Custom Hair Color</button>
        <div id="custom-hair-color-container" class="custom-input-container hidden">
         <input type="text" id="custom-hair-color-input" class="custom-text-input" placeholder="Describe your custom hair color (e.g., pastel pink with blue highlights)" onchange="updateCustomHairColor(this.value)">
        </div>
       </div>
       <div id="pose-section" class="mb-8">
-       <div class="section-title">Pose & Expression / Pose y Expresión</div>
-       <div id="pose-container"></div><button class="option-button" onclick="selectPose('Custom Pose')">✏️ Custom Pose</button>
+       <div class="section-title">Pose &amp; Expression / Pose y Expresión</div>
+       <div id="pose-container"></div>
+       <button class="option-button" onclick="selectPose('Custom Pose')">✏️ Custom Pose</button>
        <div id="custom-pose-container" class="custom-input-container hidden">
         <input type="text" id="custom-pose-input" class="custom-text-input" placeholder="Describe your custom pose (e.g., jumping with excitement, pointing at camera)" onchange="updateCustomPose(this.value)">
        </div>
       </div>
       <div id="background-section" class="mb-8">
        <div class="section-title">Background / Fondo</div>
-       <div id="background-container"></div><button class="option-button" onclick="selectBackground('Custom Background')">✏️ Custom Background</button>
+       <div id="background-container"></div>
+       <button class="option-button" onclick="selectBackground('Custom Background')">✏️ Custom Background</button>
        <div id="custom-background-container" class="custom-input-container hidden">
         <input type="text" id="custom-background-input" class="custom-text-input" placeholder="Describe your custom background (e.g., cherry blossom park, neon city street)" onchange="updateCustomBackground(this.value)">
        </div>
       </div>
       <div class="section">
        <h3>Camera Angle (Optional) / Ángulo de Cámara (Opcional)</h3>
-       <p class="section-description">Leave unselected for normal view. Choose an angle for dramatic effect. Click again to deselect. / Dejar sin seleccionar para vista normal. Elige un ángulo para efecto dramático. Click de nuevo para deseleccionar.</p>
+       <p class="section-description">Leave unselected for normal view. Click again to deselect.</p>
        <div id="camera-angle-container" class="buttons-container"></div>
        <div id="custom-camera-angle-container" class="custom-input-container hidden">
-        <input type="text" id="custom-camera-angle-input" class="custom-text-input" placeholder="Describe your custom camera angle (e.g., dutch angle, tilted perspective) / Describe tu ángulo personalizado" onchange="updateCustomCameraAngle(this.value)">
+        <input type="text" id="custom-camera-angle-input" class="custom-text-input" placeholder="Describe your custom camera angle" onchange="updateCustomCameraAngle(this.value)">
        </div>
       </div>
       <div class="section" id="color-palette-section">
        <h3>Color Palette (Optional) / Paleta de Colores (Opcional)</h3>
-       <p class="section-description">Random palette is suggested by default. Choose a specific palette or leave as Random. / Paleta aleatoria sugerida por defecto. Elige una paleta específica o deja Random.</p>
+       <p class="section-description">Random palette is suggested by default.</p>
        <div id="color-palette-container" class="buttons-container"></div>
        <div id="custom-color-palette-container" class="custom-input-container hidden">
-        <input type="text" id="custom-color-palette-input" class="custom-text-input" placeholder="Describe your custom palette (e.g., cotton candy pink, rose quartz, icy blue, lavender) / Describe tu paleta personalizada" onchange="updateCustomColorPalette(this.value)">
+        <input type="text" id="custom-color-palette-input" class="custom-text-input" placeholder="Describe your custom palette / Describe tu paleta personalizada" onchange="updateCustomColorPalette(this.value)">
        </div>
       </div>
       <div id="accessories-section" class="mb-8">
@@ -227,15 +230,19 @@
       </div>
       <div class="section">
        <h3>Custom Action / Scene (Optional) / Acción Personalizada (Opcional)</h3>
-       <p class="section-description">Add a specific action or scene / Agrega una acción o escena específica</p><input type="text" id="custom-action-input" class="custom-text-input" placeholder="Example: drinking coffee, walking a dog, taking a selfie, holding a book...">
+       <p class="section-description">Add a specific action or scene / Agrega una acción o escena específica</p>
+       <input type="text" id="custom-action-input" class="custom-text-input" placeholder="Example: drinking coffee, walking a dog, taking a selfie, holding a book...">
       </div>
       <div class="buttons-row mb-8">
        <button onclick="generatePrompt()" class="btn-main flex-1" id="generate-btn">GENERATE PROMPT</button>
        <button onclick="randomize()" class="btn-secondary flex-1" id="surprise-btn">RANDOMIZE</button>
        <button onclick="clearAll()" class="btn-clear flex-1" id="clear-btn">CLEAR</button>
       </div>
+
+      <!-- FIX 5: Conditional display of prompt sections -->
       <div id="prompt-output" class="hidden mb-8">
-       <div class="mb-6">
+       <!-- English prompt: always shown -->
+       <div class="mb-6" id="prompt-en-block">
         <h3 style="color: #d888cc; font-weight: 800; font-size: 16px; margin-bottom: 12px;">🇬🇧 ENGLISH PROMPT</h3>
         <div class="prompt-output">
          <div class="flex justify-between items-center mb-3">
@@ -246,7 +253,8 @@
          <div class="word-count" id="word-count-en"></div>
         </div>
        </div>
-       <div>
+       <!-- Spanish prompt: only shown when language is 'es' -->
+       <div id="prompt-es-block" class="hidden">
         <h3 style="color: #d888cc; font-weight: 800; font-size: 16px; margin-bottom: 12px;">🇪🇸 SPANISH PROMPT</h3>
         <div class="prompt-output">
          <div class="flex justify-between items-center mb-3">
@@ -263,16 +271,16 @@
       <h2 style="color: #d888cc; font-weight: 800; font-size: 20px; margin-bottom: 16px;">💡 TIPS FOR BETTER PROMPTS</h2>
       <div class="space-y-3">
        <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
-        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">✨ <strong>Be Specific:</strong> More details = better results. Choose style, character type, and accessories.</p>
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">✨ <strong>Be Specific:</strong> More details = better results.</p>
        </div>
        <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
-        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">🎨 <strong>Style Matters:</strong> Different styles work best for different products. Notebook = minimalist, Coloring = line art, T-Shirt = bold graphics, 3D = renders.</p>
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">🎨 <strong>Style Matters:</strong> Notebook = minimalist, Coloring = line art, T-Shirt = bold graphics, 3D = renders.</p>
        </div>
        <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
-        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">👗 <strong>Accessories Add Personality:</strong> Choose gender first (for neutral characters) to see accessory options. Mix and match for unique looks!</p>
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">👗 <strong>Accessories Add Personality:</strong> Choose gender first to see accessory options.</p>
        </div>
        <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
-        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">🎲 <strong>Use Randomize:</strong> Stuck? Click RANDOMIZE for inspiration and unexpected combinations.</p>
+        <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">🎲 <strong>Use Randomize:</strong> Click RANDOMIZE for inspiration and unexpected combinations.</p>
        </div>
        <div style="background: rgba(255, 192, 217, 0.2); border-left: 4px solid #ff88cc; padding: 12px; border-radius: 6px;">
         <p style="color: #333; font-size: 13px; font-weight: 600; margin: 0;">📋 <strong>Word Limit:</strong> Keep prompts under 120 words for best AI generation results.</p>
@@ -287,28 +295,39 @@
     // ============ COLORING FUNCTIONS ============
     function isColoringStyle() {
       const coloringStyles = ['Mandala', 'Zentangle', 'Floral', 'Fantasy', 'Kawaii Cute'];
-      return selectedCategory === 'coloring' && coloringStyles.includes(selectedStyle);
+      return selectedCategory === 'coloring' && coloringStyles.includes(getStyleEN());
     }
 
-    function getColoringStylePrompt(character, pose, wearingParts) {
+    function getColoringStylePromptEN(character, pose, wearingPartsEN) {
       const style = getStyleEN();
       const coloringBase = 'clean bold black outlines only, pure white background, no color no shading no gradients no textures no gray tones, high contrast bold black lines, vector line art style, high quality 8k illustration, perfect for printing and coloring';
-
       const coloringPrompts = {
         'Mandala': `${character} surrounded by intricate mandala patterns, geometric circular designs with detailed ornamental elements, presented as a mandala coloring page, ${coloringBase}, trending on ArtStation, professional masterpiece`,
         'Zentangle': `${character} adorned with zentangle patterns, intricate abstract decorative linework with detailed geometric and organic shapes, presented as a zentangle coloring page, ${coloringBase}, trending on ArtStation, professional masterpiece`,
         'Floral': `${character} adorned with floral elements, flowers leaves and botanical details, presented as a simple line art coloring page, ${coloringBase}, trending on ArtStation, cinematic lighting and dynamic composition, professional masterpiece`,
         'Fantasy': `${character} in a magical fantasy scene with detailed fantasy elements, stars, magical ornaments and mystical decorations, pure black and white line art only, clean crisp black ink outlines, ${coloringBase}, trending on ArtStation, professional masterpiece`,
-        'Kawaii Cute': `Kawaii ${character} coloring page illustration, big round sparkly eyes, adorable sweet expression, kawaii decorative style, ${pose ? pose + ', ' : ''}${wearingParts && wearingParts.length > 0 ? 'wearing ' + wearingParts.join(', ') + ', ' : ''}${coloringBase}, ready to color`
+        'Kawaii Cute': `Kawaii ${character} coloring page illustration, big round sparkly eyes, adorable sweet expression, kawaii decorative style, ${pose ? pose + ', ' : ''}${wearingPartsEN && wearingPartsEN.length > 0 ? 'wearing ' + wearingPartsEN.join(', ') + ', ' : ''}${coloringBase}, ready to color`
       };
-      
       for (const [key, prompt] of Object.entries(coloringPrompts)) {
-        if (style && style.toLowerCase().includes(key.toLowerCase())) {
-          return prompt;
-        }
+        if (style && style.toLowerCase().includes(key.toLowerCase())) return prompt;
       }
-      
       return `${character} presented as a coloring page illustration, ${coloringBase}`;
+    }
+
+    function getColoringStylePromptES(character, pose, wearingPartsES) {
+      const style = getStyleEN(); // compare in EN
+      const coloringBase = 'solo contornos negros limpios y gruesos, fondo blanco puro, sin color sin sombras sin gradientes sin texturas sin tonos grises, líneas negras gruesas de alto contraste, estilo ilustración vectorial, alta calidad 8k, perfecto para imprimir y colorear';
+      const coloringPrompts = {
+        'Mandala': `${character} rodeada de patrones de mandala intrincados, diseños circulares geométricos con elementos ornamentales detallados, presentada como página de colorear mandala, ${coloringBase}, tendencia en ArtStation, obra maestra profesional`,
+        'Zentangle': `${character} adornada con patrones zentangle, líneas decorativas abstractas intrincadas con formas geométricas y orgánicas detalladas, presentada como página de colorear zentangle, ${coloringBase}, tendencia en ArtStation, obra maestra profesional`,
+        'Floral': `${character} adornada con elementos florales, flores, hojas y detalles botánicos, presentada como página de colorear con arte lineal simple, ${coloringBase}, tendencia en ArtStation, iluminación cinematográfica, obra maestra profesional`,
+        'Fantasy': `${character} en una escena de fantasía mágica con elementos detallados, estrellas, ornamentos mágicos y decoraciones místicas, arte lineal en blanco y negro puro, contornos limpios de tinta negra, ${coloringBase}, tendencia en ArtStation, obra maestra profesional`,
+        'Kawaii Cute': `Ilustración kawaii de ${character} para colorear, ojos grandes redondos brillantes, expresión adorable dulce, estilo decorativo kawaii, ${pose ? pose + ', ' : ''}${wearingPartsES && wearingPartsES.length > 0 ? 'vistiendo ' + wearingPartsES.join(', ') + ', ' : ''}${coloringBase}, listo para colorear`
+      };
+      for (const [key, prompt] of Object.entries(coloringPrompts)) {
+        if (style && style.toLowerCase().includes(key.toLowerCase())) return prompt;
+      }
+      return `${character} presentada como ilustración para colorear, ${coloringBase}`;
     }
     // ============================================
 
@@ -317,16 +336,16 @@
     let selectedStyle = '';
     let selectedCharacter = '';
     let selectedNeutralGender = null;
-    let selectedPhysicalTrait = '';
+    let selectedPhysicalTrait = '';  // stores the .en key always
     let customOutfitItems = [];
     let customAccessoryItems = [];
-    let selectedHairStyle = '';
-    let selectedHairColor = '';
-    let selectedPose = '';
-    let selectedBackground = '';
+    let selectedHairStyle = '';  // stores the .en key always
+    let selectedHairColor = '';  // stores the .en key always
+    let selectedPose = '';       // stores the .en key always
+    let selectedBackground = ''; // stores the .en key always
     let selectedAccessories = [];
     let selectedSunglasses = null;
-    let selectedCameraAngle = null;
+    let selectedCameraAngle = null; // stores the .en key always
     let selectedColorPalette = null;
 
     let customHairStyleValue = '';
@@ -407,45 +426,80 @@
       { en: 'Bear', es: 'Oso', gender: 'neutral' }
     ];
 
+    // FIX 1: Updated physical traits with specific skin descriptions
     const physicalTraits = {
+      female: [
+        { en: 'medium tan skin with golden undertones, warm olive complexion', es: 'piel bronceada media con tonos dorados, tez cálida oliva' },
+        { en: 'light beige skin with yellow undertones, soft honey complexion', es: 'piel beige clara con tonos amarillos, tez suave miel' },
+        { en: 'fair porcelain skin with pink undertones, light ivory complexion', es: 'piel porcelana clara con tonos rosados, tez marfil claro' },
+        { en: 'very pale alabaster skin with cool undertones, snow-white complexion', es: 'piel alabastro muy pálida con tonos fríos, tez blanco nieve' },
+        { en: 'deep rich mahogany skin, dark chocolate brown complexion', es: 'piel caoba profunda y rica, tez marrón chocolate oscuro' },
+        { en: 'olive tan skin with warm undertones, golden bronze complexion', es: 'piel oliva bronceada con tonos cálidos, tez bronce dorado' }
+      ],
+      male: [
+        { en: 'medium tan skin with golden undertones, warm olive complexion', es: 'piel bronceada media con tonos dorados, tez cálida oliva' },
+        { en: 'light beige skin with yellow undertones, soft honey complexion', es: 'piel beige clara con tonos amarillos, tez suave miel' },
+        { en: 'fair porcelain skin with pink undertones, light ivory complexion', es: 'piel porcelana clara con tonos rosados, tez marfil claro' },
+        { en: 'very pale alabaster skin with cool undertones, snow-white complexion', es: 'piel alabastro muy pálida con tonos fríos, tez blanco nieve' },
+        { en: 'deep rich mahogany skin, dark chocolate brown complexion', es: 'piel caoba profunda y rica, tez marrón chocolate oscuro' },
+        { en: 'olive tan skin with warm undertones, golden bronze complexion', es: 'piel oliva bronceada con tonos cálidos, tez bronce dorado' }
+      ],
+      neutral: [
+        { en: 'medium tan skin with golden undertones, warm olive complexion', es: 'piel bronceada media con tonos dorados, tez cálida oliva' },
+        { en: 'light beige skin with yellow undertones, soft honey complexion', es: 'piel beige clara con tonos amarillos, tez suave miel' },
+        { en: 'fair porcelain skin with pink undertones, light ivory complexion', es: 'piel porcelana clara con tonos rosados, tez marfil claro' },
+        { en: 'very pale alabaster skin with cool undertones, snow-white complexion', es: 'piel alabastro muy pálida con tonos fríos, tez blanco nieve' },
+        { en: 'deep rich mahogany skin, dark chocolate brown complexion', es: 'piel caoba profunda y rica, tez marrón chocolate oscuro' },
+        { en: 'olive tan skin with warm undertones, golden bronze complexion', es: 'piel oliva bronceada con tonos cálidos, tez bronce dorado' }
+      ]
+    };
+
+    // Label names shown on buttons (shorter, user-friendly)
+    const physicalTraitLabels = {
       female: [
         { en: 'Latina - Caramel Skin', es: 'Latina - Piel Caramelo' },
         { en: 'Asian', es: 'Asiática' },
-        { en: 'Blonde', es: 'Rubia' },
-        { en: 'Rusa - Fair Skin', es: 'Rusa - Piel Clara' }
+        { en: 'Fair European', es: 'Europea Clara' },
+        { en: 'Russian / Nordic', es: 'Rusa / Nórdica' },
+        { en: 'African / Black', es: 'Africana Prieta' },
+        { en: 'Middle Eastern', es: 'Árabe / Medio Oriente' }
       ],
       male: [
         { en: 'Latino - Caramel Skin', es: 'Latino - Piel Caramelo' },
         { en: 'Asian', es: 'Asiático' },
-        { en: 'Blonde', es: 'Rubio' },
-        { en: 'Ruso - Fair Skin', es: 'Ruso - Piel Clara' }
+        { en: 'Fair European', es: 'Europeo Claro' },
+        { en: 'Russian / Nordic', es: 'Ruso / Nórdico' },
+        { en: 'African / Black', es: 'Africano Prieto' },
+        { en: 'Middle Eastern', es: 'Árabe / Medio Oriente' }
       ],
       neutral: [
         { en: 'Caramel Skin', es: 'Piel Caramelo' },
         { en: 'Asian', es: 'Asiático' },
-        { en: 'Blonde', es: 'Rubio' },
-        { en: 'Fair Skin', es: 'Piel Clara' }
+        { en: 'Fair European', es: 'Europeo Claro' },
+        { en: 'Russian / Nordic', es: 'Ruso / Nórdico' },
+        { en: 'African / Black', es: 'Africano/a Prieto/a' },
+        { en: 'Middle Eastern', es: 'Árabe / Medio Oriente' }
       ]
     };
 
     const hairStyles = {
       female: [
-        { en: 'Long Straight Silky', es: 'Largo Liso Sedoso', desc: 'long straight silky hair' },
-        { en: 'Long Loose Waves', es: 'Ondas Sueltas Largas', desc: 'long loose voluminous waves' },
-        { en: 'Voluminous Curly Afro', es: 'Afro Rizado Voluminoso', desc: 'voluminous curly afro' },
-        { en: 'Long Box Braids', es: 'Trenzas Box Largas', desc: 'long box braids' },
-        { en: 'Space Buns', es: 'Space Buns', desc: 'double space buns' },
-        { en: 'Long Pigtails', es: 'Coletas Largas', desc: 'cute long pigtails' },
-        { en: 'High Ponytail', es: 'Coleta Alta', desc: 'sleek high ponytail' },
-        { en: 'Half-Up Half-Down', es: 'Mitad Arriba Mitad Abajo', desc: 'half-up half-down style' },
-        { en: 'Sleek Bob Cut', es: 'Bob Elegante', desc: 'chin-length sleek bob cut' }
+        { en: 'Long Straight Silky', es: 'Largo Liso Sedoso', desc_en: 'long straight silky hair', desc_es: 'cabello largo liso sedoso' },
+        { en: 'Long Loose Waves', es: 'Ondas Sueltas Largas', desc_en: 'long loose voluminous waves', desc_es: 'ondas largas sueltas y voluminosas' },
+        { en: 'Voluminous Curly Afro', es: 'Afro Rizado Voluminoso', desc_en: 'voluminous curly afro', desc_es: 'afro rizado voluminoso' },
+        { en: 'Long Box Braids', es: 'Trenzas Box Largas', desc_en: 'long box braids', desc_es: 'trenzas box largas' },
+        { en: 'Space Buns', es: 'Space Buns', desc_en: 'double space buns', desc_es: 'doble moños space buns' },
+        { en: 'Long Pigtails', es: 'Coletas Largas', desc_en: 'cute long pigtails', desc_es: 'lindas coletas largas' },
+        { en: 'High Ponytail', es: 'Coleta Alta', desc_en: 'sleek high ponytail', desc_es: 'coleta alta elegante' },
+        { en: 'Half-Up Half-Down', es: 'Mitad Arriba Mitad Abajo', desc_en: 'half-up half-down style', desc_es: 'estilo mitad arriba mitad abajo' },
+        { en: 'Sleek Bob Cut', es: 'Bob Elegante', desc_en: 'chin-length sleek bob cut', desc_es: 'corte bob elegante a la altura del mentón' }
       ],
       male: [
-        { en: 'Long Straight', es: 'Largo Liso', desc: 'long straight hair' },
-        { en: 'Long Waves', es: 'Ondas Largas', desc: 'long wavy hair' },
-        { en: 'Curly Afro', es: 'Afro Rizado', desc: 'curly afro style' },
-        { en: 'Box Braids', es: 'Trenzas Box', desc: 'box braids' },
-        { en: 'High Ponytail', es: 'Coleta Alta', desc: 'high ponytail' }
+        { en: 'Long Straight', es: 'Largo Liso', desc_en: 'long straight hair', desc_es: 'cabello largo liso' },
+        { en: 'Long Waves', es: 'Ondas Largas', desc_en: 'long wavy hair', desc_es: 'cabello largo ondulado' },
+        { en: 'Curly Afro', es: 'Afro Rizado', desc_en: 'curly afro style', desc_es: 'estilo afro rizado' },
+        { en: 'Box Braids', es: 'Trenzas Box', desc_en: 'box braids', desc_es: 'trenzas box' },
+        { en: 'High Ponytail', es: 'Coleta Alta', desc_en: 'high ponytail', desc_es: 'coleta alta' }
       ]
     };
 
@@ -470,18 +524,18 @@
       { en: 'Sassy Standing', es: 'De Pie Descarada' },
       { en: 'Happy Waving', es: 'Saludando Feliz' },
       { en: 'Leaning Forward Playful', es: 'Inclinada Juguetona' },
-      { en: 'Peace Sign Head Tilt', es: 'Senal Paz Inclinada' },
-      { en: 'Blowing Kiss Heart Eyes', es: 'Soplando Beso Ojos Corazon' },
+      { en: 'Peace Sign Head Tilt', es: 'Señal Paz Inclinada' },
+      { en: 'Blowing Kiss Heart Eyes', es: 'Soplando Beso Ojos Corazón' },
       { en: 'Fierce Arms Crossed', es: 'Brazos Cruzados Feroz' },
       { en: 'Hair Flip Surprised', es: 'Volteo Cabello Sorprendida' },
       { en: 'Sitting Chin Rest', es: 'Sentada Barbilla' },
       { en: 'Victory Pose Big Grin', es: 'Pose Victoria Sonrisa Grande' },
-      { en: 'Heart Hands Shy Blush', es: 'Manos Corazon Timida' },
-      { en: 'Blowing Kiss Classic', es: 'Soplando Beso Clasico' },
+      { en: 'Heart Hands Shy Blush', es: 'Manos Corazón Tímida' },
+      { en: 'Blowing Kiss Classic', es: 'Soplando Beso Clásico' },
       { en: 'Holding Accessory', es: 'Sosteniendo Accesorio' },
       { en: 'Surprised Shocked', es: 'Sorprendida Impactada' },
       { en: 'Leaning Cool', es: 'Inclinada Genial' },
-      { en: 'Duo Group Pose', es: 'Pose Duo Grupo' }
+      { en: 'Duo Group Pose', es: 'Pose Dúo Grupo' }
     ];
 
     const backgrounds = {
@@ -526,7 +580,7 @@
       { en: 'Low Angle', es: 'Ángulo Bajo', prompt: 'low angle shot, camera slightly below eye level looking up' },
       { en: 'Worms Eye View', es: 'Vista de Gusano', prompt: 'EXTREME LOW ANGLE, camera on ground, character standing ABOVE camera, looking down at viewer, feet CLOSE and LARGE, head far and smaller, dramatic perspective from below, heroic pose' },
       { en: 'High Angle', es: 'Ángulo Alto', prompt: 'high angle shot, camera above looking down at character, elevated perspective' },
-      { en: 'Birds Eye View', es: 'Vista de Pajaro', prompt: 'bird eye view, extreme overhead shot from directly above, top-down perspective, character looking up' },
+      { en: 'Birds Eye View', es: 'Vista de Pájaro', prompt: 'bird eye view, extreme overhead shot from directly above, top-down perspective, character looking up' },
       { en: 'Over the Shoulder', es: 'Sobre el Hombro', prompt: 'over the shoulder shot, camera behind character' }
     ];
 
@@ -559,29 +613,29 @@
       { en: 'Halo Ring', es: 'Anillo Halo', desc: 'wearing ornate halo engagement ring' },
       { en: 'Choker Ribbon', es: 'Choker Cinta', desc: 'wearing delicate velvet ribbon choker' },
       { en: 'Nail Charms', es: 'Encantos Uñas', desc: 'wearing nail art with rhinestone charms' },
-      { en: 'Oversized Bow Belt', es: 'Cinturon Lazo', desc: 'wearing oversized silk bow belt' },
+      { en: 'Oversized Bow Belt', es: 'Cinturón Lazo', desc: 'wearing oversized silk bow belt' },
       { en: 'Septum Ring', es: 'Piercing Tabique', desc: 'wearing gold septum ring piercing' },
       { en: 'Body Chain', es: 'Cadena Corporal', desc: 'wearing delicate gold body chain' },
       { en: 'Ring Set', es: 'Juego de Anillos', desc: 'wearing multiple gold rings on fingers' },
-      { en: 'Chain Belt', es: 'Cinturon Cadena', desc: 'wearing gold chain belt' },
+      { en: 'Chain Belt', es: 'Cinturón Cadena', desc: 'wearing gold chain belt' },
       { en: 'Mini Designer Bag', es: 'Bolso Mini', desc: 'carrying luxury mini designer bag' }
     ];
 
     const sunglassesVariations = [
-      { id: 1, name: "Chunky Oversized Aviator", description: "marco negro grueso bold, lentes gradient orange/pink" },
-      { id: 2, name: "Cat-Eye Oversized", description: "forma felina elevada, marco metálico dorado, lentes tint rosa" },
-      { id: 3, name: "Shield Futurista", description: "lentes grandes continuas sin puente, vibe sci-fi blanco mate" },
-      { id: 4, name: "Square Bold", description: "marcos geométricos angulares negro mate, lentes gradient purple" },
-      { id: 5, name: "Butterfly Rounded", description: "forma mariposa suave, marco transparente, lentes ice blue" },
-      { id: 6, name: "Rimless Minimalist", description: "sin marco, lentes grandes gradient pink/lavanda" },
-      { id: 7, name: "Vintage Cat-Eye Modern", description: "retro con twist chunky, marco blanco puro, lentes tint melocotón" },
-      { id: 8, name: "Transparent Clear Frame", description: "marco acrílico invisible, lentes tintadas rosa pastel" }
+      { id: 1, name: "Chunky Oversized Aviator", description: "thick bold black frame, gradient orange/pink lenses" },
+      { id: 2, name: "Cat-Eye Oversized", description: "elevated feline shape, metallic gold frame, pink tint lenses" },
+      { id: 3, name: "Shield Futuristic", description: "large continuous lenses no bridge, sci-fi matte white vibe" },
+      { id: 4, name: "Square Bold", description: "angular geometric matte black frames, gradient purple lenses" },
+      { id: 5, name: "Butterfly Rounded", description: "soft butterfly shape, transparent frame, ice blue lenses" },
+      { id: 6, name: "Rimless Minimalist", description: "no frame, large gradient pink/lavender lenses" },
+      { id: 7, name: "Vintage Cat-Eye Modern", description: "retro with chunky twist, pure white frame, peach tint lenses" },
+      { id: 8, name: "Transparent Clear Frame", description: "invisible acrylic frame, pastel pink tinted lenses" }
     ];
 
     const completeOutfitsFemale = [
       { emoji: '👗', title: { en: 'Fashionable', es: 'A la Moda' }, desc: { en: 'trendy fashionable youthful outfit: stylish modern clothes, cute top with coverage, high-waisted jeans, fashionable sneakers, fully clothed', es: 'outfit juvenil de moda: ropa moderna elegante, top lindo con cobertura, jeans de tiro alto, tenis fashion, completamente vestida' } },
       { emoji: '💼', title: { en: 'Boss Baddie', es: 'Jefa Poderosa' }, desc: { en: 'fierce fabulous boss outfit: tailored blazer, blouse, high-waisted pants, classy heels, gold accessories, fully clothed', es: 'outfit de jefa fabulosa: blazer entallado, blusa, pantalón de tiro alto, tacones elegantes, accesorios dorados, completamente vestida' } },
-      { emoji: '🎉', title: { en: 'Party Ready', es: 'Lista para Fiesta' }, desc: { en: 'fun festive party outfit: sparkly top or dress with coverage, cute skirt, party heels, playful glamorous vibe, fully clothed', es: 'outfit festivo de fiesta: top o vestido brillante con cobertura, falda linda, tacones de fiesta, vibe glamoroso divertido, completamente vestida' } },
+      { emoji: '🎉', title: { en: 'Party Ready', es: 'Lista para Fiesta' }, desc: { en: 'fun festive party outfit: sparkly top with coverage, cute skirt, party heels, playful glamorous vibe, fully clothed', es: 'outfit festivo de fiesta: top brillante con cobertura, falda linda, tacones de fiesta, vibe glamoroso divertido, completamente vestida' } },
       { emoji: '✨', title: { en: 'Glam Diva', es: 'Diva Glamorosa' }, desc: { en: 'luxe dramatic diva outfit: elegant glamorous dress with full coverage, dramatic sleeves, statement jewelry, bold luxurious look, fully clothed', es: 'outfit de diva lujoso: vestido glamoroso elegante con cobertura completa, mangas dramáticas, joyería llamativa, look lujoso audaz, completamente vestida' } },
       { emoji: '🛹', title: { en: 'Street Style', es: 'Estilo Urbano' }, desc: { en: 'urban casual street style outfit: trendy hoodie or jacket, cargo pants, sneakers, layered accessories, cool street vibe, fully clothed', es: 'outfit estilo urbano casual: hoodie o chaqueta trendy, pantalones cargo, tenis, accesorios en capas, vibe urbano cool, completamente vestida' } },
       { emoji: '🧸', title: { en: 'Cozy Queen', es: 'Reina Acogedora' }, desc: { en: 'cozy queen outfit: soft hoodie or sweater, comfy joggers or leggings, cute accessories, relaxed adorable look, fully clothed', es: 'outfit de reina acogedora: hoodie o suéter suave, joggers o leggings cómodos, accesorios lindos, look relajado adorable, completamente vestida' } },
@@ -686,46 +740,62 @@
 
     let selectedOutfitType = null;
     let selectedCompleteOutfit = null;
-    let selectedBuildYourOwnOutfit = null;
-    let selectedShoes = null;
+    let selectedBuildYourOwnOutfitEN = null; // always stored in EN
+    let selectedShoes = null; // stored in EN
 
+    // ============ HELPER: always get EN version of selectedCharacter ============
+    function getCharacterEN() {
+      if (!selectedCharacter) return '';
+      const c = characters.find(ch => ch.en === selectedCharacter || ch.es === selectedCharacter);
+      return c ? c.en : selectedCharacter;
+    }
+
+    function getCharacterES() {
+      if (!selectedCharacter) return '';
+      const c = characters.find(ch => ch.en === selectedCharacter || ch.es === selectedCharacter);
+      return c ? c.es : selectedCharacter;
+    }
+
+    // ============ RENDER FUNCTIONS ============
     function renderOutfits() {
       const gender = getGender();
       const lang = currentLanguage;
       const completeOutfits = gender === 'female' ? completeOutfitsFemale : completeOutfitsMale;
       const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
-      
+
       const completeContainer = document.getElementById('complete-looks-container');
       if (completeContainer) {
         completeContainer.innerHTML = completeOutfits.map((outfit, index) => {
-          const title = typeof outfit.title === 'object' ? outfit.title[lang] : outfit.title;
-          const desc = typeof outfit.desc === 'object' ? outfit.desc[lang] : outfit.desc;
-          
+          const title = outfit.title[lang];
+          const desc = outfit.desc[lang];
           return `
             <div class="outfit-card" onclick="selectCompleteOutfit(${index})">
               <span class="outfit-card-checkmark">✓</span>
               <span class="outfit-card-emoji">${outfit.emoji}</span>
               <div class="outfit-card-title">${title}</div>
               <div class="outfit-card-description">${desc.substring(0, 60)}...</div>
-            </div>
-          `;
+            </div>`;
         }).join('');
       }
-      
+
       const buildContainer = document.getElementById('build-your-own-container');
       if (buildContainer) {
         buildContainer.innerHTML = buildYourOwn.map((outfit, index) => {
-          const text = typeof outfit === 'object' ? outfit[lang] : outfit;
-          const safeText = text.replace(/'/g, "\\'");
-          
-          return `<button class="option-button" onclick="selectBuildYourOwnOutfit('${safeText}')">${text}</button>`;
+          const label = outfit[lang];
+          const enKey = outfit.en;
+          const safe = enKey.replace(/'/g, "\\'");
+          return `<button class="option-button ${selectedBuildYourOwnOutfitEN === enKey ? 'selected' : ''}" onclick="selectBuildYourOwnOutfit('${safe}')">${label}</button>`;
         }).join('') + `
-          <button class="option-button" onclick="selectBuildYourOwnOutfit('Custom Outfit')">
+          <button class="option-button ${selectedBuildYourOwnOutfitEN === 'Custom Outfit' ? 'selected' : ''}" onclick="selectBuildYourOwnOutfit('Custom Outfit')">
             ✏️ ${lang === 'en' ? 'Custom Outfit' : 'Outfit Personalizado'}
           </button>
+          ${selectedBuildYourOwnOutfitEN === 'Custom Outfit' ? `
+          <div class="custom-input-container" id="custom-outfit-container" style="width:100%">
+            <input type="text" id="custom-outfit-input" class="custom-text-input" placeholder="${lang === 'en' ? 'Describe your custom outfit...' : 'Describe tu outfit personalizado...'}" value="${customOutfitValue}" oninput="updateCustomOutfit(this.value)">
+          </div>` : ''}
         `;
       }
-      
+
       renderShoes();
       renderCameraAngles();
       renderColorPalettes();
@@ -735,305 +805,168 @@
       const gender = getGender();
       const lang = currentLanguage;
       const shoes = gender === 'female' ? shoesFemale : shoesMale;
-      
       const shoesContainer = document.getElementById('shoes-container');
       if (shoesContainer) {
         shoesContainer.innerHTML = shoes.map(shoe => {
-          const name = typeof shoe.name === 'object' ? shoe.name[lang] : shoe.name;
-          return `<button class="option-button" onclick="selectShoes('${name}')">${shoe.emoji} ${name}</button>`;
+          const nameLabel = shoe.name[lang];
+          const nameEN = shoe.name.en;
+          return `<button class="option-button ${selectedShoes === nameEN ? 'selected' : ''}" onclick="selectShoes('${nameEN}')">${shoe.emoji} ${nameLabel}</button>`;
         }).join('') + `
-          <button class="option-button" onclick="selectShoes('Custom Shoes')">
+          <button class="option-button ${selectedShoes === 'Custom Shoes' ? 'selected' : ''}" onclick="selectShoes('Custom Shoes')">
             ✏️ ${lang === 'en' ? 'Custom Shoes' : 'Zapatos Personalizados'}
-          </button>
-        `;
+          </button>`;
+        const customShoesContainer = document.getElementById('custom-shoes-container');
+        if (customShoesContainer) {
+          if (selectedShoes === 'Custom Shoes') {
+            customShoesContainer.classList.remove('hidden');
+          } else {
+            customShoesContainer.classList.add('hidden');
+          }
+        }
       }
     }
 
     function renderCameraAngles() {
       const lang = currentLanguage;
       const container = document.getElementById('camera-angle-container');
-      
       if (container) {
         container.innerHTML = cameraAngles.map(angle => {
           const text = angle[lang];
-          return `<button class="option-button" onclick="selectCameraAngle('${angle.en}')">${text}</button>`;
+          return `<button class="option-button ${selectedCameraAngle === angle.en ? 'selected' : ''}" onclick="selectCameraAngle('${angle.en}')">${text}</button>`;
         }).join('') + `
-          <button class="option-button" onclick="selectCameraAngle('Custom Camera Angle')">
+          <button class="option-button ${selectedCameraAngle === 'Custom Camera Angle' ? 'selected' : ''}" onclick="selectCameraAngle('Custom Camera Angle')">
             ✏️ ${lang === 'en' ? 'Custom Angle' : 'Ángulo Personalizado'}
-          </button>
-        `;
+          </button>`;
+        const customContainer = document.getElementById('custom-camera-angle-container');
+        if (customContainer) {
+          customContainer.classList.toggle('hidden', selectedCameraAngle !== 'Custom Camera Angle');
+        }
       }
     }
 
     function selectCameraAngle(angle) {
-      if (selectedCameraAngle === angle) {
-        selectedCameraAngle = null;
-        const customContainer = document.getElementById('custom-camera-angle-container');
-        if (customContainer) {
-          customContainer.classList.add('hidden');
-          customCameraAngleValue = '';
-        }
-        document.querySelectorAll('#camera-angle-container .option-button').forEach(btn => {
-          btn.classList.remove('selected');
-        });
-        return;
-      }
-      
-      selectedCameraAngle = angle;
-      const customContainer = document.getElementById('custom-camera-angle-container');
-      if (customContainer) {
-        if (angle === 'Custom Camera Angle' || angle === 'Custom Angle') {
-          customContainer.classList.remove('hidden');
-        } else {
-          customContainer.classList.add('hidden');
-          customCameraAngleValue = '';
-        }
-      }
-      
-      document.querySelectorAll('#camera-angle-container .option-button').forEach(btn => {
-        const btnText = btn.textContent.trim();
-        const matchingAngle = cameraAngles.find(a => a.en === angle || a.es === angle);
-        
-        if (matchingAngle) {
-          if (btnText.includes(matchingAngle.en) || btnText.includes(matchingAngle.es)) {
-            btn.classList.add('selected');
-          } else {
-            btn.classList.remove('selected');
-          }
-        } else if (btnText.includes(angle)) {
-          btn.classList.add('selected');
-        } else {
-          btn.classList.remove('selected');
-        }
-      });
+      selectedCameraAngle = selectedCameraAngle === angle ? null : angle;
+      renderCameraAngles();
     }
 
-    function updateCustomCameraAngle(value) {
-      customCameraAngleValue = cleanText(value);
-    }
+    function updateCustomCameraAngle(value) { customCameraAngleValue = cleanText(value); }
 
     function renderColorPalettes() {
       const lang = currentLanguage;
       const container = document.getElementById('color-palette-container');
-      
       if (container) {
         container.innerHTML = colorPalettes.map((palette, index) => {
           const text = palette[lang];
           const emoji = palette.isDefault ? ' ⭐' : '';
-          const selectedClass = palette.isDefault ? ' selected' : '';
-          return `<button class="option-button${selectedClass}" onclick="selectColorPalette(${index})">${text}${emoji}</button>`;
+          const isSelected = selectedColorPalette && typeof selectedColorPalette === 'object' && selectedColorPalette.en === palette.en;
+          return `<button class="option-button ${isSelected ? 'selected' : ''}" onclick="selectColorPalette(${index})">${text}${emoji}</button>`;
         }).join('') + `
-          <button class="option-button" onclick="selectColorPalette('custom')">
+          <button class="option-button ${selectedColorPalette === 'custom' ? 'selected' : ''}" onclick="selectColorPalette('custom')">
             ✏️ ${lang === 'en' ? 'Custom Palette' : 'Paleta Personalizada'}
-          </button>
-        `;
+          </button>`;
+        const customContainer = document.getElementById('custom-color-palette-container');
+        if (customContainer) {
+          customContainer.classList.toggle('hidden', selectedColorPalette !== 'custom');
+        }
       }
     }
 
     function selectColorPalette(paletteIndexOrCustom) {
       if (paletteIndexOrCustom === 'custom') {
         selectedColorPalette = 'custom';
-        const customContainer = document.getElementById('custom-color-palette-container');
-        if (customContainer) {
-          customContainer.classList.remove('hidden');
-        }
       } else {
         selectedColorPalette = colorPalettes[paletteIndexOrCustom];
-        const customContainer = document.getElementById('custom-color-palette-container');
-        if (customContainer) {
-          customContainer.classList.add('hidden');
-          customColorPaletteValue = '';
-        }
       }
-      
-      document.querySelectorAll('#color-palette-container .option-button').forEach((btn, index) => {
-        if (paletteIndexOrCustom === 'custom' && btn.onclick && btn.onclick.toString().includes('custom')) {
-          btn.classList.add('selected');
-        } else if (typeof paletteIndexOrCustom === 'number' && index === paletteIndexOrCustom) {
-          btn.classList.add('selected');
-        } else {
-          btn.classList.remove('selected');
-        }
-      });
+      renderColorPalettes();
     }
 
-    function updateCustomColorPalette(value) {
-      customColorPaletteValue = cleanText(value);
-    }
+    function updateCustomColorPalette(value) { customColorPaletteValue = cleanText(value); }
 
     function selectCompleteOutfit(index) {
       selectedOutfitType = 'complete';
       const gender = getGender();
       const completeOutfits = gender === 'female' ? completeOutfitsFemale : completeOutfitsMale;
       selectedCompleteOutfit = completeOutfits[index];
-      selectedBuildYourOwnOutfit = null;
+      selectedBuildYourOwnOutfitEN = null;
       selectedShoes = null;
-      
       document.querySelectorAll('.outfit-card').forEach((card, i) => {
-        if (i === index) {
-          card.classList.add('selected');
-        } else {
-          card.classList.remove('selected');
-        }
+        card.classList.toggle('selected', i === index);
       });
-      
-      document.querySelectorAll('#build-your-own-container .option-button').forEach(btn => {
-        btn.classList.remove('selected');
-      });
-      
+      document.querySelectorAll('#build-your-own-container .option-button').forEach(btn => btn.classList.remove('selected'));
       const shoesSection = document.getElementById('shoes-section');
-      if (shoesSection) {
-        shoesSection.classList.remove('visible');
-        shoesSection.style.display = 'none';
-      }
+      if (shoesSection) { shoesSection.classList.remove('visible'); shoesSection.style.display = 'none'; }
     }
 
-    function selectBuildYourOwnOutfit(outfit) {
+    // FIX 2: selectBuildYourOwnOutfit always stores EN key
+    function selectBuildYourOwnOutfit(outfitEN) {
       selectedOutfitType = 'build-your-own';
-      selectedBuildYourOwnOutfit = outfit;
+      selectedBuildYourOwnOutfitEN = outfitEN;
       selectedCompleteOutfit = null;
-      
-      document.querySelectorAll('.outfit-card').forEach(card => {
-        card.classList.remove('selected');
-      });
-      
-      document.querySelectorAll('#build-your-own-container .option-button').forEach(btn => {
-        if (btn.textContent.includes(outfit) || btn.onclick.toString().includes(outfit)) {
-          btn.classList.add('selected');
-        } else {
-          btn.classList.remove('selected');
-        }
-      });
-      
+      document.querySelectorAll('.outfit-card').forEach(card => card.classList.remove('selected'));
       const shoesSection = document.getElementById('shoes-section');
-      if (shoesSection) {
-        shoesSection.style.display = 'block';
-        setTimeout(() => shoesSection.classList.add('visible'), 10);
+      if (shoesSection) { shoesSection.style.display = 'block'; setTimeout(() => shoesSection.classList.add('visible'), 10); }
+      renderOutfits(); // re-render to show/hide custom input
+    }
+
+    // FIX 2: selectShoes always stores EN key
+    function selectShoes(shoeEN) {
+      selectedShoes = shoeEN;
+      if (shoeEN !== 'Custom Shoes') customShoesValue = '';
+      renderShoes();
+    }
+
+    function updateCustomShoes(value) { customShoesValue = cleanText(value); }
+
+    function selectHairStyle(styleEN) {
+      selectedHairStyle = selectedHairStyle === styleEN ? '' : styleEN;
+      const colorSection = document.getElementById('hair-color-section');
+      if (colorSection) {
+        colorSection.classList.toggle('hidden', !selectedHairStyle);
+        if (!selectedHairStyle) { selectedHairColor = ''; renderHairColors(); }
       }
+      if (styleEN !== 'Custom Hair Style') customHairStyleValue = '';
+      renderHairStyles();
     }
 
-    function selectShoes(shoes) {
-      selectedShoes = shoes;
-      
-      const customShoesContainer = document.getElementById('custom-shoes-container');
-      if (customShoesContainer) {
-        if (shoes === 'Custom Shoes' || shoes === 'Zapatos Personalizados') {
-          customShoesContainer.classList.remove('hidden');
-        } else {
-          customShoesContainer.classList.add('hidden');
-          customShoesValue = '';
-        }
-      }
-      
-      document.querySelectorAll('#shoes-container .option-button').forEach(btn => {
-        if (btn.textContent.includes(shoes)) {
-          btn.classList.add('selected');
-        } else {
-          btn.classList.remove('selected');
-        }
-      });
+    function updateCustomHairStyle(value) { customHairStyleValue = cleanText(value); }
+
+    function selectHairColor(colorEN) {
+      selectedHairColor = selectedHairColor === colorEN ? '' : colorEN;
+      if (colorEN !== 'Custom Hair Color') customHairColorValue = '';
+      renderHairColors();
     }
 
-    function updateCustomShoes(value) {
-      customShoesValue = cleanText(value);
+    function updateCustomHairColor(value) { customHairColorValue = cleanText(value); }
+    function updateCustomOutfit(value) { customOutfitValue = cleanText(value); }
+
+    function selectPose(poseEN) {
+      selectedPose = selectedPose === poseEN ? '' : poseEN;
+      if (poseEN !== 'Custom Pose') customPoseValue = '';
+      renderPoses();
     }
 
-    function selectHairStyle(style) {
-      selectedHairStyle = style;
-      
-      const container = document.getElementById('custom-hair-style-container');
-      if (container) {
-        if (style === 'Custom Hair Style') {
-          container.classList.remove('hidden');
-        } else {
-          container.classList.add('hidden');
-          customHairStyleValue = '';
-        }
-      }
+    function updateCustomPose(value) { customPoseValue = cleanText(value); }
+
+    function selectBackground(bgEN) {
+      selectedBackground = selectedBackground === bgEN ? '' : bgEN;
+      if (bgEN !== 'Custom Background') customBackgroundValue = '';
+      renderBackgrounds();
     }
 
-    function updateCustomHairStyle(value) {
-      customHairStyleValue = cleanText(value);
-    }
-
-    function selectHairColor(color) {
-      selectedHairColor = color;
-      
-      const container = document.getElementById('custom-hair-color-container');
-      if (container) {
-        if (color === 'Custom Hair Color') {
-          container.classList.remove('hidden');
-        } else {
-          container.classList.add('hidden');
-          customHairColorValue = '';
-        }
-      }
-    }
-
-    function updateCustomHairColor(value) {
-      customHairColorValue = cleanText(value);
-    }
-
-    function updateCustomOutfit(value) {
-      customOutfitValue = cleanText(value);
-    }
-
-    function selectPose(pose) {
-      selectedPose = pose;
-      
-      const container = document.getElementById('custom-pose-container');
-      if (container) {
-        if (pose === 'Custom Pose') {
-          container.classList.remove('hidden');
-        } else {
-          container.classList.add('hidden');
-          customPoseValue = '';
-        }
-      }
-    }
-
-    function updateCustomPose(value) {
-      customPoseValue = cleanText(value);
-    }
-
-    function selectBackground(bg) {
-      selectedBackground = bg;
-      
-      const container = document.getElementById('custom-background-container');
-      if (container) {
-        if (bg === 'Custom Background') {
-          container.classList.remove('hidden');
-        } else {
-          container.classList.add('hidden');
-          customBackgroundValue = '';
-        }
-      }
-    }
-
-    function updateCustomBackground(value) {
-      customBackgroundValue = cleanText(value);
-    }
+    function updateCustomBackground(value) { customBackgroundValue = cleanText(value); }
 
     function setLanguage(lang) {
       currentLanguage = lang;
-      document.getElementById('lang-en').classList.remove('active');
-      document.getElementById('lang-es').classList.remove('active');
-      document.getElementById(`lang-${lang}`).classList.add('active');
+      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+      document.getElementById('lang-es').classList.toggle('active', lang === 'es');
       updateLabels();
       renderAll();
     }
 
     function updateLabels() {
-      const labels = currentLanguage === 'en' ? {
-        surprise: 'RANDOMIZE',
-        clear: 'CLEAR',
-        generate: 'GENERATE PROMPT'
-      } : {
-        surprise: 'ALEATORIO',
-        clear: 'LIMPIAR',
-        generate: 'GENERAR PROMPT'
-      };
-
+      const labels = currentLanguage === 'en'
+        ? { surprise: 'RANDOMIZE', clear: 'CLEAR', generate: 'GENERATE PROMPT' }
+        : { surprise: 'ALEATORIO', clear: 'LIMPIAR', generate: 'GENERAR PROMPT' };
       document.getElementById('surprise-btn').textContent = labels.surprise;
       document.getElementById('clear-btn').textContent = labels.clear;
       document.getElementById('generate-btn').textContent = labels.generate;
@@ -1041,17 +974,10 @@
 
     function addCustomAccessory() {
       const input = document.getElementById('custom-accessory-input').value.trim();
-      if (input) {
-        customAccessoryItems.push(input);
-        document.getElementById('custom-accessory-input').value = '';
-        renderCustomAccessories();
-      }
+      if (input) { customAccessoryItems.push(input); document.getElementById('custom-accessory-input').value = ''; renderCustomAccessories(); }
     }
 
-    function removeCustomAccessory(index) {
-      customAccessoryItems.splice(index, 1);
-      renderCustomAccessories();
-    }
+    function removeCustomAccessory(index) { customAccessoryItems.splice(index, 1); renderCustomAccessories(); }
 
     function renderCustomAccessories() {
       const container = document.getElementById('custom-accessories-buttons');
@@ -1059,62 +985,28 @@
       customAccessoryItems.forEach((item, index) => {
         const btn = document.createElement('button');
         btn.className = 'chip-btn active';
-        btn.style.display = 'flex';
-        btn.style.alignItems = 'center';
-        btn.style.gap = '6px';
-        btn.innerHTML = `${item} <span style="cursor: pointer; font-weight: bold;">×</span>`;
-        btn.onclick = (e) => {
-          e.preventDefault();
-          removeCustomAccessory(index);
-        };
+        btn.style.display = 'flex'; btn.style.alignItems = 'center'; btn.style.gap = '6px';
+        btn.innerHTML = `${item} <span style="cursor:pointer;font-weight:bold;">×</span>`;
+        btn.onclick = (e) => { e.preventDefault(); removeCustomAccessory(index); };
         container.appendChild(btn);
       });
     }
 
     function setNeutralGender(gender) {
       selectedNeutralGender = selectedNeutralGender === gender ? null : gender;
-      
-      document.getElementById('gender-female').classList.remove('active');
-      document.getElementById('gender-male').classList.remove('active');
-      
-      if (selectedNeutralGender === 'female') {
-        document.getElementById('gender-female').classList.add('active');
-      } else if (selectedNeutralGender === 'male') {
-        document.getElementById('gender-male').classList.add('active');
-      }
-      
-      selectedPhysicalTrait = '';
-      selectedHairStyle = '';
-      selectedHairColor = '';
-      selectedAccessories = [];
-      selectedSunglasses = null;
-      customAccessoryItems = [];
-      customHairStyleValue = '';
-      customHairColorValue = '';
-      customOutfitValue = '';
-      customShoesValue = '';
-      customPoseValue = '';
-      customBackgroundValue = '';
-      
-      renderPhysicalTraits();
-      renderHairStyles();
-      renderHairColors();
-      renderAccessories();
-      renderOutfits();
+      document.getElementById('gender-female').classList.toggle('active', selectedNeutralGender === 'female');
+      document.getElementById('gender-male').classList.toggle('active', selectedNeutralGender === 'male');
+      selectedPhysicalTrait = ''; selectedHairStyle = ''; selectedHairColor = '';
+      selectedAccessories = []; selectedSunglasses = null; customAccessoryItems = [];
+      customHairStyleValue = ''; customHairColorValue = ''; customOutfitValue = '';
+      customShoesValue = ''; customPoseValue = ''; customBackgroundValue = '';
+      renderPhysicalTraits(); renderHairStyles(); renderHairColors(); renderAccessories(); renderOutfits();
     }
 
     function renderAll() {
-      renderCategories();
-      renderStyles();
-      renderCharacters();
-      renderPhysicalTraits();
-      renderHairStyles();
-      renderHairColors();
-      renderPoses();
-      renderBackgrounds();
-      renderAccessories();
-      renderCustomAccessories();
-      renderOutfits();
+      renderCategories(); renderStyles(); renderCharacters(); renderPhysicalTraits();
+      renderHairStyles(); renderHairColors(); renderPoses(); renderBackgrounds();
+      renderAccessories(); renderCustomAccessories(); renderOutfits();
     }
 
     function renderCategories() {
@@ -1123,16 +1015,12 @@
       categories.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = `category-btn category-${cat.id} ${selectedCategory === cat.id ? 'active' : ''}`;
-        const emojis = { notebook: '📓', coloring: '🖌', tshirt: '👕', '3d': '3️⃣' };
+        const emojis = { notebook: '📓', coloring: '🖌️', tshirt: '👕', '3d': '3️⃣' };
         const label = currentLanguage === 'en' ? cat.en : cat.es;
         btn.textContent = `${emojis[cat.id]} ${label}`;
-        btn.onclick = () => { 
-          selectedCategory = cat.id;
-          selectedStyle = '';
-          selectedBackground = '';
-          renderCategories();
-          renderStyles();
-          renderBackgrounds();
+        btn.onclick = () => {
+          selectedCategory = cat.id; selectedStyle = ''; selectedBackground = '';
+          renderCategories(); renderStyles(); renderBackgrounds();
         };
         container.appendChild(btn);
       });
@@ -1144,13 +1032,12 @@
       const styleList = styles[selectedCategory] || [];
       styleList.forEach(style => {
         const btn = document.createElement('button');
-        const styleName = currentLanguage === 'en' ? style.en : style.es;
-        btn.className = `chip-btn ${selectedStyle === styleName ? 'active' : ''}`;
-        btn.textContent = styleName;
-        btn.onclick = () => { 
-          selectedStyle = selectedStyle === styleName ? '' : styleName; 
-          renderStyles(); 
-          hideColorPaletteIfColoring();
+        const label = currentLanguage === 'en' ? style.en : style.es;
+        btn.className = `chip-btn ${selectedStyle === style.en ? 'active' : ''}`;
+        btn.textContent = label;
+        btn.onclick = () => {
+          selectedStyle = selectedStyle === style.en ? '' : style.en;
+          renderStyles(); hideColorPaletteIfColoring();
         };
         container.appendChild(btn);
       });
@@ -1159,12 +1046,7 @@
     function hideColorPaletteIfColoring() {
       const coloringStyles = ['Mandala', 'Zentangle', 'Floral', 'Fantasy', 'Kawaii Cute'];
       const colorPaletteSection = document.getElementById('color-palette-section');
-      
-      if (selectedCategory === 'coloring' && coloringStyles.includes(selectedStyle)) {
-        colorPaletteSection.style.display = 'none';
-      } else {
-        colorPaletteSection.style.display = 'block';
-      }
+      colorPaletteSection.style.display = (selectedCategory === 'coloring' && coloringStyles.includes(selectedStyle)) ? 'none' : 'block';
     }
 
     function renderCharacters() {
@@ -1172,38 +1054,21 @@
       container.innerHTML = '';
       characters.forEach(char => {
         const btn = document.createElement('button');
-        const charName = currentLanguage === 'en' ? char.en : char.es;
-        btn.className = `chip-btn ${selectedCharacter === charName ? 'active' : ''}`;
-        btn.textContent = charName;
-        btn.onclick = () => { 
-          if (selectedCharacter === charName) {
-            selectedCharacter = '';
-            selectedNeutralGender = null;
+        const label = currentLanguage === 'en' ? char.en : char.es;
+        btn.className = `chip-btn ${selectedCharacter === char.en ? 'active' : ''}`;
+        btn.textContent = label;
+        btn.onclick = () => {
+          if (selectedCharacter === char.en) {
+            selectedCharacter = ''; selectedNeutralGender = null;
           } else {
-            selectedCharacter = charName; 
-            selectedNeutralGender = null;
+            selectedCharacter = char.en; selectedNeutralGender = null;
           }
-          
-          selectedPhysicalTrait = '';
-          selectedHairStyle = '';
-          selectedHairColor = '';
-          selectedAccessories = [];
-          selectedSunglasses = null;
-          customAccessoryItems = [];
-          customHairStyleValue = '';
-          customHairColorValue = '';
-          customOutfitValue = '';
-          customShoesValue = '';
-          customPoseValue = '';
-          customBackgroundValue = '';
-          
-          renderCharacters();
-          renderGenderSection();
-          renderPhysicalTraits();
-          renderHairStyles();
-          renderHairColors();
-          renderAccessories();
-          renderOutfits();
+          selectedPhysicalTrait = ''; selectedHairStyle = ''; selectedHairColor = '';
+          selectedAccessories = []; selectedSunglasses = null; customAccessoryItems = [];
+          customHairStyleValue = ''; customHairColorValue = ''; customOutfitValue = '';
+          customShoesValue = ''; customPoseValue = ''; customBackgroundValue = '';
+          renderCharacters(); renderGenderSection(); renderPhysicalTraits();
+          renderHairStyles(); renderHairColors(); renderAccessories(); renderOutfits();
         };
         container.appendChild(btn);
       });
@@ -1211,77 +1076,38 @@
 
     function renderGenderSection() {
       const section = document.getElementById('gender-section');
-      const character = characters.find(c => {
-        const charName = currentLanguage === 'en' ? c.en : c.es;
-        return charName === selectedCharacter;
-      });
-
+      const character = characters.find(c => c.en === selectedCharacter);
       if (!character || character.gender !== 'neutral') {
-        section.classList.add('hidden');
-        selectedNeutralGender = null;
-        return;
+        section.classList.add('hidden'); selectedNeutralGender = null; return;
       }
-
       section.classList.remove('hidden');
-      
       const titleEl = document.getElementById('gender-section-title');
-      const charName = currentLanguage === 'en' ? character.en : character.es;
-      if (currentLanguage === 'en') {
-        titleEl.textContent = `Choose ${charName} Gender`;
-      } else {
-        titleEl.textContent = `Elige Género del ${charName}`;
-      }
-
-      document.getElementById('gender-female').classList.remove('active');
-      document.getElementById('gender-male').classList.remove('active');
-      
-      if (selectedNeutralGender === 'female') {
-        document.getElementById('gender-female').classList.add('active');
-      } else if (selectedNeutralGender === 'male') {
-        document.getElementById('gender-male').classList.add('active');
-      }
+      const charLabel = currentLanguage === 'en' ? character.en : character.es;
+      titleEl.textContent = currentLanguage === 'en' ? `Choose ${charLabel} Gender` : `Elige Género del ${charLabel}`;
+      document.getElementById('gender-female').classList.toggle('active', selectedNeutralGender === 'female');
+      document.getElementById('gender-male').classList.toggle('active', selectedNeutralGender === 'male');
     }
 
     function renderPhysicalTraits() {
       const container = document.getElementById('physical-traits-container');
       const section = document.getElementById('physical-traits-section');
-      
-      if (!selectedCharacter) {
-        section.classList.add('hidden');
-        return;
-      }
-
+      if (!selectedCharacter) { section.classList.add('hidden'); return; }
       section.classList.remove('hidden');
       container.innerHTML = '';
-
-      const character = characters.find(c => {
-        const charName = currentLanguage === 'en' ? c.en : c.es;
-        return charName === selectedCharacter;
-      });
-      
-      if (!character) {
-        section.classList.add('hidden');
-        return;
-      }
-
+      const character = characters.find(c => c.en === selectedCharacter);
+      if (!character) { section.classList.add('hidden'); return; }
       let gender = character.gender || 'neutral';
-      
-      if (gender === 'neutral' && selectedNeutralGender) {
-        gender = selectedNeutralGender;
-      } else if (gender === 'neutral') {
-        section.classList.add('hidden');
-        return;
-      }
-
+      if (gender === 'neutral' && selectedNeutralGender) { gender = selectedNeutralGender; }
+      else if (gender === 'neutral') { section.classList.add('hidden'); return; }
       const traitsList = physicalTraits[gender] || [];
-      
-      traitsList.forEach(trait => {
+      const labelsList = physicalTraitLabels[gender] || [];
+      traitsList.forEach((trait, i) => {
         const btn = document.createElement('button');
-        const traitName = currentLanguage === 'en' ? trait.en : trait.es;
-        btn.className = `chip-btn ${selectedPhysicalTrait === traitName ? 'active' : ''}`;
-        btn.textContent = traitName;
-        btn.onclick = () => { 
-          selectedPhysicalTrait = selectedPhysicalTrait === traitName ? '' : traitName; 
+        const label = labelsList[i] ? (currentLanguage === 'en' ? labelsList[i].en : labelsList[i].es) : trait.en;
+        btn.className = `chip-btn ${selectedPhysicalTrait === trait.en ? 'active' : ''}`;
+        btn.textContent = label;
+        btn.onclick = () => {
+          selectedPhysicalTrait = selectedPhysicalTrait === trait.en ? '' : trait.en;
           renderPhysicalTraits();
         };
         container.appendChild(btn);
@@ -1292,81 +1118,49 @@
       const container = document.getElementById('hair-style-container');
       const section = document.getElementById('hair-style-section');
       const colorSection = document.getElementById('hair-color-section');
-      
-      if (!selectedCharacter) {
-        section.classList.add('hidden');
-        colorSection.classList.add('hidden');
-        return;
-      }
-
+      if (!selectedCharacter) { section.classList.add('hidden'); colorSection.classList.add('hidden'); return; }
       section.classList.remove('hidden');
       container.innerHTML = '';
-
-      const character = characters.find(c => {
-        const charName = currentLanguage === 'en' ? c.en : c.es;
-        return charName === selectedCharacter;
-      });
-      
-      if (!character) {
-        section.classList.add('hidden');
-        colorSection.classList.add('hidden');
-        return;
-      }
-
+      const character = characters.find(c => c.en === selectedCharacter);
+      if (!character) { section.classList.add('hidden'); colorSection.classList.add('hidden'); return; }
       let gender = character.gender || 'neutral';
-      
-      if (gender === 'neutral' && selectedNeutralGender) {
-        gender = selectedNeutralGender;
-      } else if (gender === 'neutral') {
-        section.classList.add('hidden');
-        colorSection.classList.add('hidden');
-        return;
-      }
-
-      let styleList = [];
-      if (gender === 'male') {
-        styleList = hairStyles['male'] || [];
-      } else if (gender === 'female') {
-        styleList = hairStyles['female'] || [];
-      } else {
-        styleList = hairStyles['female'] || [];
-      }
-      
+      if (gender === 'neutral' && selectedNeutralGender) { gender = selectedNeutralGender; }
+      else if (gender === 'neutral') { section.classList.add('hidden'); colorSection.classList.add('hidden'); return; }
+      const styleList = gender === 'male' ? hairStyles['male'] : hairStyles['female'];
       styleList.forEach(style => {
         const btn = document.createElement('button');
-        const styleName = currentLanguage === 'en' ? style.en : style.es;
-        btn.className = `chip-btn ${selectedHairStyle === styleName ? 'active' : ''}`;
-        btn.textContent = styleName;
-        btn.onclick = () => { 
-          selectedHairStyle = selectedHairStyle === styleName ? '' : styleName;
-          if (selectedHairStyle) {
-            colorSection.classList.remove('hidden');
-          } else {
-            colorSection.classList.add('hidden');
-            selectedHairColor = '';
-            renderHairColors();
-          }
+        const label = currentLanguage === 'en' ? style.en : style.es;
+        btn.className = `chip-btn ${selectedHairStyle === style.en ? 'active' : ''}`;
+        btn.textContent = label;
+        btn.onclick = () => {
+          selectedHairStyle = selectedHairStyle === style.en ? '' : style.en;
+          const cs = document.getElementById('hair-color-section');
+          if (cs) cs.classList.toggle('hidden', !selectedHairStyle);
+          if (!selectedHairStyle) { selectedHairColor = ''; renderHairColors(); }
+          if (style.en !== 'Custom Hair Style') customHairStyleValue = '';
           renderHairStyles();
         };
         container.appendChild(btn);
       });
+      // Show custom hair style input if selected
+      const customContainer = document.getElementById('custom-hair-style-container');
+      if (customContainer) customContainer.classList.toggle('hidden', selectedHairStyle !== 'Custom Hair Style');
     }
 
     function renderHairColors() {
       const container = document.getElementById('hair-color-container');
       container.innerHTML = '';
-      
       hairColors.forEach(color => {
         const btn = document.createElement('button');
-        const colorName = currentLanguage === 'en' ? color.en : color.es;
-        btn.className = `chip-btn ${selectedHairColor === colorName ? 'active' : ''}`;
-        btn.textContent = colorName;
-        btn.onclick = () => { 
-          selectedHairColor = selectedHairColor === colorName ? '' : colorName; 
-          renderHairColors(); 
-        };
+        const label = currentLanguage === 'en' ? color.en : color.es;
+        btn.className = `chip-btn ${selectedHairColor === color.en ? 'active' : ''}`;
+        btn.textContent = label;
+        btn.onclick = () => { selectedHairColor = selectedHairColor === color.en ? '' : color.en; renderHairColors(); };
         container.appendChild(btn);
       });
+      // Show custom hair color input if selected
+      const customContainer = document.getElementById('custom-hair-color-container');
+      if (customContainer) customContainer.classList.toggle('hidden', selectedHairColor !== 'Custom Hair Color');
     }
 
     function renderPoses() {
@@ -1374,15 +1168,18 @@
       container.innerHTML = '';
       poses.forEach(pose => {
         const btn = document.createElement('button');
-        const poseName = currentLanguage === 'en' ? pose.en : pose.es;
-        btn.className = `chip-btn ${selectedPose === poseName ? 'active' : ''}`;
-        btn.textContent = poseName;
-        btn.onclick = () => { 
-          selectedPose = selectedPose === poseName ? '' : poseName; 
-          renderPoses(); 
+        const label = currentLanguage === 'en' ? pose.en : pose.es;
+        btn.className = `chip-btn ${selectedPose === pose.en ? 'active' : ''}`;
+        btn.textContent = label;
+        btn.onclick = () => {
+          selectedPose = selectedPose === pose.en ? '' : pose.en;
+          if (pose.en !== 'Custom Pose') customPoseValue = '';
+          renderPoses();
         };
         container.appendChild(btn);
       });
+      const customContainer = document.getElementById('custom-pose-container');
+      if (customContainer) customContainer.classList.toggle('hidden', selectedPose !== 'Custom Pose');
     }
 
     function renderBackgrounds() {
@@ -1391,15 +1188,18 @@
       const bgList = backgrounds[selectedCategory] || [];
       bgList.forEach(bg => {
         const btn = document.createElement('button');
-        const bgName = currentLanguage === 'en' ? bg.en : bg.es;
-        btn.className = `chip-btn ${selectedBackground === bgName ? 'active' : ''}`;
-        btn.textContent = bgName;
-        btn.onclick = () => { 
-          selectedBackground = selectedBackground === bgName ? '' : bgName; 
-          renderBackgrounds(); 
+        const label = currentLanguage === 'en' ? bg.en : bg.es;
+        btn.className = `chip-btn ${selectedBackground === bg.en ? 'active' : ''}`;
+        btn.textContent = label;
+        btn.onclick = () => {
+          selectedBackground = selectedBackground === bg.en ? '' : bg.en;
+          if (bg.en !== 'Custom Background') customBackgroundValue = '';
+          renderBackgrounds();
         };
         container.appendChild(btn);
       });
+      const customContainer = document.getElementById('custom-background-container');
+      if (customContainer) customContainer.classList.toggle('hidden', selectedBackground !== 'Custom Background');
     }
 
     function renderAccessories() {
@@ -1407,57 +1207,34 @@
       const placeholder = document.getElementById('accessories-placeholder');
       const customSection = document.getElementById('custom-accessories-container');
       const sunglassesDropdown = document.getElementById('sunglasses-dropdown-container');
-      
-      const character = characters.find(c => {
-        const charName = currentLanguage === 'en' ? c.en : c.es;
-        return charName === selectedCharacter;
-      });
-
+      const character = characters.find(c => c.en === selectedCharacter);
       if (!character) {
-        placeholder.style.display = 'block';
-        container.innerHTML = '';
-        sunglassesDropdown.style.display = 'none';
-        customSection.classList.add('hidden');
-        return;
+        placeholder.style.display = 'block'; container.innerHTML = '';
+        sunglassesDropdown.style.display = 'none'; customSection.classList.add('hidden'); return;
       }
-
       let gender = character.gender || 'neutral';
       if (gender === 'neutral' && !selectedNeutralGender) {
-        placeholder.style.display = 'block';
-        container.innerHTML = '';
-        sunglassesDropdown.style.display = 'none';
-        customSection.classList.add('hidden');
-        return;
+        placeholder.style.display = 'block'; container.innerHTML = '';
+        sunglassesDropdown.style.display = 'none'; customSection.classList.add('hidden'); return;
       }
-
-      if (gender === 'neutral' && selectedNeutralGender) {
-        gender = selectedNeutralGender;
-      }
-
+      if (gender === 'neutral') gender = selectedNeutralGender;
       placeholder.style.display = 'none';
       sunglassesDropdown.style.display = 'block';
       customSection.classList.remove('hidden');
       container.innerHTML = '';
-      
       accessoriesList.forEach(acc => {
         const btn = document.createElement('button');
-        const accName = currentLanguage === 'en' ? acc.en : acc.es;
-        
-        const isSelected = selectedAccessories.includes(accName);
-        
+        const label = currentLanguage === 'en' ? acc.en : acc.es;
+        const isSelected = selectedAccessories.includes(acc.en);
         btn.className = `chip-btn ${isSelected ? 'active' : ''}`;
-        btn.textContent = accName;
-        btn.onclick = () => { 
-          if (isSelected) {
-            selectedAccessories = selectedAccessories.filter(a => a !== accName);
-          } else {
-            selectedAccessories.push(accName);
-          }
+        btn.textContent = label;
+        btn.onclick = () => {
+          if (isSelected) { selectedAccessories = selectedAccessories.filter(a => a !== acc.en); }
+          else { selectedAccessories.push(acc.en); }
           renderAccessories();
         };
         container.appendChild(btn);
       });
-      
       initSunglassesDropdown();
     }
 
@@ -1465,799 +1242,378 @@
       const toggleBtn = document.getElementById('sunglasses-toggle-btn');
       const menu = document.getElementById('sunglasses-menu');
       const arrow = document.getElementById('sunglasses-arrow');
-
       if (!toggleBtn || !menu) return;
-
       menu.innerHTML = sunglassesVariations.map(variation => `
         <div class="sunglasses-option" data-id="${variation.id}">
-          <div class="sunglasses-option-title">
-            ${variation.name}
-            <span class="sunglasses-checkmark" style="display: ${selectedSunglasses?.id === variation.id ? 'inline' : 'none'}">✓</span>
+          <div class="sunglasses-option-title">${variation.name}
+            <span class="sunglasses-checkmark" style="display:${selectedSunglasses?.id === variation.id ? 'inline' : 'none'}">✓</span>
           </div>
-          <div class="sunglasses-option-description">
-            ${variation.description}
-          </div>
-        </div>
-      `).join('');
-
-      toggleBtn.onclick = (e) => {
+          <div class="sunglasses-option-description">${variation.description}</div>
+        </div>`).join('');
+      // Remove old listeners by cloning
+      const newToggle = toggleBtn.cloneNode(true);
+      toggleBtn.parentNode.replaceChild(newToggle, toggleBtn);
+      newToggle.onclick = (e) => {
         e.stopPropagation();
         menu.classList.toggle('hidden');
-        toggleBtn.classList.toggle('active');
-        arrow.textContent = menu.classList.contains('hidden') ? '▼' : '▲';
+        newToggle.classList.toggle('active');
+        document.getElementById('sunglasses-arrow').textContent = menu.classList.contains('hidden') ? '▼' : '▲';
       };
-
       menu.querySelectorAll('.sunglasses-option').forEach(option => {
         option.onclick = (e) => {
           e.stopPropagation();
           const id = parseInt(option.dataset.id);
           selectedSunglasses = sunglassesVariations.find(v => v.id === id);
-          
-          menu.querySelectorAll('.sunglasses-checkmark').forEach(checkmark => {
-            checkmark.style.display = 'none';
-          });
+          menu.querySelectorAll('.sunglasses-checkmark').forEach(c => c.style.display = 'none');
           option.querySelector('.sunglasses-checkmark').style.display = 'inline';
-          
           menu.classList.add('hidden');
-          toggleBtn.classList.remove('active');
-          arrow.textContent = '▼';
+          newToggle.classList.remove('active');
+          document.getElementById('sunglasses-arrow').textContent = '▼';
         };
       });
-
       document.addEventListener('click', (e) => {
-        const container = document.getElementById('sunglasses-dropdown-container');
-        if (container && !container.contains(e.target)) {
+        const cont = document.getElementById('sunglasses-dropdown-container');
+        if (cont && !cont.contains(e.target)) {
           menu.classList.add('hidden');
-          toggleBtn.classList.remove('active');
-          arrow.textContent = '▼';
+          newToggle.classList.remove('active');
+          const arr = document.getElementById('sunglasses-arrow');
+          if (arr) arr.textContent = '▼';
         }
-      });
+      }, { once: true });
     }
 
+    // ============ UTILITY ============
     function cleanText(text) {
-      return text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{27BF}]|[\u{2300}-\u{23FF}]|[\u{2000}-\u{206F}]|[\u{3000}-\u{303F}]/gu, '').replace(/^\s*[-–~~~~✓~~~]\s*/, '').trim();
+      return text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{27BF}]|[\u{2300}-\u{23FF}]|[\u{2000}-\u{206F}]|[\u{3000}-\u{303F}]/gu, '')
+                 .replace(/^\s*[-–~~~~✓~~~]\s*/, '').trim();
     }
 
-    function countWords(text) {
-      return text.trim().split(/\s+/).filter(w => w.length > 0).length;
-    }
+    function countWords(text) { return text.trim().split(/\s+/).filter(w => w.length > 0).length; }
 
+    // Always returns the EN style string
     function getStyleEN() {
-      const styleList = styles[selectedCategory] || [];
-      const styleObj = styleList.find(s => {
-        const currentName = currentLanguage === 'es' ? s.es : s.en;
-        return currentName === selectedStyle;
-      });
-      return styleObj ? styleObj.en : selectedStyle;
+      if (!selectedStyle) return '';
+      // selectedStyle is always stored as .en key
+      return selectedStyle;
     }
 
     function getStyleES() {
       const styleList = styles[selectedCategory] || [];
-      const styleObj = styleList.find(s => s.en === getStyleEN());
+      const styleObj = styleList.find(s => s.en === selectedStyle);
       return styleObj ? styleObj.es : selectedStyle;
     }
 
-    function generatePrompt() {
-      if (!selectedStyle || !selectedCharacter) {
-        return;
-      }
-
-      const promptEn = generatePromptEN();
-      const promptEs = generatePromptES();
-      displayPrompt(promptEn, promptEs);
+    function getGender() {
+      if (!selectedCharacter) return 'neutral';
+      const character = characters.find(c => c.en === selectedCharacter);
+      if (!character) return 'neutral';
+      let gender = character.gender || 'neutral';
+      if (gender === 'neutral' && selectedNeutralGender) gender = selectedNeutralGender;
+      return gender;
     }
 
-    function generatePromptEN() {
-      if (isColoringStyle()) {
-        const character = cleanText(selectedCharacter);
-        let subjectText = '';
-        if (character && character !== '') {
-          subjectText = character;
-        } else {
-          const gender = getGender();
-          subjectText = gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character';
-        }
-
-        let wearingParts = [];
-        const charGender = characters.find(c => {
-          const charName = currentLanguage === 'en' ? c.en : c.es;
-          return charName === selectedCharacter;
-        })?.gender;
-
-        if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
-          const descEN = typeof selectedCompleteOutfit.desc === 'object' ? selectedCompleteOutfit.desc.en : selectedCompleteOutfit.desc;
-          wearingParts.push(descEN);
-        } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfit) {
-          if (selectedBuildYourOwnOutfit === 'Custom Outfit' || selectedBuildYourOwnOutfit === 'Outfit Personalizado') {
-            if (customOutfitValue) {
-              wearingParts.push(customOutfitValue);
-            }
-          } else {
-            const gender = getGender();
-            const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
-            const outfitObj = buildYourOwn.find(o => 
-              (typeof o === 'object' && (o.en === selectedBuildYourOwnOutfit || o.es === selectedBuildYourOwnOutfit)) ||
-              o === selectedBuildYourOwnOutfit
-            );
-            const outfitEN = typeof outfitObj === 'object' ? outfitObj.en : outfitObj;
-            wearingParts.push(outfitEN);
-          }
-          
-          if (selectedShoes) {
-            if (selectedShoes === 'Custom Shoes' || selectedShoes === 'Zapatos Personalizados') {
-              if (customShoesValue) {
-                wearingParts.push(customShoesValue);
-              }
-            } else {
-              const gender = getGender();
-              const shoes = gender === 'female' ? shoesFemale : shoesMale;
-              const shoeObj = shoes.find(s => 
-                (typeof s.name === 'object' && (s.name.en === selectedShoes || s.name.es === selectedShoes)) ||
-                s.name === selectedShoes
-              );
-              const shoeEN = shoeObj && typeof shoeObj.name === 'object' ? shoeObj.name.en : selectedShoes;
-              wearingParts.push(shoeEN);
-            }
-          }
-        }
-
-        wearingParts = wearingParts.concat(customOutfitItems);
-
-        if (selectedAccessories.length > 0) {
-          const accessoryDescs = selectedAccessories.map(accName => {
-            const acc = accessoriesList.find(a => (currentLanguage === 'en' ? a.en : a.es) === accName);
-            return acc ? acc.desc : accName;
-          });
-          wearingParts.push(...accessoryDescs);
-        }
-
-        if (customAccessoryItems.length > 0) {
-          wearingParts.push(...customAccessoryItems);
-        }
-
-        let pose = cleanText(selectedPose);
-        if (selectedPose === 'Custom Pose' && customPoseValue) {
-          pose = customPoseValue;
-        }
-
-        const coloringPrompt = getColoringStylePrompt(
-          subjectText, 
-          pose, 
-          wearingParts
-        );
-        
-        return coloringPrompt;
-      }
-
-      // Non-coloring styles...
-      const styleEN = getStyleEN();
-      const character = cleanText(selectedCharacter);
-      const physTrait = cleanText(selectedPhysicalTrait);
-      let hairStyle = cleanText(selectedHairStyle);
-      let hairColor = cleanText(selectedHairColor);
-      let pose = cleanText(selectedPose);
-      let bg = cleanText(selectedBackground);
-      const gender = getGender();
-      
-      if (selectedHairStyle === 'Custom Hair Style' && customHairStyleValue) {
-        hairStyle = customHairStyleValue;
-      }
-      
-      if (selectedHairColor === 'Custom Hair Color' && customHairColorValue) {
-        hairColor = customHairColorValue;
-      }
-      
-      if (selectedPose === 'Custom Pose' && customPoseValue) {
-        pose = customPoseValue;
-      }
-      
-      if (selectedBackground === 'Custom Background' && customBackgroundValue) {
-        bg = customBackgroundValue;
-      }
-      
-      let wearingParts = [];
-      const charGender = characters.find(c => {
-        const charName = currentLanguage === 'en' ? c.en : c.es;
-        return charName === selectedCharacter;
-      })?.gender;
-
+    // ============ OUTFIT PARTS HELPERS ============
+    // Returns wearing parts always in EN (for AI prompt)
+    function getWearingPartsEN() {
+      const parts = [];
       if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
-        const descEN = typeof selectedCompleteOutfit.desc === 'object' ? selectedCompleteOutfit.desc.en : selectedCompleteOutfit.desc;
-        wearingParts.push(descEN);
-      } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfit) {
-        if (selectedBuildYourOwnOutfit === 'Custom Outfit' || selectedBuildYourOwnOutfit === 'Outfit Personalizado') {
-          if (customOutfitValue) {
-            wearingParts.push(customOutfitValue);
-          }
+        parts.push(selectedCompleteOutfit.desc.en);
+      } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfitEN) {
+        if (selectedBuildYourOwnOutfitEN === 'Custom Outfit') {
+          if (customOutfitValue) parts.push(customOutfitValue);
         } else {
           const gender = getGender();
           const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
-          const outfitObj = buildYourOwn.find(o => 
-            (typeof o === 'object' && (o.en === selectedBuildYourOwnOutfit || o.es === selectedBuildYourOwnOutfit)) ||
-            o === selectedBuildYourOwnOutfit
-          );
-          const outfitEN = typeof outfitObj === 'object' ? outfitObj.en : outfitObj;
-          wearingParts.push(outfitEN);
+          const outfitObj = buildYourOwn.find(o => o.en === selectedBuildYourOwnOutfitEN);
+          if (outfitObj) parts.push(outfitObj.en);
         }
-        
         if (selectedShoes) {
-          if (selectedShoes === 'Custom Shoes' || selectedShoes === 'Zapatos Personalizados') {
-            if (customShoesValue) {
-              wearingParts.push(customShoesValue);
-            }
-          } else {
+          if (selectedShoes === 'Custom Shoes') { if (customShoesValue) parts.push(customShoesValue); }
+          else {
             const gender = getGender();
             const shoes = gender === 'female' ? shoesFemale : shoesMale;
-            const shoeObj = shoes.find(s => 
-              (typeof s.name === 'object' && (s.name.en === selectedShoes || s.name.es === selectedShoes)) ||
-              s.name === selectedShoes
-            );
-            const shoeEN = shoeObj && typeof shoeObj.name === 'object' ? shoeObj.name.en : selectedShoes;
-            wearingParts.push(shoeEN);
+            const shoeObj = shoes.find(s => s.name.en === selectedShoes);
+            if (shoeObj) parts.push(shoeObj.name.en);
           }
         }
       }
+      // accessories always in EN
+      selectedAccessories.forEach(accEN => {
+        const acc = accessoriesList.find(a => a.en === accEN);
+        if (acc) parts.push(acc.desc);
+      });
+      if (selectedSunglasses) parts.push(`wearing ${selectedSunglasses.description}, trendy modern sunglasses, high fashion eyewear`);
+      parts.push(...customAccessoryItems);
+      return parts;
+    }
 
-      wearingParts = wearingParts.concat(customOutfitItems);
+    // Returns wearing parts in ES (for Spanish prompt)
+    function getWearingPartsES() {
+      const parts = [];
+      if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
+        parts.push(selectedCompleteOutfit.desc.es);
+      } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfitEN) {
+        if (selectedBuildYourOwnOutfitEN === 'Custom Outfit') {
+          if (customOutfitValue) parts.push(customOutfitValue);
+        } else {
+          const gender = getGender();
+          const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
+          const outfitObj = buildYourOwn.find(o => o.en === selectedBuildYourOwnOutfitEN);
+          if (outfitObj) parts.push(outfitObj.es);
+        }
+        if (selectedShoes) {
+          if (selectedShoes === 'Custom Shoes') { if (customShoesValue) parts.push(customShoesValue); }
+          else {
+            const gender = getGender();
+            const shoes = gender === 'female' ? shoesFemale : shoesMale;
+            const shoeObj = shoes.find(s => s.name.en === selectedShoes);
+            if (shoeObj) parts.push(shoeObj.name.es);
+          }
+        }
+      }
+      selectedAccessories.forEach(accEN => {
+        const acc = accessoriesList.find(a => a.en === accEN);
+        if (acc) parts.push(acc.desc); // desc is in EN (AI technical term), fine to keep
+      });
+      if (selectedSunglasses) parts.push(`vistiendo ${selectedSunglasses.description}, gafas de sol modernas, moda alta`);
+      parts.push(...customAccessoryItems);
+      return parts;
+    }
 
-      if (selectedAccessories.length > 0) {
-        const accessoryDescs = selectedAccessories.map(accName => {
-          const acc = accessoriesList.find(a => (currentLanguage === 'en' ? a.en : a.es) === accName);
-          return acc ? acc.desc : accName;
-        });
-        wearingParts.push(...accessoryDescs);
+    // ============ FIX 3: generatePromptEN — ALWAYS 100% ENGLISH ============
+    function generatePromptEN() {
+      const styleEN = getStyleEN();
+      const characterEN = getCharacterEN();
+      const gender = getGender();
+
+      // Physical trait — stored as EN key
+      const physTraitEN = selectedPhysicalTrait || '';
+
+      // Hair — stored as EN keys
+      let hairStyleDesc = '';
+      if (selectedHairStyle === 'Custom Hair Style' && customHairStyleValue) {
+        hairStyleDesc = customHairStyleValue;
+      } else if (selectedHairStyle) {
+        const gender2 = getGender();
+        const sList = gender2 === 'male' ? hairStyles['male'] : hairStyles['female'];
+        const h = sList.find(s => s.en === selectedHairStyle);
+        hairStyleDesc = h ? h.desc_en : selectedHairStyle;
       }
 
-      if (selectedSunglasses) {
-        wearingParts.push(`wearing ${selectedSunglasses.description}, trendy 2025-2026 sunglasses style, high fashion modern eyewear`);
+      let hairColorEN = '';
+      if (selectedHairColor === 'Custom Hair Color' && customHairColorValue) {
+        hairColorEN = customHairColorValue;
+      } else if (selectedHairColor) {
+        const hc = hairColors.find(h => h.en === selectedHairColor);
+        hairColorEN = hc ? hc.en : selectedHairColor;
       }
 
-      if (customAccessoryItems.length > 0) {
-        wearingParts.push(...customAccessoryItems);
+      let poseEN = '';
+      if (selectedPose === 'Custom Pose' && customPoseValue) { poseEN = customPoseValue; }
+      else if (selectedPose) {
+        const p = poses.find(pp => pp.en === selectedPose);
+        poseEN = p ? p.en : selectedPose;
       }
-      
+
+      let bgEN = '';
+      if (selectedBackground === 'Custom Background' && customBackgroundValue) { bgEN = customBackgroundValue; }
+      else if (selectedBackground) {
+        const bgList = backgrounds[selectedCategory] || [];
+        const b = bgList.find(bg => bg.en === selectedBackground);
+        bgEN = b ? b.en : selectedBackground;
+      }
+
+      const wearingPartsEN = getWearingPartsEN();
       const customActionInput = document.getElementById('custom-action-input');
       const customAction = customActionInput ? cleanText(customActionInput.value) : '';
 
+      // Camera angle
+      let cameraPrompt = '';
+      if (selectedCameraAngle === 'Custom Camera Angle' && customCameraAngleValue) {
+        cameraPrompt = customCameraAngleValue;
+      } else if (selectedCameraAngle) {
+        const angle = cameraAngles.find(a => a.en === selectedCameraAngle);
+        if (angle) cameraPrompt = angle.prompt;
+      }
+
+      // Color palette
+      let colorPrompt = '';
+      if (selectedColorPalette === 'custom' && customColorPaletteValue) {
+        colorPrompt = `color palette: ${customColorPaletteValue}`;
+      } else if (selectedColorPalette && typeof selectedColorPalette === 'object') {
+        colorPrompt = selectedColorPalette.prompt;
+      }
+
+      // Coloring style special case
+      if (isColoringStyle()) {
+        const subject = characterEN || (gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character');
+        return getColoringStylePromptEN(subject, poseEN, wearingPartsEN);
+      }
+
       const isGlossyChibi = styleEN === 'Glossy 3D Chibi';
       const isBoldChibi = styleEN === 'Bold 3D Chibi';
+      const subjectEN = characterEN || (gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character');
+      const hairDesc = hairColorEN && hairStyleDesc ? `${hairColorEN} ${hairStyleDesc}` : (hairStyleDesc || hairColorEN);
+      const wearingClause = wearingPartsEN.length > 0 ? `wearing ${wearingPartsEN.join(', ')}, ` : '';
+      const poseClause = poseEN ? `${poseEN}, ` : '';
+      const cameraClause = cameraPrompt ? `, ${cameraPrompt}` : '';
+      const colorClause = colorPrompt ? `, ${colorPrompt}` : '';
+      const actionClause = customAction ? `, ${customAction}` : '';
+      const bgClause = bgEN ? `${bgEN} background` : 'solid pastel background';
+      const viewClause = !selectedCameraAngle ? (isGlossyChibi ? 'shot from front view, ' : 'shot from front, ') : '';
 
       let prompt = '';
 
       if (isGlossyChibi) {
-        let ethnicity = physTrait || 'mixed';
-        let hairDesc = '';
-        if (hairColor && hairStyle) {
-          hairDesc = `${hairColor} ${hairStyle}`;
-        } else if (hairStyle) {
-          hairDesc = hairStyle;
-        } else {
-          hairDesc = 'stylish hair';
-        }
-
-        let wearingClause = '';
-        if (wearingParts.length > 0) {
-          wearingClause = `wearing ${wearingParts.join(', ')}, `;
-        }
-
-        let poseClause = '';
-        if (pose) {
-          if (selectedCameraAngle) {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
-            if (!angleObj || !(angleObj.prompt.includes('pose') || angleObj.prompt.includes('heroic'))) {
-              poseClause = `${pose}, `;
-            }
-          } else {
-            poseClause = `${pose}, `;
-          }
-        }
-        
-        let bgClause = bg ? `${bg} background` : 'solid pastel background';
-        let actionClause = customAction ? `, ${customAction}` : '';
-        
-        let viewClause = '';
-        if (!selectedCameraAngle || selectedCameraAngle === null) {
-          viewClause = 'shot from front view, ';
-        }
-
-        let cameraClause = '';
-        if (selectedCameraAngle && selectedCameraAngle !== null) {
-          if (selectedCameraAngle === 'Custom Camera Angle' && customCameraAngleValue) {
-            cameraClause = `, ${customCameraAngleValue}`;
-          } else {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
-            if (angleObj && angleObj.prompt) {
-              cameraClause = `, ${angleObj.prompt}`;
-            }
-          }
-        }
-        
-        let colorClause = '';
-        if (selectedColorPalette) {
-          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
-            colorClause = `, color palette: ${customColorPaletteValue}`;
-          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
-            colorClause = `, ${selectedColorPalette.prompt}`;
-          }
-        }
-
-        let subjectText = '';
-        if (character && character !== '') {
-          subjectText = character;
-        } else {
-          subjectText = gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character';
-        }
-
-        let facialFeatures = 'expressive sparkling eyes with lashes, glossy full lips, winged eyeliner, glamorous makeup';
-
-        prompt = `A glossy ultra-edgy chibi style illustration of a ${subjectText} of ${ethnicity} ethnicity, smooth rich skin, ${facialFeatures}, ${hairDesc}, ${wearingClause}${poseClause}fully clothed modest glamorous look, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, glossy 3D chibi cartoon, bold outlines, smooth shading, soft highlights, high quality, single character only`;
-
+        const ethnicity = physTraitEN || 'mixed ethnicity';
+        const facialFeatures = 'expressive sparkling eyes with lashes, glossy full lips, winged eyeliner, glamorous makeup';
+        prompt = `A glossy ultra-edgy chibi style illustration of a ${subjectEN} with ${ethnicity}, smooth rich skin, ${facialFeatures}, ${hairDesc || 'stylish hair'}, ${wearingClause}${poseClause}fully clothed modest glamorous look, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, glossy 3D chibi cartoon, bold outlines, smooth shading, soft highlights, high quality, single character only`;
       } else if (isBoldChibi) {
-        let ethnicity = physTrait || 'mixed';
-        let hairDesc = '';
-        if (hairColor && hairStyle) {
-          hairDesc = `${hairColor} ${hairStyle}`;
-        } else if (hairStyle) {
-          hairDesc = hairStyle;
-        } else {
-          hairDesc = 'stylish hair';
-        }
-
-        let wearingClause = '';
-        if (wearingParts.length > 0) {
-          wearingClause = `wearing ${wearingParts.join(', ')}, `;
-        }
-
-        let poseClause = '';
-        if (pose) {
-          if (selectedCameraAngle) {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
-            if (!angleObj || !(angleObj.prompt.includes('pose') || angleObj.prompt.includes('heroic'))) {
-              poseClause = `${pose}, `;
-            }
-          } else {
-            poseClause = `${pose}, `;
-          }
-        }
-        
-        let bgClause = bg ? `${bg} background` : 'pastel background';
-        let actionClause = customAction ? `, ${customAction}` : '';
-        
-        let viewClause = '';
-        if (!selectedCameraAngle || selectedCameraAngle === null) {
-          viewClause = 'shot from front, ';
-        }
-
-        let cameraClause = '';
-        if (selectedCameraAngle && selectedCameraAngle !== null) {
-          if (selectedCameraAngle === 'Custom Camera Angle' && customCameraAngleValue) {
-            cameraClause = `, ${customCameraAngleValue}`;
-          } else {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
-            if (angleObj && angleObj.prompt) {
-              cameraClause = `, ${angleObj.prompt}`;
-            }
-          }
-        }
-        
-        let colorClause = '';
-        if (selectedColorPalette) {
-          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
-            colorClause = `, color palette: ${customColorPaletteValue}`;
-          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
-            colorClause = `, ${selectedColorPalette.prompt}`;
-          }
-        }
-
-        let subjectText = '';
-        if (character && character !== '') {
-          subjectText = character;
-        } else {
-          subjectText = gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character';
-        }
-
-        prompt = `A bold 3D chibi ${subjectText} of ${ethnicity} ethnicity, expressive glossy eyes, natural lips, ${hairDesc} with glossy finish, ${wearingClause}${poseClause}fully clothed, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, clean 3D chibi art, bold outlines, smooth shading, vibrant colors, high quality`;
-
+        const ethnicity = physTraitEN || 'mixed ethnicity';
+        prompt = `A bold 3D chibi ${subjectEN} with ${ethnicity}, expressive glossy eyes, natural lips, ${hairDesc || 'stylish hair'} with glossy finish, ${wearingClause}${poseClause}fully clothed, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, clean 3D chibi art, bold outlines, smooth shading, vibrant colors, high quality`;
       } else {
-        let wearingClause = '';
-        if (wearingParts.length > 0) {
-          wearingClause = `, wearing ${wearingParts.join(', ')}`;
-        }
-
-        prompt = `A ${styleEN} illustration of a ${character}`;
-        if (physTrait) prompt += ` with ${physTrait}`;
-        if (hairColor && hairStyle) prompt += `, ${hairColor} ${hairStyle}`;
-        else if (hairStyle) prompt += `, ${hairStyle}`;
-        
-        prompt += wearingClause;
-
-        if (pose) prompt += `, ${pose}`;
-        if (bg) prompt += `, ${bg} background`;
+        prompt = `A ${styleEN} illustration of a ${subjectEN}`;
+        if (physTraitEN) prompt += ` with ${physTraitEN}`;
+        if (hairColorEN && hairStyleDesc) prompt += `, ${hairColorEN} ${hairStyleDesc}`;
+        else if (hairStyleDesc) prompt += `, ${hairStyleDesc}`;
+        if (wearingPartsEN.length > 0) prompt += `, wearing ${wearingPartsEN.join(', ')}`;
+        if (poseEN) prompt += `, ${poseEN}`;
+        if (bgEN) prompt += `, ${bgEN} background`;
         if (customAction) prompt += `, ${customAction}`;
-        
-        if (selectedCameraAngle && selectedCameraAngle !== null) {
-          if (selectedCameraAngle === 'Custom Camera Angle' && customCameraAngleValue) {
-            prompt += `, ${customCameraAngleValue}`;
-          } else {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle);
-            if (angleObj && angleObj.prompt) {
-              prompt += `, ${angleObj.prompt}`;
-            }
-          }
-        }
-        
-        if (selectedColorPalette) {
-          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
-            prompt += `, color palette: ${customColorPaletteValue}`;
-          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
-            prompt += `, ${selectedColorPalette.prompt}`;
-          }
-        }
-
+        if (cameraPrompt) prompt += `, ${cameraPrompt}`;
+        if (colorPrompt) prompt += `, ${colorPrompt}`;
         prompt += `, high quality, professional illustration`;
       }
 
       return prompt;
     }
 
+    // ============ FIX 4: generatePromptES — ALWAYS 100% SPANISH ============
     function generatePromptES() {
-      if (isColoringStyle()) {
-        const character = cleanText(selectedCharacter);
-        let subjectText = '';
-        if (character && character !== '') {
-          subjectText = character;
-        } else {
-          const gender = getGender();
-          subjectText = gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje';
-        }
-
-        let wearingParts = [];
-        const charGender = characters.find(c => {
-          const charName = currentLanguage === 'en' ? c.en : c.es;
-          return charName === selectedCharacter;
-        })?.gender;
-
-        if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
-          const descES = typeof selectedCompleteOutfit.desc === 'object' ? selectedCompleteOutfit.desc.es : selectedCompleteOutfit.desc;
-          wearingParts.push(descES);
-        } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfit) {
-          if (selectedBuildYourOwnOutfit === 'Custom Outfit' || selectedBuildYourOwnOutfit === 'Outfit Personalizado') {
-            if (customOutfitValue) {
-              wearingParts.push(customOutfitValue);
-            }
-          } else {
-            const gender = getGender();
-            const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
-            const outfitObj = buildYourOwn.find(o => 
-              (typeof o === 'object' && (o.en === selectedBuildYourOwnOutfit || o.es === selectedBuildYourOwnOutfit)) ||
-              o === selectedBuildYourOwnOutfit
-            );
-            const outfitES = typeof outfitObj === 'object' ? outfitObj.es : outfitObj;
-            wearingParts.push(outfitES);
-          }
-          
-          if (selectedShoes) {
-            if (selectedShoes === 'Custom Shoes' || selectedShoes === 'Zapatos Personalizados') {
-              if (customShoesValue) {
-                wearingParts.push(customShoesValue);
-              }
-            } else {
-              const gender = getGender();
-              const shoes = gender === 'female' ? shoesFemale : shoesMale;
-              const shoeObj = shoes.find(s => 
-                (typeof s.name === 'object' && (s.name.en === selectedShoes || s.name.es === selectedShoes)) ||
-                s.name === selectedShoes
-              );
-              const shoeES = shoeObj && typeof shoeObj.name === 'object' ? shoeObj.name.es : selectedShoes;
-              wearingParts.push(shoeES);
-            }
-          }
-        }
-
-        wearingParts = wearingParts.concat(customOutfitItems);
-
-        if (selectedAccessories.length > 0) {
-          const accessoryDescs = selectedAccessories.map(accName => {
-            const acc = accessoriesList.find(a => (currentLanguage === 'en' ? a.en : a.es) === accName);
-            return acc ? acc.desc : accName;
-          });
-          wearingParts.push(...accessoryDescs);
-        }
-
-        if (customAccessoryItems.length > 0) {
-          wearingParts.push(...customAccessoryItems);
-        }
-
-        let pose = cleanText(selectedPose);
-        if (selectedPose === 'Custom Pose' && customPoseValue) {
-          pose = customPoseValue;
-        }
-
-        const coloringPrompt = getColoringStylePrompt(
-          subjectText,
-          pose,
-          wearingParts
-        );
-        
-        return coloringPrompt;
-      }
-
-      // Non-coloring styles - same as EN but in Spanish...
+      const styleEN = getStyleEN();
       const styleES = getStyleES();
-      const character = cleanText(selectedCharacter);
-      const physTrait = cleanText(selectedPhysicalTrait);
-      let hairStyle = cleanText(selectedHairStyle);
-      let hairColor = cleanText(selectedHairColor);
-      let pose = cleanText(selectedPose);
-      let bg = cleanText(selectedBackground);
+      const characterES = getCharacterES();
       const gender = getGender();
-      
+
+      // Physical trait — lookup ES translation
+      let physTraitES = '';
+      if (selectedPhysicalTrait) {
+        const g = getGender() === 'neutral' ? 'neutral' : getGender();
+        const traitObj = physicalTraits[g]?.find(t => t.en === selectedPhysicalTrait);
+        physTraitES = traitObj ? traitObj.es : selectedPhysicalTrait;
+      }
+
+      // Hair style — lookup ES desc
+      let hairStyleDescES = '';
       if (selectedHairStyle === 'Custom Hair Style' && customHairStyleValue) {
-        hairStyle = customHairStyleValue;
+        hairStyleDescES = customHairStyleValue;
+      } else if (selectedHairStyle) {
+        const g2 = getGender();
+        const sList = g2 === 'male' ? hairStyles['male'] : hairStyles['female'];
+        const h = sList.find(s => s.en === selectedHairStyle);
+        hairStyleDescES = h ? h.desc_es : selectedHairStyle;
       }
-      
+
+      // Hair color — lookup ES
+      let hairColorES = '';
       if (selectedHairColor === 'Custom Hair Color' && customHairColorValue) {
-        hairColor = customHairColorValue;
-      }
-      
-      if (selectedPose === 'Custom Pose' && customPoseValue) {
-        pose = customPoseValue;
-      }
-      
-      if (selectedBackground === 'Custom Background' && customBackgroundValue) {
-        bg = customBackgroundValue;
-      }
-      
-      let wearingParts = [];
-      const charGender = characters.find(c => {
-        const charName = currentLanguage === 'en' ? c.en : c.es;
-        return charName === selectedCharacter;
-      })?.gender;
-
-      if (selectedOutfitType === 'complete' && selectedCompleteOutfit) {
-        const descES = typeof selectedCompleteOutfit.desc === 'object' ? selectedCompleteOutfit.desc.es : selectedCompleteOutfit.desc;
-        wearingParts.push(descES);
-      } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfit) {
-        if (selectedBuildYourOwnOutfit === 'Custom Outfit' || selectedBuildYourOwnOutfit === 'Outfit Personalizado') {
-          if (customOutfitValue) {
-            wearingParts.push(customOutfitValue);
-          }
-        } else {
-          const gender = getGender();
-          const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
-          const outfitObj = buildYourOwn.find(o => 
-            (typeof o === 'object' && (o.en === selectedBuildYourOwnOutfit || o.es === selectedBuildYourOwnOutfit)) ||
-            o === selectedBuildYourOwnOutfit
-          );
-          const outfitES = typeof outfitObj === 'object' ? outfitObj.es : outfitObj;
-          wearingParts.push(outfitES);
-        }
-        
-        if (selectedShoes) {
-          if (selectedShoes === 'Custom Shoes' || selectedShoes === 'Zapatos Personalizados') {
-            if (customShoesValue) {
-              wearingParts.push(customShoesValue);
-            }
-          } else {
-            const gender = getGender();
-            const shoes = gender === 'female' ? shoesFemale : shoesMale;
-            const shoeObj = shoes.find(s => 
-              (typeof s.name === 'object' && (s.name.en === selectedShoes || s.name.es === selectedShoes)) ||
-              s.name === selectedShoes
-            );
-            const shoeES = shoeObj && typeof shoeObj.name === 'object' ? shoeObj.name.es : selectedShoes;
-            wearingParts.push(shoeES);
-          }
-        }
+        hairColorES = customHairColorValue;
+      } else if (selectedHairColor) {
+        const hc = hairColors.find(h => h.en === selectedHairColor);
+        hairColorES = hc ? hc.es : selectedHairColor;
       }
 
-      wearingParts = wearingParts.concat(customOutfitItems);
-
-      if (selectedAccessories.length > 0) {
-        const accessoryDescs = selectedAccessories.map(accName => {
-          const acc = accessoriesList.find(a => (currentLanguage === 'en' ? a.en : a.es) === accName);
-          return acc ? acc.desc : accName;
-        });
-        wearingParts.push(...accessoryDescs);
+      // Pose — lookup ES
+      let poseES = '';
+      if (selectedPose === 'Custom Pose' && customPoseValue) { poseES = customPoseValue; }
+      else if (selectedPose) {
+        const p = poses.find(pp => pp.en === selectedPose);
+        poseES = p ? p.es : selectedPose;
       }
 
-      if (selectedSunglasses) {
-        wearingParts.push(`vistiendo ${selectedSunglasses.description}, estilo gafas de sol moderno, moda alta`);
+      // Background — lookup ES
+      let bgES = '';
+      if (selectedBackground === 'Custom Background' && customBackgroundValue) { bgES = customBackgroundValue; }
+      else if (selectedBackground) {
+        const bgList = backgrounds[selectedCategory] || [];
+        const b = bgList.find(bg => bg.en === selectedBackground);
+        bgES = b ? b.es : selectedBackground;
       }
 
-      if (customAccessoryItems.length > 0) {
-        wearingParts.push(...customAccessoryItems);
-      }
-      
+      const wearingPartsES = getWearingPartsES();
       const customActionInput = document.getElementById('custom-action-input');
       const customAction = customActionInput ? cleanText(customActionInput.value) : '';
 
-      const styleEN = getStyleEN();
+      // Camera angle prompt (technical, keep EN for AI clarity but in ES context)
+      let cameraPrompt = '';
+      if (selectedCameraAngle === 'Custom Camera Angle' && customCameraAngleValue) {
+        cameraPrompt = customCameraAngleValue;
+      } else if (selectedCameraAngle) {
+        const angle = cameraAngles.find(a => a.en === selectedCameraAngle);
+        if (angle) cameraPrompt = angle.prompt; // Camera tech terms stay in EN even in ES prompt
+      }
+
+      // Color palette
+      let colorPrompt = '';
+      if (selectedColorPalette === 'custom' && customColorPaletteValue) {
+        colorPrompt = `paleta de colores: ${customColorPaletteValue}`;
+      } else if (selectedColorPalette && typeof selectedColorPalette === 'object') {
+        colorPrompt = selectedColorPalette.prompt; // palette descriptions keep EN for AI
+      }
+
+      // Coloring style special case
+      if (isColoringStyle()) {
+        const subject = characterES || (gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje');
+        return getColoringStylePromptES(subject, poseES, wearingPartsES);
+      }
+
       const isGlossyChibi = styleEN === 'Glossy 3D Chibi';
       const isBoldChibi = styleEN === 'Bold 3D Chibi';
+      const subjectES = characterES || (gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje');
+      const hairDesc = hairColorES && hairStyleDescES ? `${hairColorES} ${hairStyleDescES}` : (hairStyleDescES || hairColorES);
+      const wearingClause = wearingPartsES.length > 0 ? `vistiendo ${wearingPartsES.join(', ')}, ` : '';
+      const poseClause = poseES ? `${poseES}, ` : '';
+      const cameraClause = cameraPrompt ? `, ${cameraPrompt}` : '';
+      const colorClause = colorPrompt ? `, ${colorPrompt}` : '';
+      const actionClause = customAction ? `, ${customAction}` : '';
+      const bgClause = bgES ? `fondo ${bgES}` : 'fondo pastel sólido';
+      const viewClause = !selectedCameraAngle ? (isGlossyChibi ? 'toma frontal, ' : 'toma frontal, ') : '';
 
       let prompt = '';
 
       if (isGlossyChibi) {
-        let ethnicity = physTrait || 'mixta';
-        let hairDesc = '';
-        if (hairColor && hairStyle) {
-          hairDesc = `${hairColor} ${hairStyle}`;
-        } else if (hairStyle) {
-          hairDesc = hairStyle;
-        } else {
-          hairDesc = 'pelo elegante';
-        }
-
-        let wearingClause = '';
-        if (wearingParts.length > 0) {
-          wearingClause = `vistiendo ${wearingParts.join(', ')}, `;
-        }
-
-        let poseClause = '';
-        if (pose) {
-          if (selectedCameraAngle) {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
-            if (!angleObj || !(angleObj.prompt.includes('pose') || angleObj.prompt.includes('heroic'))) {
-              poseClause = `${pose}, `;
-            }
-          } else {
-            poseClause = `${pose}, `;
-          }
-        }
-        
-        let bgClause = bg ? `fondo ${bg}` : 'fondo pastel sólido';
-        let actionClause = customAction ? `, ${customAction}` : '';
-        
-        let viewClause = '';
-        if (!selectedCameraAngle || selectedCameraAngle === null) {
-          viewClause = 'toma frontal, ';
-        }
-
-        let cameraClause = '';
-        if (selectedCameraAngle && selectedCameraAngle !== null) {
-          if (selectedCameraAngle === 'Custom Camera Angle' || selectedCameraAngle === 'Ángulo Personalizado') {
-            if (customCameraAngleValue) {
-              cameraClause = `, ${customCameraAngleValue}`;
-            }
-          } else {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
-            if (angleObj && angleObj.prompt) {
-              cameraClause = `, ${angleObj.prompt}`;
-            }
-          }
-        }
-        
-        let colorClause = '';
-        if (selectedColorPalette) {
-          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
-            colorClause = `, paleta de colores: ${customColorPaletteValue}`;
-          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
-            colorClause = `, ${selectedColorPalette.prompt}`;
-          }
-        }
-
-        let subjectText = '';
-        if (character && character !== '') {
-          subjectText = character;
-        } else {
-          subjectText = gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje';
-        }
-
-        let facialFeatures = 'ojos expresivos brillantes con pestañas, labios glossy carnosos, delineador alado, maquillaje glamoroso';
-
-        prompt = `Una ilustración estilo chibi 3D brillante ultra exagerado de una ${subjectText} de etnia ${ethnicity}, piel suave, ${facialFeatures}, ${hairDesc}, ${wearingClause}${poseClause}look glamoroso modesto completamente vestida, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, dibujo chibi 3D brillante, contornos marcados, sombreado suave, reflejos suaves, alta calidad, solo un personaje`;
-
+        const ethnicity = physTraitES || 'etnia mixta';
+        const facialFeatures = 'ojos expresivos brillantes con pestañas, labios carnosos glossy, delineador alado, maquillaje glamoroso';
+        prompt = `Una ilustración estilo chibi 3D brillante ultra exagerado de una ${subjectES} con ${ethnicity}, piel suave y rica, ${facialFeatures}, ${hairDesc || 'cabello elegante'}, ${wearingClause}${poseClause}look glamoroso modesto completamente vestida, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, dibujo chibi 3D brillante, contornos marcados, sombreado suave, reflejos suaves, alta calidad, solo un personaje`;
       } else if (isBoldChibi) {
-        let ethnicity = physTrait || 'mixta';
-        let hairDesc = '';
-        if (hairColor && hairStyle) {
-          hairDesc = `${hairColor} ${hairStyle}`;
-        } else if (hairStyle) {
-          hairDesc = hairStyle;
-        } else {
-          hairDesc = 'pelo elegante';
-        }
-
-        let wearingClause = '';
-        if (wearingParts.length > 0) {
-          wearingClause = `vistiendo ${wearingParts.join(', ')}, `;
-        }
-
-        let poseClause = '';
-        if (pose) {
-          if (selectedCameraAngle) {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
-            if (!angleObj || !(angleObj.prompt.includes('pose') || angleObj.prompt.includes('heroic'))) {
-              poseClause = `${pose}, `;
-            }
-          } else {
-            poseClause = `${pose}, `;
-          }
-        }
-        
-        let bgClause = bg ? `fondo ${bg}` : 'fondo sólido pastel';
-        let actionClause = customAction ? `, ${customAction}` : '';
-        
-        let viewClause = '';
-        if (!selectedCameraAngle || selectedCameraAngle === null) {
-          viewClause = 'toma frontal, ';
-        }
-
-        let cameraClause = '';
-        if (selectedCameraAngle && selectedCameraAngle !== null) {
-          if (selectedCameraAngle === 'Custom Camera Angle' || selectedCameraAngle === 'Ángulo Personalizado') {
-            if (customCameraAngleValue) {
-              cameraClause = `, ${customCameraAngleValue}`;
-            }
-          } else {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
-            if (angleObj && angleObj.prompt) {
-              cameraClause = `, ${angleObj.prompt}`;
-            }
-          }
-        }
-        
-        let colorClause = '';
-        if (selectedColorPalette) {
-          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
-            colorClause = `, paleta de colores: ${customColorPaletteValue}`;
-          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
-            colorClause = `, ${selectedColorPalette.prompt}`;
-          }
-        }
-
-        let subjectText = '';
-        if (character && character !== '') {
-          subjectText = character;
-        } else {
-          subjectText = gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje';
-        }
-
-        prompt = `Una ilustración estilo chibi 3D audaz de un ${subjectText} de etnia ${ethnicity}, rasgos masculinos, expresión confiada, ojos expresivos glossy, labios naturales, cejas definidas, ${hairDesc} con acabado ultra glossy, ${wearingClause}${poseClause}look modesto completamente vestido, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, estilo arte chibi 3D limpio, contornos marcados, sombreado suave, cabello brillante, colores vibrantes, alta calidad, solo un personaje masculino`;
-
+        const ethnicity = physTraitES || 'etnia mixta';
+        prompt = `Una ilustración estilo chibi 3D audaz de un ${subjectES} con ${ethnicity}, ojos expresivos glossy, labios naturales, ${hairDesc || 'cabello elegante'} con acabado ultra glossy, ${wearingClause}${poseClause}look modesto completamente vestido, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, arte chibi 3D limpio, contornos marcados, sombreado suave, colores vibrantes, alta calidad, solo un personaje masculino`;
       } else {
-        let wearingClause = '';
-        if (wearingParts.length > 0) {
-          wearingClause = `, vistiendo ${wearingParts.join(', ')}`;
-        }
-
-        prompt = `Una ilustración ${styleES} de una ${character}`;
-        if (physTrait) prompt += ` con ${physTrait}`;
-        if (hairColor && hairStyle) prompt += `, ${hairColor} ${hairStyle}`;
-        else if (hairStyle) prompt += `, ${hairStyle}`;
-        
-        prompt += wearingClause;
-
-        if (pose) prompt += `, ${pose}`;
-        if (bg) prompt += `, fondo ${bg}`;
+        prompt = `Una ilustración ${styleES} de una ${subjectES}`;
+        if (physTraitES) prompt += ` con ${physTraitES}`;
+        if (hairColorES && hairStyleDescES) prompt += `, ${hairColorES} ${hairStyleDescES}`;
+        else if (hairStyleDescES) prompt += `, ${hairStyleDescES}`;
+        if (wearingPartsES.length > 0) prompt += `, vistiendo ${wearingPartsES.join(', ')}`;
+        if (poseES) prompt += `, ${poseES}`;
+        if (bgES) prompt += `, fondo ${bgES}`;
         if (customAction) prompt += `, ${customAction}`;
-        
-        if (selectedCameraAngle && selectedCameraAngle !== null) {
-          if (selectedCameraAngle === 'Custom Camera Angle' || selectedCameraAngle === 'Ángulo Personalizado') {
-            if (customCameraAngleValue) {
-              prompt += `, ${customCameraAngleValue}`;
-            }
-          } else {
-            const angleObj = cameraAngles.find(a => a.en === selectedCameraAngle || a.es === selectedCameraAngle);
-            if (angleObj && angleObj.prompt) {
-              prompt += `, ${angleObj.prompt}`;
-            }
-          }
-        }
-        
-        if (selectedColorPalette) {
-          if (selectedColorPalette === 'custom' && customColorPaletteValue) {
-            prompt += `, paleta de colores: ${customColorPaletteValue}`;
-          } else if (typeof selectedColorPalette === 'object' && selectedColorPalette.prompt) {
-            prompt += `, ${selectedColorPalette.prompt}`;
-          }
-        }
-
+        if (cameraPrompt) prompt += `, ${cameraPrompt}`;
+        if (colorPrompt) prompt += `, ${colorPrompt}`;
         prompt += `, alta calidad, ilustración profesional`;
       }
 
       return prompt;
+    }
+
+    // ============ FIX 5: Conditional display — EN only or EN+ES ============
+    function generatePrompt() {
+      if (!selectedStyle || !selectedCharacter) {
+        alert(currentLanguage === 'en' ? 'Please select a Style and a Character first!' : '¡Por favor selecciona un Estilo y un Personaje primero!');
+        return;
+      }
+      const promptEn = generatePromptEN();
+      const promptEs = generatePromptES();
+      displayPrompt(promptEn, promptEs);
     }
 
     function displayPrompt(promptEn, promptEs) {
@@ -2265,12 +1621,18 @@
       textEn.textContent = promptEn;
       const countEn = document.getElementById('word-count-en');
       countEn.textContent = `Words: ${countWords(promptEn)} / 120`;
-      
+      countEn.className = `word-count${countWords(promptEn) > 120 ? ' warning' : ''}`;
+
       const textEs = document.getElementById('prompt-text-es');
       textEs.textContent = promptEs;
       const countEs = document.getElementById('word-count-es');
       countEs.textContent = `Palabras: ${countWords(promptEs)} / 120`;
-      
+      countEs.className = `word-count${countWords(promptEs) > 120 ? ' warning' : ''}`;
+
+      // FIX 5: Show ES block only when language is 'es'
+      const esBlock = document.getElementById('prompt-es-block');
+      if (esBlock) esBlock.classList.toggle('hidden', currentLanguage !== 'es');
+
       const output = document.getElementById('prompt-output');
       output.classList.remove('hidden');
     }
@@ -2279,9 +1641,9 @@
       const text = document.getElementById('prompt-text-en').textContent;
       navigator.clipboard.writeText(text).then(() => {
         const btn = event.target;
-        const originalText = btn.textContent;
+        const orig = btn.textContent;
         btn.textContent = '✓ COPIED!';
-        setTimeout(() => { btn.textContent = originalText; }, 2000);
+        setTimeout(() => { btn.textContent = orig; }, 2000);
       });
     }
 
@@ -2289,190 +1651,89 @@
       const text = document.getElementById('prompt-text-es').textContent;
       navigator.clipboard.writeText(text).then(() => {
         const btn = event.target;
-        const originalText = btn.textContent;
+        const orig = btn.textContent;
         btn.textContent = '✓ COPIADO!';
-        setTimeout(() => { btn.textContent = originalText; }, 2000);
+        setTimeout(() => { btn.textContent = orig; }, 2000);
       });
     }
 
-    function getGender() {
-      if (!selectedCharacter) return 'neutral';
-      const character = characters.find(c => {
-        const charName = currentLanguage === 'en' ? c.en : c.es;
-        return charName === selectedCharacter;
-      });
-      if (!character) return 'neutral';
-      
-      let gender = character.gender || 'neutral';
-      if (gender === 'neutral' && selectedNeutralGender) {
-        gender = selectedNeutralGender;
-      }
-      return gender;
-    }
-
+    // ============ RANDOMIZE ============
     function randomize() {
       selectedCategory = categories[Math.floor(Math.random() * categories.length)].id;
       renderCategories();
-      
       const styleList = styles[selectedCategory];
-      selectedStyle = currentLanguage === 'en' ? styleList[Math.floor(Math.random() * styleList.length)].en : styleList[Math.floor(Math.random() * styleList.length)].es;
-      renderStyles();
-      hideColorPaletteIfColoring();
-      
-      const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
-      selectedCharacter = currentLanguage === 'en' ? randomCharacter.en : randomCharacter.es;
-      renderCharacters();
-      
-      renderGenderSection();
-      if (characters.find(c => {
-        const charName = currentLanguage === 'en' ? c.en : c.es;
-        return charName === selectedCharacter;
-      })?.gender === 'neutral') {
+      selectedStyle = styleList[Math.floor(Math.random() * styleList.length)].en;
+      renderStyles(); hideColorPaletteIfColoring();
+      const randomChar = characters[Math.floor(Math.random() * characters.length)];
+      selectedCharacter = randomChar.en;
+      renderCharacters(); renderGenderSection();
+      if (randomChar.gender === 'neutral') {
         selectedNeutralGender = Math.random() > 0.5 ? 'female' : 'male';
         renderGenderSection();
-      }
-      
+      } else { selectedNeutralGender = null; }
       renderPhysicalTraits();
       if (Math.random() > 0.5) {
-        const character = characters.find(c => {
-          const charName = currentLanguage === 'en' ? c.en : c.es;
-          return charName === selectedCharacter;
-        });
-        let gender = character?.gender || 'neutral';
-        if (gender === 'neutral' && selectedNeutralGender) {
-          gender = selectedNeutralGender;
-        } else if (gender === 'neutral') {
-          renderPhysicalTraits();
-          return;
-        }
+        const gender = getGender();
         const traits = physicalTraits[gender] || [];
-        if (traits.length > 0) {
-          const randomTrait = traits[Math.floor(Math.random() * traits.length)];
-          selectedPhysicalTrait = currentLanguage === 'en' ? randomTrait.en : randomTrait.es;
-        }
-      }
+        if (traits.length > 0) selectedPhysicalTrait = traits[Math.floor(Math.random() * traits.length)].en;
+      } else { selectedPhysicalTrait = ''; }
       renderPhysicalTraits();
-      
-      renderHairStyles();
       if (Math.random() > 0.4) {
-        const character = characters.find(c => {
-          const charName = currentLanguage === 'en' ? c.en : c.es;
-          return charName === selectedCharacter;
-        });
-        let gender = character?.gender || 'neutral';
-        if (gender === 'neutral' && selectedNeutralGender) {
-          gender = selectedNeutralGender;
-        } else if (gender === 'neutral') {
-          renderHairStyles();
-          return;
-        }
-        let styleList = [];
-        if (gender === 'male') {
-          styleList = hairStyles['male'] || [];
-        } else if (gender === 'female') {
-          styleList = hairStyles['female'] || [];
-        }
-        if (styleList.length > 0) {
-          const randomStyle = styleList[Math.floor(Math.random() * styleList.length)];
-          selectedHairStyle = currentLanguage === 'en' ? randomStyle.en : randomStyle.es;
-        }
-      }
+        const gender = getGender();
+        const sList = gender === 'male' ? hairStyles['male'] : hairStyles['female'];
+        if (sList.length > 0) selectedHairStyle = sList[Math.floor(Math.random() * sList.length)].en;
+      } else { selectedHairStyle = ''; }
       renderHairStyles();
-      
-      renderHairColors();
+      const colorSection = document.getElementById('hair-color-section');
+      if (selectedHairStyle && colorSection) colorSection.classList.remove('hidden');
       if (selectedHairStyle && Math.random() > 0.3) {
-        const randomColor = hairColors[Math.floor(Math.random() * hairColors.length)];
-        selectedHairColor = currentLanguage === 'en' ? randomColor.en : randomColor.es;
-      }
+        selectedHairColor = hairColors[Math.floor(Math.random() * hairColors.length)].en;
+      } else { selectedHairColor = ''; }
       renderHairColors();
-      
-      const randomPose = poses[Math.floor(Math.random() * poses.length)];
-      selectedPose = currentLanguage === 'en' ? randomPose.en : randomPose.es;
+      selectedPose = poses[Math.floor(Math.random() * poses.length)].en;
       renderPoses();
-      
-      const randomBg = backgrounds[selectedCategory][Math.floor(Math.random() * backgrounds[selectedCategory].length)];
-      selectedBackground = currentLanguage === 'en' ? randomBg.en : randomBg.es;
+      const bgList = backgrounds[selectedCategory];
+      selectedBackground = bgList[Math.floor(Math.random() * bgList.length)].en;
       renderBackgrounds();
-
-      if (Math.random() > 0.6) {
-        const randomCamera = cameraAngles[Math.floor(Math.random() * cameraAngles.length)];
-        selectedCameraAngle = currentLanguage === 'en' ? randomCamera.en : randomCamera.es;
-      } else {
-        selectedCameraAngle = null;
-      }
+      selectedCameraAngle = Math.random() > 0.6 ? cameraAngles[Math.floor(Math.random() * cameraAngles.length)].en : null;
       renderCameraAngles();
-
       selectedColorPalette = colorPalettes[0];
       renderColorPalettes();
-      
       selectedAccessories = [];
       if (Math.random() > 0.5) {
         const num = Math.floor(Math.random() * 3) + 1;
         for (let i = 0; i < num; i++) {
           const acc = accessoriesList[Math.floor(Math.random() * accessoriesList.length)];
-          const accName = currentLanguage === 'en' ? acc.en : acc.es;
-          if (!selectedAccessories.includes(accName)) {
-            selectedAccessories.push(accName);
-          }
+          if (!selectedAccessories.includes(acc.en)) selectedAccessories.push(acc.en);
         }
       }
-      
-      selectedSunglasses = null;
-      if (Math.random() > 0.6) {
-        selectedSunglasses = sunglassesVariations[Math.floor(Math.random() * sunglassesVariations.length)];
-      }
-      
+      selectedSunglasses = Math.random() > 0.6 ? sunglassesVariations[Math.floor(Math.random() * sunglassesVariations.length)] : null;
       renderAccessories();
-      
-      customOutfitItems = [];
-      customAccessoryItems = [];
-      customCameraAngleValue = '';
-      customColorPaletteValue = '';
+      customOutfitItems = []; customAccessoryItems = []; customCameraAngleValue = ''; customColorPaletteValue = '';
+      selectedOutfitType = null; selectedCompleteOutfit = null; selectedBuildYourOwnOutfitEN = null; selectedShoes = null;
       document.getElementById('custom-accessory-input').value = '';
-      
-      renderCustomAccessories();
-      renderOutfits();
+      renderCustomAccessories(); renderOutfits();
       generatePrompt();
     }
 
+    // ============ CLEAR ============
     function clearAll() {
-      selectedStyle = '';
-      selectedCharacter = '';
-      selectedNeutralGender = null;
-      selectedPhysicalTrait = '';
-      selectedHairStyle = '';
-      selectedHairColor = '';
-      selectedPose = '';
-      selectedBackground = '';
-      selectedCameraAngle = null;
-      selectedColorPalette = colorPalettes[0];
-      selectedAccessories = [];
-      selectedSunglasses = null;
-      customOutfitItems = [];
-      customAccessoryItems = [];
-      customHairStyleValue = '';
-      customHairColorValue = '';
-      customOutfitValue = '';
-      customShoesValue = '';
-      customPoseValue = '';
-      customBackgroundValue = '';
-      customCameraAngleValue = '';
-      customColorPaletteValue = '';
-      selectedOutfitType = null;
-      selectedCompleteOutfit = null;
-      selectedBuildYourOwnOutfit = null;
-      selectedShoes = null;
-      
+      selectedStyle = ''; selectedCharacter = ''; selectedNeutralGender = null; selectedPhysicalTrait = '';
+      selectedHairStyle = ''; selectedHairColor = ''; selectedPose = ''; selectedBackground = '';
+      selectedCameraAngle = null; selectedColorPalette = colorPalettes[0];
+      selectedAccessories = []; selectedSunglasses = null; customOutfitItems = []; customAccessoryItems = [];
+      customHairStyleValue = ''; customHairColorValue = ''; customOutfitValue = ''; customShoesValue = '';
+      customPoseValue = ''; customBackgroundValue = ''; customCameraAngleValue = ''; customColorPaletteValue = '';
+      selectedOutfitType = null; selectedCompleteOutfit = null; selectedBuildYourOwnOutfitEN = null; selectedShoes = null;
       document.getElementById('custom-accessory-input').value = '';
       document.getElementById('custom-action-input').value = '';
-      
-      renderAll();
-      renderGenderSection();
+      renderAll(); renderGenderSection();
       document.getElementById('prompt-output').classList.add('hidden');
     }
 
+    // ============ INIT ============
     renderAll();
     renderGenderSection();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d09a4a3172cb9e6',t:'MTc3MTU0NDc4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ </body>
 </html>
