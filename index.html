@@ -230,8 +230,12 @@
       </div>
       <div class="section">
        <h3>Custom Action / Scene (Optional) / Acción Personalizada (Opcional)</h3>
-       <p class="section-description">Add a specific action or scene / Agrega una acción o escena específica</p>
-       <input type="text" id="custom-action-input" class="custom-text-input" placeholder="Example: drinking coffee, walking a dog, taking a selfie, holding a book...">
+       <p class="section-description">Add a specific action or scene — it will be woven naturally into the prompt / Agrega una acción o escena — se integrará de forma natural en el prompt</p>
+       <div class="custom-input-row">
+        <input type="text" id="custom-action-input" class="input-field" placeholder="e.g. drinking coffee, walking a dog, taking a selfie, holding a book..." onkeydown="if(event.key==='Enter') addCustomAction()">
+        <button onclick="addCustomAction()" class="btn-secondary" style="white-space:nowrap;">+ Add</button>
+       </div>
+       <div id="custom-action-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;"></div>
       </div>
       <div class="buttons-row mb-8">
        <button onclick="generatePrompt()" class="btn-main flex-1" id="generate-btn">GENERATE PROMPT</button>
@@ -356,6 +360,7 @@
     let customBackgroundValue = '';
     let customCameraAngleValue = '';
     let customColorPaletteValue = '';
+    let customActionItems = [];
 
     const categories = [
       { en: 'Notebook', es: 'Cuaderno', id: 'notebook' },
@@ -992,6 +997,28 @@
       });
     }
 
+    function addCustomAction() {
+      const input = document.getElementById("custom-action-input");
+      const val = input.value.trim();
+      if (val) { customActionItems.push(val); input.value = ""; renderCustomActions(); }
+    }
+
+    function removeCustomAction(index) { customActionItems.splice(index, 1); renderCustomActions(); }
+
+    function renderCustomActions() {
+      const container = document.getElementById("custom-action-chips");
+      if (!container) return;
+      container.innerHTML = "";
+      customActionItems.forEach((item, index) => {
+        const btn = document.createElement("button");
+        btn.className = "chip-btn active";
+        btn.style.display = "flex"; btn.style.alignItems = "center"; btn.style.gap = "6px";
+        btn.innerHTML = `${item} <span style="cursor:pointer;font-weight:bold;">×</span>`;
+        btn.onclick = (e) => { e.preventDefault(); removeCustomAction(index); };
+        container.appendChild(btn);
+      });
+    }
+
     function setNeutralGender(gender) {
       selectedNeutralGender = selectedNeutralGender === gender ? null : gender;
       document.getElementById('gender-female').classList.toggle('active', selectedNeutralGender === 'female');
@@ -1424,8 +1451,7 @@
       }
 
       const wearingPartsEN = getWearingPartsEN();
-      const customActionInput = document.getElementById('custom-action-input');
-      const customAction = customActionInput ? cleanText(customActionInput.value) : '';
+      const customAction = customActionItems.length > 0 ? customActionItems.join(', ') : '';
 
       // Camera angle
       let cameraPrompt = '';
@@ -1458,7 +1484,8 @@
       const poseClause = poseEN ? `${poseEN}, ` : '';
       const cameraClause = cameraPrompt ? `, ${cameraPrompt}` : '';
       const colorClause = colorPrompt ? `, ${colorPrompt}` : '';
-      const actionClause = customAction ? `, ${customAction}` : '';
+      // Coherent action clause — placed BEFORE quality tags, after scene/bg
+      const actionClause = customAction ? `, actively ${customAction}` : '';
       const bgClause = bgEN ? `${bgEN} background` : 'solid pastel background';
       const viewClause = !selectedCameraAngle ? (isGlossyChibi ? 'shot from front view, ' : 'shot from front, ') : '';
 
@@ -1479,9 +1506,9 @@
         if (wearingPartsEN.length > 0) prompt += `, wearing ${wearingPartsEN.join(', ')}`;
         if (poseEN) prompt += `, ${poseEN}`;
         if (bgEN) prompt += `, ${bgEN} background`;
-        if (customAction) prompt += `, ${customAction}`;
         if (cameraPrompt) prompt += `, ${cameraPrompt}`;
         if (colorPrompt) prompt += `, ${colorPrompt}`;
+        if (customAction) prompt += `, character is actively ${customAction}`;
         prompt += `, high quality, professional illustration`;
       }
 
@@ -1541,8 +1568,7 @@
       }
 
       const wearingPartsES = getWearingPartsES();
-      const customActionInput = document.getElementById('custom-action-input');
-      const customAction = customActionInput ? cleanText(customActionInput.value) : '';
+      const customAction = customActionItems.length > 0 ? customActionItems.join(', ') : '';
 
       // Camera angle prompt (technical, keep EN for AI clarity but in ES context)
       let cameraPrompt = '';
@@ -1575,7 +1601,8 @@
       const poseClause = poseES ? `${poseES}, ` : '';
       const cameraClause = cameraPrompt ? `, ${cameraPrompt}` : '';
       const colorClause = colorPrompt ? `, ${colorPrompt}` : '';
-      const actionClause = customAction ? `, ${customAction}` : '';
+      // Acción coherente — colocada ANTES de tags de calidad, después de escena/fondo
+      const actionClause = customAction ? `, activamente ${customAction}` : '';
       const bgClause = bgES ? `fondo ${bgES}` : 'fondo pastel sólido';
       const viewClause = !selectedCameraAngle ? (isGlossyChibi ? 'toma frontal, ' : 'toma frontal, ') : '';
 
@@ -1596,9 +1623,9 @@
         if (wearingPartsES.length > 0) prompt += `, vistiendo ${wearingPartsES.join(', ')}`;
         if (poseES) prompt += `, ${poseES}`;
         if (bgES) prompt += `, fondo ${bgES}`;
-        if (customAction) prompt += `, ${customAction}`;
         if (cameraPrompt) prompt += `, ${cameraPrompt}`;
         if (colorPrompt) prompt += `, ${colorPrompt}`;
+        if (customAction) prompt += `, el personaje está activamente ${customAction}`;
         prompt += `, alta calidad, ilustración profesional`;
       }
 
@@ -1709,7 +1736,7 @@
       }
       selectedSunglasses = Math.random() > 0.6 ? sunglassesVariations[Math.floor(Math.random() * sunglassesVariations.length)] : null;
       renderAccessories();
-      customOutfitItems = []; customAccessoryItems = []; customCameraAngleValue = ''; customColorPaletteValue = '';
+      customOutfitItems = []; customAccessoryItems = []; customActionItems = []; customCameraAngleValue = ''; customColorPaletteValue = '';
       selectedOutfitType = null; selectedCompleteOutfit = null; selectedBuildYourOwnOutfitEN = null; selectedShoes = null;
       document.getElementById('custom-accessory-input').value = '';
       renderCustomAccessories(); renderOutfits();
@@ -1726,7 +1753,9 @@
       customPoseValue = ''; customBackgroundValue = ''; customCameraAngleValue = ''; customColorPaletteValue = '';
       selectedOutfitType = null; selectedCompleteOutfit = null; selectedBuildYourOwnOutfitEN = null; selectedShoes = null;
       document.getElementById('custom-accessory-input').value = '';
+      customActionItems = [];
       document.getElementById('custom-action-input').value = '';
+      renderCustomActions();
       renderAll(); renderGenderSection();
       document.getElementById('prompt-output').classList.add('hidden');
     }
@@ -1735,7 +1764,8 @@
     renderAll();
     renderGenderSection();
   </script>
- <footer style="text-align: center; padding: 24px 16px; margin-top: 8px; color: #c9a0b8; font-size: 13px; font-family: 'Quicksand', sans-serif; font-weight: 600;">
+
+  <footer style="text-align: center; padding: 24px 16px; margin-top: 8px; color: #c9a0b8; font-size: 13px; font-family: 'Quicksand', sans-serif; font-weight: 600;">
     © 2026 All Rights Reserved · Made with ❤️ for 
     <a href="https://johadigitalseattle.com" target="_blank" style="color: #ff88cc; text-decoration: none; font-weight: 700;">johadigitalseattle.com</a>
   </footer>
