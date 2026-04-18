@@ -59,6 +59,11 @@
     .custom-input-row button { white-space: nowrap; }
     .custom-accessories-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid #ffc0e0; }
     .custom-accessories-section .section-title { font-size: 13px; margin-bottom: 8px; }
+    .acc-cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+    .acc-cat-btn { background: rgba(255,192,217,0.15); border: 1.5px solid #ffb3d9; color: #cc88bb; border-radius: 10px; cursor: pointer; font-family: Quicksand,sans-serif; font-weight: 700; font-size: 12px; padding: 10px 6px; text-align: center; transition: all 0.2s ease; }
+    .acc-cat-btn:hover { background: rgba(255,192,217,0.3); }
+    .acc-cat-btn.open { background: linear-gradient(135deg,#ff88cc,#e055b0); border-color: #ff88cc; color: white; }
+    .acc-cat-dropdown { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 4px 4px; }
     #sunglasses-dropdown-container { position: relative; margin-top: 12px; }
     .sunglasses-toggle-btn { background: #ffd4e5; color: #8b6b7d; border: 2px solid #ffc0d9; padding: 10px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; font-weight: 600; font-size: 13px; box-shadow: 0 3px 12px rgba(255, 192, 217, 0.2); display: flex; justify-content: space-between; align-items: center; width: auto; }
     .sunglasses-toggle-btn:hover { transform: scale(1.08); background: #fff5fb; }
@@ -242,8 +247,29 @@
         <input type="text" id="custom-shoes-input" class="custom-text-input" placeholder="Describe your custom shoes / Describe tus zapatos personalizados" onchange="updateCustomShoes(this.value)">
        </div>
       </div>
+      <div id="accessories-section" class="mb-8">
+       <div class="section-title">Accessories / Accesorios</div>
+       <div id="accessories-placeholder" class="accessories-placeholder">
+        Primero selecciona Género (Hombre o Mujer) para ver los accesorios recomendados.
+       </div>
+       <div id="accessories-container"></div>
+       <div id="sunglasses-dropdown-container" style="display: none;">
+        <button id="sunglasses-toggle-btn" class="sunglasses-toggle-btn"><span id="sunglasses-btn-text">🕶️ Sunglasses</span> <span id="sunglasses-arrow" style="margin-left: 8px;">▼</span></button>
+        <div id="sunglasses-menu" class="sunglasses-menu hidden"></div>
+       </div>
+       <div id="custom-accessories-container" class="custom-accessories-section hidden">
+        <div class="section-title">Custom Accessories / Accesorios Personalizados</div>
+        <div class="custom-input-row">
+         <input type="text" id="custom-accessory-input" class="input-field" placeholder="Add custom accessory...">
+         <button onclick="addCustomAccessory()" class="btn-secondary">+ Add</button>
+        </div>
+        <div id="custom-accessories-buttons"></div>
+       </div>
+      </div>
+
       <div id="hair-style-section" class="mb-8">
        <div class="section-title">Hair Style</div>
+       <p class="section-description">Leave unselected for normal view. Click again to deselect.</p>
        <div id="hair-style-container"></div>
        <button class="option-button" onclick="selectHairStyle('Custom Hair Style')">✏️ Custom Hair Style</button>
        <div id="custom-hair-style-container" class="custom-input-container hidden">
@@ -290,24 +316,6 @@
         <input type="text" id="custom-color-palette-input" class="custom-text-input" placeholder="Describe your custom palette / Describe tu paleta personalizada" onchange="updateCustomColorPalette(this.value)">
        </div>
       </div>
-      <div id="accessories-section" class="mb-8">
-       <div class="section-title">Accessories / Accesorios</div>
-       <div id="accessories-placeholder" class="accessories-placeholder">
-        Primero selecciona Género (Hombre o Mujer) para ver los accesorios recomendados.
-       </div>
-       <div id="accessories-container"></div>
-       <div id="sunglasses-dropdown-container" style="display: none;">
-        <button id="sunglasses-toggle-btn" class="sunglasses-toggle-btn"><span id="sunglasses-btn-text">🕶️ Sunglasses</span> <span id="sunglasses-arrow" style="margin-left: 8px;">▼</span></button>
-        <div id="sunglasses-menu" class="sunglasses-menu hidden"></div>
-       </div>
-       <div id="custom-accessories-container" class="custom-accessories-section hidden">
-        <div class="section-title">Custom Accessories / Accesorios Personalizados</div>
-        <div class="custom-input-row">
-         <input type="text" id="custom-accessory-input" class="input-field" placeholder="Add custom accessory...">
-         <button onclick="addCustomAccessory()" class="btn-secondary">+ Add</button>
-        </div>
-        <div id="custom-accessories-buttons"></div>
-       </div>
       </div>
       <div class="section">
        <h3>Custom Action / Scene (Optional) / Acción Personalizada (Opcional)</h3>
@@ -442,6 +450,8 @@
     let customCameraAngleValue = '';
     let customColorPaletteValue = '';
     let customActionItems = [];
+    let openOutfitCategories = [];
+    let openPoseCategories = [];
 
     const categories = [
       { en: 'Notebook', es: 'Cuaderno', id: 'notebook' },
@@ -474,7 +484,7 @@
         { en: 'Glossy 3D Chibi', es: 'Chibi 3D Brillante' },
         { en: 'Bold 3D Chibi', es: 'Chibi 3D Audaz' },
         { en: 'Hyper Realistic 3D Doll', es: 'Muñeca 3D Hiperrealista' },
-        { en: '3D Octane Render', es: 'Render Octane 3D' },
+        { en: 'Pixar Bratz', es: 'Pixar Bratz' },
         { en: '3D Cinematic Lighting', es: 'Iluminación Cinemática 3D' },
         { en: '3D Vinyl Toy Figure', es: 'Figura Juguete Vinilo 3D' },
         { en: '3D Low Poly Cute', es: 'Low Poly Lindo 3D' },
@@ -578,7 +588,15 @@
         { en: 'Long Pigtails', es: 'Coletas Largas', desc_en: 'cute long pigtails', desc_es: 'lindas coletas largas' },
         { en: 'High Ponytail', es: 'Coleta Alta', desc_en: 'sleek high ponytail', desc_es: 'coleta alta elegante' },
         { en: 'Half-Up Half-Down', es: 'Mitad Arriba Mitad Abajo', desc_en: 'half-up half-down style', desc_es: 'estilo mitad arriba mitad abajo' },
-        { en: 'Sleek Bob Cut', es: 'Bob Elegante', desc_en: 'chin-length sleek bob cut', desc_es: 'corte bob elegante a la altura del mentón' }
+        { en: 'Sleek Bob Cut', es: 'Bob Elegante', desc_en: 'chin-length sleek bob cut', desc_es: 'corte bob elegante a la altura del mentón' },
+        { en: 'Messy Bun Color Highlights', es: 'Moño Desordenado con Mechas de Color', desc_en: 'high messy bun with loose falling strands, dark base hair with glossy pink teal and caramel color highlights, multi-color streaks with shine effect', desc_es: 'moño alto desordenado con mechones sueltos, cabello base oscuro con mechas glossy rosa teal y caramel, rayitos multicolor con efecto brillo' },
+        { en: 'Sleek High Bun', es: 'Moño Alto Elegante', desc_en: 'sleek tight high bun, polished and clean', desc_es: 'moño alto elegante y bien peinado' },
+        { en: 'Butterfly Locs', es: 'Butterfly Locs', desc_en: 'long butterfly locs with soft curled ends', desc_es: 'butterfly locs largas con puntas rizadas suaves' },
+        { en: 'Knotless Braids', es: 'Trenzas Knotless', desc_en: 'long knotless box braids, natural and neat', desc_es: 'trenzas knotless largas, naturales y ordenadas' },
+        { en: 'Passion Twists', es: 'Passion Twists', desc_en: 'long passion twists, bohemian textured look', desc_es: 'passion twists largas, look texturizado bohemio' },
+        { en: 'Wavy Bob with Highlights', es: 'Bob Ondulado con Mechas', desc_en: 'chin-length wavy bob with blonde or color highlights', desc_es: 'bob ondulado a la altura del mentón con mechas rubias o de color' },
+        { en: 'Side Swept Curls', es: 'Rizos a Un Lado', desc_en: 'voluminous curls swept to one side, glamorous look', desc_es: 'rizos voluminosos recogidos a un lado, look glamoroso' },
+        { en: 'Long Curly Bob', es: 'Bob Rizado Largo', desc_en: 'short curly dark bob with loose ringlets', desc_es: 'bob oscuro corto rizado con rizos sueltos' }
       ],
       male: [
         { en: 'Long Straight', es: 'Largo Liso', desc_en: 'long straight hair', desc_es: 'cabello largo liso' },
@@ -603,26 +621,62 @@
       { en: 'Mint to Teal', es: 'Menta a Azul Verdoso' },
       { en: 'Bubblegum Purple', es: 'Púrpura Chicle' },
       { en: 'Iridescent Holo', es: 'Holográfico Iridiscente' },
-      { en: 'Peach to Coral', es: 'Melocotón a Coral' }
+      { en: 'Peach to Coral', es: 'Melocotón a Coral' },
+      { en: 'Black with Pink & Teal Highlights', es: 'Negro con Mechas Rosa y Teal' },
+      { en: 'Black with Blue Shimmer', es: 'Negro Azulado Brillante' },
+      { en: 'Brown with Caramel Highlights', es: 'Marrón con Mechas Caramel' },
+      { en: 'Black with Blonde Streaks', es: 'Negro con Rayitos Rubios' },
+      { en: 'Dark Brown with Auburn', es: 'Marrón Oscuro con Rojizo' },
+      { en: 'Black with Purple Streaks', es: 'Negro con Mechas Moradas' }
     ];
 
-    const poses = [
-      { en: 'Sassy Standing', es: 'De Pie Descarada' },
-      { en: 'Happy Waving', es: 'Saludando Feliz' },
-      { en: 'Leaning Forward Playful', es: 'Inclinada Juguetona' },
-      { en: 'Peace Sign Head Tilt', es: 'Señal Paz Inclinada' },
-      { en: 'Blowing Kiss Heart Eyes', es: 'Soplando Beso Ojos Corazón' },
-      { en: 'Fierce Arms Crossed', es: 'Brazos Cruzados Feroz' },
-      { en: 'Hair Flip Surprised', es: 'Volteo Cabello Sorprendida' },
-      { en: 'Sitting Chin Rest', es: 'Sentada Barbilla' },
-      { en: 'Victory Pose Big Grin', es: 'Pose Victoria Sonrisa Grande' },
-      { en: 'Heart Hands Shy Blush', es: 'Manos Corazón Tímida' },
-      { en: 'Blowing Kiss Classic', es: 'Soplando Beso Clásico' },
-      { en: 'Holding Accessory', es: 'Sosteniendo Accesorio' },
-      { en: 'Surprised Shocked', es: 'Sorprendida Impactada' },
-      { en: 'Leaning Cool', es: 'Inclinada Genial' },
-      { en: 'Duo Group Pose', es: 'Pose Dúo Grupo' }
+    // Poses organized by category for dropdown display
+    const posesCategories = [
+      {
+        label_en: '😎 Cool & Attitude', label_es: '😎 Cool y Actitud',
+        items: [
+          { en: 'Sassy Standing', es: 'De Pie Descarada' },
+          { en: 'Fierce Arms Crossed', es: 'Brazos Cruzados Feroz' },
+          { en: 'Hands In Pockets Cool', es: 'Manos en Bolsillos Cool' },
+          { en: 'Looking Over Shoulder Attitude', es: 'Mirando por Encima del Hombro' },
+          { en: 'Leaning Cool', es: 'Recostada Genial' },
+          { en: 'Leaning Against Wall Casual', es: 'Recostada en Pared Casual' }
+        ]
+      },
+      {
+        label_en: '💕 Cute & Sweet', label_es: '💕 Linda y Dulce',
+        items: [
+          { en: 'Happy Waving', es: 'Saludando Feliz' },
+          { en: 'Blowing Kiss Heart Eyes', es: 'Soplando Beso Ojos Corazón' },
+          { en: 'Blowing Kiss Classic', es: 'Soplando Beso Clásico' },
+          { en: 'Heart Hands Shy Blush', es: 'Manos Corazón Tímida' },
+          { en: 'Peace Sign Head Tilt', es: 'Señal Paz Inclinada' },
+          { en: 'Leaning Forward Playful', es: 'Inclinada Juguetona' }
+        ]
+      },
+      {
+        label_en: '💃 Dynamic & Fun', label_es: '💃 Dinámica y Divertida',
+        items: [
+          { en: 'Hair Flip Surprised', es: 'Volteo Cabello Sorprendida' },
+          { en: 'Victory Pose Big Grin', es: 'Pose Victoria Sonrisa Grande' },
+          { en: 'Surprised Shocked', es: 'Sorprendida Impactada' },
+          { en: 'Holding Accessory', es: 'Sosteniendo Accesorio' },
+          { en: 'Duo Group Pose', es: 'Pose Dúo Grupo' }
+        ]
+      },
+      {
+        label_en: '📸 Editorial & Fashion', label_es: '📸 Editorial y Moda',
+        items: [
+          { en: 'Sitting Chin Rest', es: 'Sentada Barbilla' },
+          { en: 'Sitting Editorial', es: 'Sentada Editorial' },
+          { en: 'Selfie Angle Social Media', es: 'Ángulo Selfie Redes Sociales' },
+          { en: 'Walking Fashion Runway', es: 'Caminando Pasarela de Moda' }
+        ]
+      }
     ];
+
+    // Flat poses list for prompt lookup
+    const poses = posesCategories.flatMap(cat => cat.items);
 
     const backgrounds = {
       notebook: [
@@ -679,33 +733,86 @@
       { en: 'Earth Tones', es: 'Tonos Tierra', prompt: 'warm earth tone palette: terracotta, sage green, sandy beige, warm brown, dusty rose' }
     ];
 
-    const accessoriesList = [
-      { en: 'Regular Glasses', es: 'Gafas Regulares', desc: 'wearing regular glasses, eyeglasses' },
-      { en: 'Crown', es: 'Corona', desc: 'wearing ornate jeweled crown, golden tiara' },
-      { en: 'Necklace', es: 'Collar', desc: 'wearing elegant gold chain necklace' },
-      { en: 'Hat', es: 'Sombrero', desc: 'wearing stylish hat' },
-      { en: 'Earrings', es: 'Pendientes', desc: 'wearing large statement hoop earrings, gold' },
-      { en: 'Bracelets', es: 'Pulseras', desc: 'wearing layered gold bracelets, bangles' },
-      { en: 'Hair Bow', es: 'Lazo', desc: 'wearing oversized silk hair bow' },
-      { en: 'Hair Clips', es: 'Clips Cabello', desc: 'wearing decorative pearl hair clips' },
-      { en: 'Butterfly Clips', es: 'Clips Mariposa', desc: 'wearing colorful butterfly hair clips' },
-      { en: 'Flower Crown', es: 'Corona de Flores', desc: 'wearing delicate flower crown' },
-      { en: 'Gold Cuffs', es: 'Puños Oro', desc: 'wearing chunky gold arm cuffs' },
-      { en: 'Diamond Studs', es: 'Diamantes', desc: 'wearing sparkling diamond stud earrings' },
-      { en: 'Pearl Choker', es: 'Collar Perlas', desc: 'wearing elegant pearl choker necklace' },
-      { en: 'Designer Bag', es: 'Bolso Diseñador', desc: 'carrying luxury designer handbag' },
-      { en: 'Lip Gloss', es: 'Brillo Labios', desc: 'wearing glossy sparkling lip gloss' },
-      { en: 'Star Hair Pins', es: 'Clips Estrellas', desc: 'wearing decorative gold star hair pins' },
-      { en: 'Halo Ring', es: 'Anillo Halo', desc: 'wearing ornate halo engagement ring' },
-      { en: 'Choker Ribbon', es: 'Choker Cinta', desc: 'wearing delicate velvet ribbon choker' },
-      { en: 'Nail Charms', es: 'Encantos Uñas', desc: 'wearing nail art with rhinestone charms' },
-      { en: 'Oversized Bow Belt', es: 'Cinturón Lazo', desc: 'wearing oversized silk bow belt' },
-      { en: 'Septum Ring', es: 'Piercing Tabique', desc: 'wearing gold septum ring piercing' },
-      { en: 'Body Chain', es: 'Cadena Corporal', desc: 'wearing delicate gold body chain' },
-      { en: 'Ring Set', es: 'Juego de Anillos', desc: 'wearing multiple gold rings on fingers' },
-      { en: 'Chain Belt', es: 'Cinturón Cadena', desc: 'wearing gold chain belt' },
-      { en: 'Mini Designer Bag', es: 'Bolso Mini', desc: 'carrying luxury mini designer bag' }
+    // Accessories organized by category for visual display
+    const accessoriesCategories = [
+      {
+        label_en: '🧢 Hats & Headwear', label_es: '🧢 Gorras y Sombreros',
+        items: [
+          { en: 'Baseball Cap', es: 'Gorra Beisbol', desc: 'wearing classic baseball cap' },
+          { en: 'NY Cap Pink', es: 'Gorra NY Rosa', desc: 'wearing pink New York Yankees baseball cap' },
+          { en: 'NY Cap Black', es: 'Gorra NY Negra', desc: 'wearing black New York Yankees baseball cap' },
+          { en: 'Snapback Cap', es: 'Snapback', desc: 'wearing snapback cap sideways, street style' },
+          { en: 'Bucket Hat', es: 'Sombrero Bucket', desc: 'wearing trendy bucket hat' },
+          { en: 'Beanie', es: 'Gorro Beanie', desc: 'wearing cozy knit beanie hat' },
+          { en: 'Crown', es: 'Corona', desc: 'wearing ornate jeweled crown, golden tiara' },
+          { en: 'Flower Crown', es: 'Corona de Flores', desc: 'wearing delicate flower crown' }
+        ]
+      },
+      {
+        label_en: '💛 Gold & Jewelry', label_es: '💛 Oro y Joyería',
+        items: [
+          { en: 'Chunky Gold Chains', es: 'Cadenas Doradas Gruesas', desc: 'wearing chunky layered gold chains necklace' },
+          { en: 'Iced Out Chain', es: 'Cadena con Diamantes', desc: 'wearing iced-out diamond chain necklace' },
+          { en: 'Necklace', es: 'Collar', desc: 'wearing elegant gold chain necklace' },
+          { en: 'Nameplate Necklace', es: 'Collar con Nombre', desc: 'wearing gold nameplate necklace' },
+          { en: 'Earrings Hoops', es: 'Aretes Argolla', desc: 'wearing large gold hoop earrings' },
+          { en: 'Diamond Studs', es: 'Diamantes', desc: 'wearing sparkling diamond stud earrings' },
+          { en: 'Bracelets', es: 'Pulseras', desc: 'wearing layered gold bracelets, bangles' },
+          { en: 'Gold Cuffs', es: 'Puños Oro', desc: 'wearing chunky gold arm cuffs' },
+          { en: 'Tennis Bracelet', es: 'Pulsera Tenis', desc: 'wearing diamond tennis bracelet' },
+          { en: 'Luxury Watch', es: 'Reloj de Lujo', desc: 'wearing luxury designer watch' },
+          { en: 'Ring Set', es: 'Juego de Anillos', desc: 'wearing multiple gold rings on fingers' },
+          { en: 'Body Chain', es: 'Cadena Corporal', desc: 'wearing delicate gold body chain' },
+          { en: 'Waist Chain', es: 'Cadena de Cintura', desc: 'wearing delicate gold waist chain' },
+          { en: 'Anklet', es: 'Tobillera', desc: 'wearing delicate gold anklet bracelet' }
+        ]
+      },
+      {
+        label_en: '👑 Luxury & Bling', label_es: '👑 Lujo y Brillantes',
+        items: [
+          { en: 'Pearl Choker', es: 'Collar Perlas', desc: 'wearing elegant pearl choker necklace' },
+          { en: 'Choker Ribbon', es: 'Choker Cinta', desc: 'wearing delicate velvet ribbon choker' },
+          { en: 'Halo Ring', es: 'Anillo Halo', desc: 'wearing ornate halo engagement ring' },
+          { en: 'Grillz', es: 'Grillz', desc: 'wearing gold grillz on teeth' },
+          { en: 'Nose Ring', es: 'Aro de Nariz', desc: 'wearing small gold nose ring' },
+          { en: 'Septum Ring', es: 'Piercing Tabique', desc: 'wearing gold septum ring piercing' },
+          { en: 'Chain Belt', es: 'Cinturón Cadena', desc: 'wearing gold chain belt' }
+        ]
+      },
+      {
+        label_en: '💅 Beauty & Nails', label_es: '💅 Belleza y Uñas',
+        items: [
+          { en: 'Rhinestone Nails', es: 'Uñas con Brillantes', desc: 'wearing long acrylic nails with rhinestone nail art' },
+          { en: 'Nail Charms', es: 'Encantos Uñas', desc: 'wearing nail art with rhinestone charms' },
+          { en: 'Lip Gloss', es: 'Brillo Labios', desc: 'wearing glossy sparkling lip gloss' },
+          { en: 'Regular Glasses', es: 'Gafas Regulares', desc: 'wearing regular glasses, eyeglasses' },
+          { en: 'Tinted Sunglasses', es: 'Gafas de Sol Tintadas', desc: 'wearing tinted Y2K colored sunglasses' }
+        ]
+      },
+      {
+        label_en: '👜 Bags & Extras', label_es: '👜 Bolsos y Extras',
+        items: [
+          { en: 'Designer Bag', es: 'Bolso Diseñador', desc: 'carrying luxury designer handbag' },
+          { en: 'Mini Designer Bag', es: 'Bolso Mini', desc: 'carrying luxury mini designer bag' },
+          { en: 'Crossbody Bag', es: 'Bolso Cruzado', desc: 'carrying small crossbody bag' },
+          { en: 'Oversized Bow Belt', es: 'Cinturón Lazo', desc: 'wearing oversized silk bow belt' }
+        ]
+      },
+      {
+        label_en: '🌈 Hair & Y2K', label_es: '🌈 Cabello y Y2K',
+        items: [
+          { en: 'Hair Bow', es: 'Lazo', desc: 'wearing oversized silk hair bow' },
+          { en: 'Hair Clips', es: 'Clips Cabello', desc: 'wearing decorative pearl hair clips' },
+          { en: 'Butterfly Clips', es: 'Clips Mariposa', desc: 'wearing colorful butterfly hair clips' },
+          { en: 'Star Hair Pins', es: 'Clips Estrellas', desc: 'wearing decorative gold star hair pins' },
+          { en: 'Butterfly Clips Y2K', es: 'Clips Mariposa Y2K', desc: 'wearing colorful Y2K butterfly hair clips' },
+          { en: 'Beaded Necklaces', es: 'Collares de Cuentas', desc: 'wearing colorful Y2K beaded necklaces' }
+        ]
+      }
     ];
+
+    // Flat list for prompt generation (all items from all categories)
+    const accessoriesList = accessoriesCategories.flatMap(cat => cat.items);
 
     const sunglassesVariations = [
       { id: 1, name: "Chunky Oversized Aviator", description: "thick bold black frame, gradient orange/pink lenses" },
@@ -748,29 +855,61 @@
       { emoji: '🦸', title: { en: 'Super Hero', es: 'Súper Héroe' }, desc: { en: 'cape, fitted bodysuit, boots, emblem, mask, heroic powerful look, fully clothed', es: 'capa, traje de cuerpo ajustado, botas, emblema, máscara, look heroico poderoso, completamente vestido' } }
     ];
 
-    const buildYourOwnFemale = [
-      { en: 'hoodie and sweatpants', es: 'hoodie y pants deportivo' },
-      { en: 'designer top with denim jeans', es: 'top de marca con jeans' },
-      { en: 'oversized cozy sweater with leggings', es: 'suéter oversized con leggings' },
-      { en: 'leather jacket with ripped jeans', es: 'chaqueta de cuero con jeans rotos' },
-      { en: 'satin pajama set', es: 'conjunto de pijama de satén' },
-      { en: 'bomber jacket with joggers', es: 'chaqueta bomber con joggers' },
-      { en: 'tank top with baggy jeans', es: 'camiseta sin mangas con jeans baggy' },
-      { en: 'cute onesie', es: 'enterito lindo' },
-      { en: 'colorful romper', es: 'romper colorido' },
-      { en: 'overalls', es: 'overol' },
-      { en: 'princess dress', es: 'vestido de princesa' },
-      { en: 'denim jacket with shorts', es: 'chaqueta de mezclilla con shorts' },
-      { en: 'striped shirt with leggings', es: 'camisa a rayas con leggings' },
-      { en: 'dungarees', es: 'peto' },
-      { en: 'sequined cocktail dress', es: 'vestido de cóctel con lentejuelas' },
-      { en: 'velvet bodycon dress', es: 'vestido bodycon de terciopelo' },
-      { en: 'silk slip dress', es: 'vestido slip de seda' },
-      { en: 'distressed boyfriend jeans with graphic tee', es: 'jeans boyfriend desgastados con camiseta gráfica' },
-      { en: 'linen button-up with chino shorts', es: 'camisa de lino con shorts chinos' },
-      { en: 'crop top with high-waisted jeans', es: 'crop top con jeans de tiro alto' },
-      { en: 'bodysuit with palazzo pants', es: 'bodysuit con pantalones palazzo' }
+    // Female outfits organized by category for dropdown display
+    const buildYourOwnFemaleCategories = [
+      {
+        label_en: '💖 Glam & Luxury', label_es: '💖 Glam y Lujo',
+        items: [
+          { en: 'pink crop top with fluffy fur jacket and high-waisted jeans', es: 'crop top rosa con chaqueta de piel esponjosa y jeans tiro alto' },
+          { en: 'tight mini dress with fur coat and heels', es: 'vestido mini ajustado con abrigo de piel y tacones' },
+          { en: 'velvet bodycon dress with gold accessories', es: 'vestido bodycon de terciopelo con accesorios dorados' },
+          { en: 'sparkly party dress with platform heels', es: 'vestido de fiesta brillante con tacones plataforma' },
+          { en: 'sequined cocktail dress', es: 'vestido de cóctel con lentejuelas' },
+          { en: 'silk slip dress', es: 'vestido slip de seda' },
+          { en: 'designer top with denim jeans', es: 'top de marca con jeans' },
+          { en: 'white outfit minimal clean aesthetic', es: 'outfit blanco minimal estética limpia' }
+        ]
+      },
+      {
+        label_en: '🖤 Street & Urban', label_es: '🖤 Street y Urbano',
+        items: [
+          { en: 'oversized hoodie with baggy jeans and sneakers', es: 'hoodie oversized con jeans baggy y tenis' },
+          { en: 'hoodie and sweatpants', es: 'hoodie y pants deportivo' },
+          { en: 'leather jacket with ripped jeans', es: 'chaqueta de cuero con jeans rotos' },
+          { en: 'bomber jacket with joggers', es: 'chaqueta bomber con joggers' },
+          { en: 'tank top with baggy jeans', es: 'camiseta sin mangas con jeans baggy' },
+          { en: 'denim jacket with shorts', es: 'chaqueta de mezclilla con shorts' },
+          { en: 'distressed boyfriend jeans with graphic tee', es: 'jeans boyfriend desgastados con camiseta gráfica' },
+          { en: 'crop top with high-waisted jeans', es: 'crop top con jeans de tiro alto' },
+          { en: 'bodysuit with palazzo pants', es: 'bodysuit con pantalones palazzo' }
+        ]
+      },
+      {
+        label_en: '🎀 Cute & Kawaii', label_es: '🎀 Linda y Kawaii',
+        items: [
+          { en: 'cute onesie', es: 'enterito lindo' },
+          { en: 'colorful romper', es: 'romper colorido' },
+          { en: 'princess dress', es: 'vestido de princesa' },
+          { en: 'satin pajama set', es: 'conjunto de pijama de satén' },
+          { en: 'oversized cozy sweater with leggings', es: 'suéter oversized con leggings' },
+          { en: 'striped shirt with leggings', es: 'camisa a rayas con leggings' },
+          { en: 'dungarees', es: 'peto' },
+          { en: 'overalls', es: 'overol' }
+        ]
+      },
+      {
+        label_en: '⚡ Sport & Active', label_es: '⚡ Deporte y Activo',
+        items: [
+          { en: 'athletic leggings with sports bra and zip up jacket', es: 'leggings atléticos con top deportivo y chaqueta' },
+          { en: 'yoga set with sneakers', es: 'conjunto de yoga con tenis' },
+          { en: 'basketball shorts with crop hoodie', es: 'shorts de básquet con crop hoodie' },
+          { en: 'linen button-up with chino shorts', es: 'camisa de lino con shorts chinos' }
+        ]
+      }
     ];
+
+    // Flat list for prompt generation
+    const buildYourOwnFemale = buildYourOwnFemaleCategories.flatMap(cat => cat.items);
 
     const buildYourOwnMale = [
       { en: 'hoodie and joggers', es: 'hoodie y joggers' },
@@ -793,7 +932,58 @@
       { en: 'tech wear outfit', es: 'outfit tech wear' },
       { en: 'baseball uniform', es: 'uniforme de béisbol' },
       { en: 'skater style (hoodie + loose jeans)', es: 'estilo skater (hoodie + jeans sueltos)' },
-      { en: 'biker style (leather vest + jeans)', es: 'estilo motociclista (chaleco de cuero + jeans)' }
+      { en: 'biker style (leather vest + jeans)', es: 'estilo motociclista (chaleco de cuero + jeans)' },
+      { en: 'designer streetwear with gold chains and fresh sneakers', es: 'ropa de calle de marca con cadenas doradas y tenis frescos' },
+      { en: 'all black outfit with silver accessories', es: 'outfit todo negro con accesorios plateados' },
+      { en: 'luxury white linen outfit', es: 'outfit de lino blanco lujoso' }
+    ];
+
+    // Male outfits organized by category for dropdown display
+    const buildYourOwnMaleCategories = [
+      {
+        label_en: '💼 Formal & Luxury', label_es: '💼 Formal y Lujo',
+        items: [
+          { en: 'suit and tie', es: 'traje y corbata' },
+          { en: 'tuxedo', es: 'esmoquin' },
+          { en: 'casual blazer with jeans', es: 'blazer casual con jeans' },
+          { en: 'luxury white linen outfit', es: 'outfit de lino blanco lujoso' },
+          { en: 'designer streetwear with gold chains and fresh sneakers', es: 'ropa de calle de marca con cadenas doradas y tenis frescos' }
+        ]
+      },
+      {
+        label_en: '🖤 Street & Urban', label_es: '🖤 Street y Urbano',
+        items: [
+          { en: 'hoodie and joggers', es: 'hoodie y joggers' },
+          { en: 'graphic tee with baggy jeans', es: 'camiseta gráfica con jeans baggy' },
+          { en: 'oversized hoodie with sweatpants', es: 'hoodie oversized con pants deportivo' },
+          { en: 'bomber jacket with cargo pants', es: 'chaqueta bomber con pantalones cargo' },
+          { en: 'leather jacket with jeans', es: 'chaqueta de cuero con jeans' },
+          { en: 'varsity jacket with jeans', es: 'chaqueta varsity con jeans' },
+          { en: 'denim jacket with black jeans', es: 'chaqueta de mezclilla con jeans negros' },
+          { en: 'all black outfit with silver accessories', es: 'outfit todo negro con accesorios plateados' },
+          { en: 'band tee with ripped jeans', es: 'camiseta de banda con jeans rotos' },
+          { en: 'biker style (leather vest + jeans)', es: 'estilo motociclista (chaleco de cuero + jeans)' }
+        ]
+      },
+      {
+        label_en: '⚡ Sport & Active', label_es: '⚡ Deporte y Activo',
+        items: [
+          { en: 'athletic jersey with shorts', es: 'jersey atlético con shorts' },
+          { en: 'tank top with basketball shorts', es: 'camiseta sin mangas con shorts de básquet' },
+          { en: 'tracksuit (matching set)', es: 'conjunto deportivo' },
+          { en: 'baseball uniform', es: 'uniforme de béisbol' },
+          { en: 'tech wear outfit', es: 'outfit tech wear' }
+        ]
+      },
+      {
+        label_en: '😎 Casual & Chill', label_es: '😎 Casual y Relajado',
+        items: [
+          { en: 'plain white tee with joggers', es: 'camiseta blanca básica con joggers' },
+          { en: 'flannel shirt with jeans', es: 'camisa de franela con jeans' },
+          { en: 'camouflage cargo outfit', es: 'outfit cargo camuflado' },
+          { en: 'skater style (hoodie + loose jeans)', es: 'estilo skater (hoodie + jeans sueltos)' }
+        ]
+      }
     ];
 
     const shoesFemale = [
@@ -866,20 +1056,38 @@
 
       const buildContainer = document.getElementById('build-your-own-container');
       if (buildContainer) {
-        buildContainer.innerHTML = buildYourOwn.map((outfit, index) => {
-          const label = outfit[lang];
-          const enKey = outfit.en;
-          const safe = enKey.replace(/'/g, "\\'");
-          return `<button class="option-button ${selectedBuildYourOwnOutfitEN === enKey ? 'selected' : ''}" onclick="selectBuildYourOwnOutfit('${safe}')">${label}</button>`;
-        }).join('') + `
-          <button class="option-button ${selectedBuildYourOwnOutfitEN === 'Custom Outfit' ? 'selected' : ''}" onclick="selectBuildYourOwnOutfit('Custom Outfit')">
-            ✏️ ${lang === 'en' ? 'Custom Outfit' : 'Outfit Personalizado'}
-          </button>
-          ${selectedBuildYourOwnOutfitEN === 'Custom Outfit' ? `
-          <div class="custom-input-container" id="custom-outfit-container" style="width:100%">
-            <input type="text" id="custom-outfit-input" class="custom-text-input" placeholder="${lang === 'en' ? 'Describe your custom outfit...' : 'Describe tu outfit personalizado...'}" value="${customOutfitValue}" oninput="updateCustomOutfit(this.value)">
-          </div>` : ''}
-        `;
+        const cats = gender === 'female' ? buildYourOwnFemaleCategories : buildYourOwnMaleCategories;
+        let html = '';
+        cats.forEach(function(cat, catIdx) {
+          const catLabel = lang === 'en' ? cat.label_en : cat.label_es;
+          const isOpen = openOutfitCategories.includes(catIdx);
+          const btnStyle = isOpen
+            ? 'background:linear-gradient(135deg,#ff88cc,#e055b0);border:1.5px solid #ff88cc;color:white;'
+            : 'background:rgba(255,192,217,0.15);border:1.5px solid #ffb3d9;color:#cc88bb;';
+          html += '<div style="width:100%;margin-bottom:6px;">';
+          html += '<button onclick="toggleOutfitCategory(' + catIdx + ')" style="width:100%;text-align:left;padding:9px 14px;' + btnStyle + 'border-radius:10px;cursor:pointer;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s ease;">';
+          html += '<span>' + catLabel + '</span><span style="font-size:11px;">' + (isOpen ? '▲' : '▼') + '</span>';
+          html += '</button>';
+          if (isOpen) {
+            html += '<div style="display:flex;flex-wrap:wrap;gap:8px;padding:10px 4px 4px;">';
+            cat.items.forEach(function(outfit) {
+              const label = outfit[lang];
+              const enKey = outfit.en;
+              const safe = enKey.replace(/'/g, "\'");
+              const sel = selectedBuildYourOwnOutfitEN === enKey;
+              html += '<button class="option-button ' + (sel ? 'selected' : '') + '" onclick="selectBuildYourOwnOutfit(\'' + safe + '\')">' + label + '</button>';
+            });
+            html += '</div>';
+          }
+          html += '</div>';
+        });
+        // Custom outfit button
+        const isCustomSelected = selectedBuildYourOwnOutfitEN === 'Custom Outfit';
+        html += '<button class="option-button ' + (isCustomSelected ? 'selected' : '') + '" onclick="selectBuildYourOwnOutfit(\'Custom Outfit\')" style="width:100%;margin-top:4px;">✏️ ' + (lang === 'en' ? 'Custom Outfit' : 'Outfit Personalizado') + '</button>';
+        if (isCustomSelected) {
+          html += '<div class="custom-input-container" id="custom-outfit-container" style="width:100%;margin-top:8px;"><div style="display:flex;gap:8px;align-items:center;"><input type="text" id="custom-outfit-input" class="custom-text-input" placeholder="' + (lang === 'en' ? 'Describe your custom outfit...' : 'Describe tu outfit personalizado...') + '" style="flex:1;" onkeydown="if(event.key===\'Enter\') addCustomOutfitItem()"><button onclick="addCustomOutfitItem()" class="btn-secondary" style="white-space:nowrap;flex-shrink:0;">+ Add</button></div><div id="custom-outfit-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;"></div></div>';
+        }
+        buildContainer.innerHTML = html;
       }
 
       renderShoes();
@@ -1024,6 +1232,51 @@
 
     function updateCustomHairColor(value) { customHairColorValue = cleanText(value); }
     function updateCustomOutfit(value) { customOutfitValue = cleanText(value); }
+
+    function toggleOutfitCategory(idx) {
+      const pos = openOutfitCategories.indexOf(idx);
+      if (pos > -1) { openOutfitCategories.splice(pos, 1); }
+      else { openOutfitCategories.push(idx); }
+      renderOutfits();
+    }
+
+    function togglePoseCategory(idx) {
+      const pos = openPoseCategories.indexOf(idx);
+      if (pos > -1) { openPoseCategories.splice(pos, 1); }
+      else { openPoseCategories.push(idx); }
+      renderPoses();
+    }
+
+    function addCustomOutfitItem() {
+      const input = document.getElementById('custom-outfit-input');
+      if (!input) return;
+      const val = input.value.trim();
+      if (val) {
+        customOutfitItems.push(val);
+        input.value = '';
+        customOutfitValue = customOutfitItems.join(', ');
+        renderCustomOutfitChips();
+      }
+    }
+
+    function removeCustomOutfitItem(index) {
+      customOutfitItems.splice(index, 1);
+      customOutfitValue = customOutfitItems.join(', ');
+      renderCustomOutfitChips();
+    }
+
+    function renderCustomOutfitChips() {
+      const container = document.getElementById('custom-outfit-chips');
+      if (!container) return;
+      container.innerHTML = '';
+      customOutfitItems.forEach((item, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'chip-btn active';
+        btn.style.cssText = 'display:flex;align-items:center;gap:6px;';
+        btn.innerHTML = item + ' <span style="cursor:pointer;font-weight:bold;font-size:14px;" onclick="removeCustomOutfitItem(' + index + ')">×</span>';
+        container.appendChild(btn);
+      });
+    }
 
     function selectPose(poseEN) {
       selectedPose = selectedPose === poseEN ? '' : poseEN;
@@ -1241,7 +1494,7 @@
       styleList.forEach(style => {
         const btn = document.createElement('button');
         const label = currentLanguage === 'en' ? style.en : style.es;
-        btn.className = `chip-btn ${selectedHairStyle === style.en ? 'active' : ''}`;
+        btn.className = `option-button ${selectedHairStyle === style.en ? 'selected' : ''}`;
         btn.textContent = label;
         btn.onclick = () => {
           selectedHairStyle = selectedHairStyle === style.en ? '' : style.en;
@@ -1276,18 +1529,39 @@
 
     function renderPoses() {
       const container = document.getElementById('pose-container');
+      const lang = currentLanguage;
       container.innerHTML = '';
-      poses.forEach(pose => {
-        const btn = document.createElement('button');
-        const label = currentLanguage === 'en' ? pose.en : pose.es;
-        btn.className = `chip-btn ${selectedPose === pose.en ? 'active' : ''}`;
-        btn.textContent = label;
-        btn.onclick = () => {
-          selectedPose = selectedPose === pose.en ? '' : pose.en;
-          if (pose.en !== 'Custom Pose') customPoseValue = '';
-          renderPoses();
-        };
-        container.appendChild(btn);
+      posesCategories.forEach(function(cat, catIdx) {
+        const catLabel = lang === 'en' ? cat.label_en : cat.label_es;
+        const isOpen = openPoseCategories.includes(catIdx);
+        const btnStyle = isOpen
+          ? 'background:linear-gradient(135deg,#ff88cc,#e055b0);border:1.5px solid #ff88cc;color:white;'
+          : 'background:rgba(255,192,217,0.15);border:1.5px solid #ffb3d9;color:#cc88bb;';
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'width:100%;margin-bottom:6px;';
+        const header = document.createElement('button');
+        header.style.cssText = 'width:100%;text-align:left;padding:9px 14px;' + btnStyle + 'border-radius:10px;cursor:pointer;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;';
+        header.innerHTML = '<span>' + catLabel + '</span><span style="font-size:11px;">' + (isOpen ? '▲' : '▼') + '</span>';
+        header.onclick = function() { togglePoseCategory(catIdx); };
+        wrapper.appendChild(header);
+        if (isOpen) {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;padding:10px 4px 4px;';
+          cat.items.forEach(function(pose) {
+            const btn = document.createElement('button');
+            const label = lang === 'en' ? pose.en : pose.es;
+            btn.className = 'chip-btn ' + (selectedPose === pose.en ? 'active' : '');
+            btn.textContent = label;
+            btn.onclick = function() {
+              selectedPose = selectedPose === pose.en ? '' : pose.en;
+              customPoseValue = '';
+              renderPoses();
+            };
+            row.appendChild(btn);
+          });
+          wrapper.appendChild(row);
+        }
+        container.appendChild(wrapper);
       });
       const customContainer = document.getElementById('custom-pose-container');
       if (customContainer) customContainer.classList.toggle('hidden', selectedPose !== 'Custom Pose');
@@ -1313,6 +1587,9 @@
       if (customContainer) customContainer.classList.toggle('hidden', selectedBackground !== 'Custom Background');
     }
 
+    // Track which accessory category is open
+    let openAccCategory = null;
+
     function renderAccessories() {
       const container = document.getElementById('accessories-container');
       const placeholder = document.getElementById('accessories-placeholder');
@@ -1332,21 +1609,46 @@
       placeholder.style.display = 'none';
       sunglassesDropdown.style.display = 'block';
       customSection.classList.remove('hidden');
-      container.innerHTML = '';
-      accessoriesList.forEach(acc => {
-        const btn = document.createElement('button');
-        const label = currentLanguage === 'en' ? acc.en : acc.es;
-        const isSelected = selectedAccessories.includes(acc.en);
-        btn.className = `chip-btn ${isSelected ? 'active' : ''}`;
-        btn.textContent = label;
-        btn.onclick = () => {
-          if (isSelected) { selectedAccessories = selectedAccessories.filter(a => a !== acc.en); }
-          else { selectedAccessories.push(acc.en); }
-          renderAccessories();
-        };
-        container.appendChild(btn);
+
+      let html = '';
+      accessoriesCategories.forEach(function(cat, catIdx) {
+        const catLabel = currentLanguage === 'en' ? cat.label_en : cat.label_es;
+        const isOpen = openAccCategory === catIdx;
+        const btnStyle = isOpen
+          ? 'background:linear-gradient(135deg,#ff88cc,#e055b0);border:1.5px solid #ff88cc;color:white;'
+          : 'background:rgba(255,192,217,0.15);border:1.5px solid #ffb3d9;color:#cc88bb;';
+        html += '<div style="width:100%;margin-bottom:6px;">';
+        html += '<button onclick="toggleAccCategory(' + catIdx + ')" style="width:100%;text-align:left;padding:9px 14px;' + btnStyle + 'border-radius:10px;cursor:pointer;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s ease;">';
+        html += '<span>' + catLabel + '</span><span style="font-size:11px;">' + (isOpen ? '▲' : '▼') + '</span>';
+        html += '</button>';
+        if (isOpen) {
+          html += '<div style="display:flex;flex-wrap:wrap;gap:8px;padding:10px 4px 4px;">';
+          cat.items.forEach(function(acc) {
+            const label = currentLanguage === 'en' ? acc.en : acc.es;
+            const isSelected = selectedAccessories.includes(acc.en);
+            const safe = acc.en.replace(/'/g, "\\'");
+            html += '<button class="option-button ' + (isSelected ? 'selected' : '') + '" onclick="toggleAccessory(\'' + safe + '\')">' + label + '</button>';
+          });
+          html += '</div>';
+        }
+        html += '</div>';
       });
+      container.innerHTML = html;
       initSunglassesDropdown();
+    }
+
+    function toggleAccCategory(idx) {
+      openAccCategory = (openAccCategory === idx) ? null : idx;
+      renderAccessories();
+    }
+
+    function toggleAccessory(accEN) {
+      if (selectedAccessories.includes(accEN)) {
+        selectedAccessories = selectedAccessories.filter(a => a !== accEN);
+      } else {
+        selectedAccessories.push(accEN);
+      }
+      renderAccessories();
     }
 
     function initSunglassesDropdown() {
@@ -1431,7 +1733,7 @@
         parts.push(selectedCompleteOutfit.desc.en);
       } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfitEN) {
         if (selectedBuildYourOwnOutfitEN === 'Custom Outfit') {
-          if (customOutfitValue) parts.push(customOutfitValue);
+          if (customOutfitValue) parts.push(customOutfitValue); else if (customOutfitItems.length > 0) parts.push(customOutfitItems.join(', '));
         } else {
           const gender = getGender();
           const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
@@ -1465,7 +1767,7 @@
         parts.push(selectedCompleteOutfit.desc.es);
       } else if (selectedOutfitType === 'build-your-own' && selectedBuildYourOwnOutfitEN) {
         if (selectedBuildYourOwnOutfitEN === 'Custom Outfit') {
-          if (customOutfitValue) parts.push(customOutfitValue);
+          if (customOutfitValue) parts.push(customOutfitValue); else if (customOutfitItems.length > 0) parts.push(customOutfitItems.join(', '));
         } else {
           const gender = getGender();
           const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
@@ -1562,6 +1864,7 @@
 
       const isGlossyChibi = styleEN === 'Glossy 3D Chibi';
       const isBoldChibi = styleEN === 'Bold 3D Chibi';
+      const isPixarBratz = styleEN === 'Pixar Bratz';
       const subjectEN = characterEN || (gender === 'female' ? 'Girl' : gender === 'male' ? 'Boy' : 'Character');
       const hairDesc = hairColorEN && hairStyleDesc ? `${hairColorEN} ${hairStyleDesc}` : (hairStyleDesc || hairColorEN);
       const wearingClause = wearingPartsEN.length > 0 ? `wearing ${wearingPartsEN.join(', ')}, ` : '';
@@ -1582,6 +1885,15 @@
       } else if (isBoldChibi) {
         const ethnicity = physTraitEN || 'mixed ethnicity';
         prompt = `A bold 3D chibi ${subjectEN} with ${ethnicity}, expressive glossy eyes, natural lips, ${hairDesc || 'stylish hair'} with glossy finish, ${wearingClause}${poseClause}fully clothed, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, clean 3D chibi art, bold outlines, smooth shading, vibrant colors, high quality`;
+      } else if (isPixarBratz) {
+        const ethnicity = physTraitEN || 'mixed ethnicity';
+        const facialFeatures = gender === 'female'
+          ? 'big expressive eyes with long dramatic lashes, glossy lips, sharp eyebrows, soft blush, smooth skin'
+          : 'big expressive eyes, sharp eyebrows, smooth skin, confident expression';
+        const wearingFull = wearingPartsEN.length > 0 ? `wearing ${wearingPartsEN.join(', ')}, ` : '';
+        const accFull = customAccessoryItems.length > 0 ? `accessories: ${customAccessoryItems.join(', ')}, ` : '';
+        const poseFull = poseEN ? `pose: ${poseEN}, ` : 'pose: confident standing, ';
+        prompt = `A stylized 3D cartoon ${subjectEN}, Bratz doll + Pixar-inspired, ${ethnicity}, ${facialFeatures}, ${hairDesc || 'stylish hair'}, ${wearingFull}${accFull}${poseFull}${bgClause ? bgClause + ', ' : 'clean white background, '}${actionClause ? 'actively ' + customAction + ', ' : ''}${cameraClause ? cameraClause + ', ' : ''}${colorClause ? colorClause + ', ' : ''}ultra-detailed, 8k, cinematic render, octane render, unreal engine, fashion doll aesthetic, glossy lips, big expressive eyes, doll-like proportions, big head small body ratio, smooth plastic skin shading, masterpiece`;
       } else {
         prompt = `A ${styleEN} illustration of a ${subjectEN}`;
         if (physTraitEN) prompt += ` with ${physTraitEN}`;
@@ -1679,6 +1991,7 @@
 
       const isGlossyChibi = styleEN === 'Glossy 3D Chibi';
       const isBoldChibi = styleEN === 'Bold 3D Chibi';
+      const isPixarBratz = styleEN === 'Pixar Bratz';
       const subjectES = characterES || (gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje');
       const hairDesc = hairColorES && hairStyleDescES ? `${hairColorES} ${hairStyleDescES}` : (hairStyleDescES || hairColorES);
       const wearingClause = wearingPartsES.length > 0 ? `vistiendo ${wearingPartsES.join(', ')}, ` : '';
@@ -1699,6 +2012,15 @@
       } else if (isBoldChibi) {
         const ethnicity = physTraitES || 'etnia mixta';
         prompt = `Una ilustración estilo chibi 3D audaz de un ${subjectES} con ${ethnicity}, ojos expresivos glossy, labios naturales, ${hairDesc || 'cabello elegante'} con acabado ultra glossy, ${wearingClause}${poseClause}look modesto completamente vestido, ${viewClause}${bgClause}${actionClause}${cameraClause}${colorClause}, arte chibi 3D limpio, contornos marcados, sombreado suave, colores vibrantes, alta calidad, solo un personaje masculino`;
+      } else if (isPixarBratz) {
+        const ethnicity = physTraitES || 'etnia mixta';
+        const facialFeatures = gender === 'female'
+          ? 'ojos grandes expresivos con pestañas largas dramáticas, labios glossy, cejas marcadas, rubor suave, piel suave'
+          : 'ojos grandes expresivos, cejas marcadas, piel suave, expresión segura';
+        const wearingFull = wearingPartsES.length > 0 ? `vistiendo ${wearingPartsES.join(', ')}, ` : '';
+        const accFull = customAccessoryItems.length > 0 ? `accesorios: ${customAccessoryItems.join(', ')}, ` : '';
+        const poseFull = poseES ? `pose: ${poseES}, ` : 'pose: de pie con actitud, ';
+        prompt = `A stylized 3D cartoon ${subjectES}, Bratz doll + Pixar-inspired, ${ethnicity}, ${facialFeatures}, ${hairDesc || 'cabello elegante'}, ${wearingFull}${accFull}${poseFull}${bgClause ? bgClause + ', ' : 'fondo blanco limpio, '}${actionClause ? 'activamente ' + customAction + ', ' : ''}${cameraClause ? cameraClause + ', ' : ''}${colorClause ? colorClause + ', ' : ''}ultra-detailed, 8k, cinematic render, octane render, unreal engine, fashion doll aesthetic, glossy lips, big expressive eyes, doll-like proportions, big head small body ratio, smooth plastic skin shading, masterpiece`;
       } else {
         prompt = `Una ilustración ${styleES} de una ${subjectES}`;
         if (physTraitES) prompt += ` con ${physTraitES}`;
@@ -1820,7 +2142,7 @@
       }
       selectedSunglasses = Math.random() > 0.6 ? sunglassesVariations[Math.floor(Math.random() * sunglassesVariations.length)] : null;
       renderAccessories();
-      customOutfitItems = []; customAccessoryItems = []; customActionItems = []; customCameraAngleValue = ''; customColorPaletteValue = '';
+      customOutfitItems = []; customAccessoryItems = []; customActionItems = []; customCameraAngleValue = ''; customColorPaletteValue = ''; customOutfitValue = '';
       selectedOutfitType = null; selectedCompleteOutfit = null; selectedBuildYourOwnOutfitEN = null; selectedShoes = null;
       document.getElementById('custom-accessory-input').value = '';
       renderCustomAccessories(); renderOutfits();
