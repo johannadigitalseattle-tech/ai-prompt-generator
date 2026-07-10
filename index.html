@@ -14,6 +14,7 @@
     * { font-family: 'Quicksand', sans-serif; }
     h1, h2, h3, .btn-main, .chip-btn { font-family: 'Poppins', sans-serif; }
     .pastel-bg { background: linear-gradient(135deg, #ffeef6 0%, #fff5f0 50%, #f0f9ff 100%); position: relative; }
+    [style*="display:none"], [style*="display: none"] { margin: 0 !important; padding: 0 !important; }
     .btn-main { background: linear-gradient(135deg, #ff88cc, #ff66bb); border: 2px solid #ff55aa; color: white; font-weight: 800; padding: 16px 32px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(255, 102, 187, 0.4); }
     .btn-main:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 102, 187, 0.6); }
     .btn-secondary { background: linear-gradient(135deg, #a78bfa, #c084fc); border: 2px solid #a78bfa; color: white; font-weight: 700; padding: 12px 24px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; font-size: 13px; box-shadow: 0 4px 12px rgba(167, 139, 250, 0.3); }
@@ -59,11 +60,6 @@
     .custom-input-row button { white-space: nowrap; }
     .custom-accessories-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid #ffc0e0; }
     .custom-accessories-section .section-title { font-size: 13px; margin-bottom: 8px; }
-    .acc-cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-    .acc-cat-btn { background: rgba(255,192,217,0.15); border: 1.5px solid #ffb3d9; color: #cc88bb; border-radius: 10px; cursor: pointer; font-family: Quicksand,sans-serif; font-weight: 700; font-size: 12px; padding: 10px 6px; text-align: center; transition: all 0.2s ease; }
-    .acc-cat-btn:hover { background: rgba(255,192,217,0.3); }
-    .acc-cat-btn.open { background: linear-gradient(135deg,#ff88cc,#e055b0); border-color: #ff88cc; color: white; }
-    .acc-cat-dropdown { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 4px 4px; }
     #sunglasses-dropdown-container { position: relative; margin-top: 12px; }
     .sunglasses-toggle-btn { background: #ffd4e5; color: #8b6b7d; border: 2px solid #ffc0d9; padding: 10px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; font-weight: 600; font-size: 13px; box-shadow: 0 3px 12px rgba(255, 192, 217, 0.2); display: flex; justify-content: space-between; align-items: center; width: auto; }
     .sunglasses-toggle-btn:hover { transform: scale(1.08); background: #fff5fb; }
@@ -99,8 +95,8 @@
     .option-button { background: rgba(255, 255, 255, 0.7); border: 2px solid rgba(255, 192, 203, 0.4); border-radius: 20px; padding: 10px 20px; font-size: 14px; color: #4A5568; cursor: pointer; transition: all 0.3s ease; font-weight: 500; backdrop-filter: blur(5px); }
     .option-button:hover { background: rgba(255, 240, 245, 0.9); border-color: rgba(255, 182, 193, 0.6); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 192, 203, 0.2); }
     .option-button.selected { background: linear-gradient(135deg, rgba(255, 182, 193, 0.8) 0%, rgba(255, 192, 203, 0.9) 100%); border-color: rgba(255, 105, 180, 0.7); color: white; font-weight: 600; box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3); }
-    #shoes-section { opacity: 0; transition: opacity 0.3s ease; }
-    #shoes-section.visible { display: block !important; opacity: 1; }
+    #shoes-section { display: none; }
+    #shoes-section.visible { display: block !important; }
     .custom-input-container { margin-top: 10px; padding: 10px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; border: 1px solid rgba(255, 192, 203, 0.3); animation: slideDown 0.3s ease-out; }
     .custom-input-container.hidden { display: none; }
     .custom-text-input { width: 100%; padding: 10px 14px; border: 2px solid rgba(255, 192, 203, 0.4); border-radius: 8px; font-size: 14px; background: white; transition: border-color 0.3s ease; font-family: inherit; }
@@ -211,6 +207,12 @@
        <div class="section-title">Visual Style</div>
        <div id="style-container"></div>
       </div>
+      <!-- KDP Fields — shown only for KDP notebook styles -->
+      <div id="kdp-fields-container" style="display:none;" class="mb-8"></div>
+      <div id="kdp-nature-bg-container" style="display:none;" class="mb-8"></div>
+      <div id="kdp-extras-container" style="display:none;" class="mb-8"></div>
+      <!-- TYPOGRAPHY SECTION — shown only when Typography style is selected -->
+      <div id="typography-section" style="display:none;" class="mb-8"></div>
       <div id="character-section" class="mb-8">
        <div class="section-title">Character / Personaje</div>
        <div id="character-container"></div>
@@ -222,11 +224,25 @@
         <button onclick="setNeutralGender('male')" id="gender-male" class="btn-secondary flex-1">👨 Masculino</button>
        </div>
       </div>
-      <div id="physical-traits-section" class="mb-8">
+      <div id="physical-traits-section" class="mb-8" style="display:none;">
        <div class="section-title">Physical Traits</div>
        <div id="physical-traits-container"></div>
       </div>
-      <div class="section">
+      <div id="hair-style-section" class="mb-8" style="display:none;">
+       <div class="section-title">Hair Style</div>
+       <div id="hair-style-container"></div>
+       <div id="custom-hair-style-container" class="custom-input-container hidden">
+        <input type="text" id="custom-hair-style-input" class="custom-text-input" placeholder="Describe your custom hair style (e.g., shoulder-length straight with bangs)" onchange="updateCustomHairStyle(this.value)">
+       </div>
+      </div>
+      <div id="hair-color-section" class="mb-8 hidden">
+       <div class="section-title">Hair Color</div>
+       <div id="hair-color-container"></div>
+       <div id="custom-hair-color-container" class="custom-input-container hidden">
+        <input type="text" id="custom-hair-color-input" class="custom-text-input" placeholder="Describe your custom hair color (e.g., pastel pink with blue highlights)" onchange="updateCustomHairColor(this.value)">
+       </div>
+      </div>
+      <div class="section" id="body-type-section" style="display:none;">
        <h3>Body Type / Outfit / Tipo de Cuerpo y Vestimenta</h3>
        <div class="complete-looks-section">
         <h4 class="subsection-title">Complete Looks (outfit + shoes included) / Looks Completos (outfit + zapatos incluidos)</h4>
@@ -239,6 +255,26 @@
         <div id="build-your-own-container" class="buttons-container"></div>
        </div>
       </div>
+      <div class="section" id="body-type-section" style="display:none;">
+       <h3>Body Type / Outfit / Tipo de Cuerpo y Vestimenta</h3>
+       <div class="complete-looks-section">
+        <h4 class="subsection-title">Complete Looks (outfit + shoes included) / Looks Completos (outfit + zapatos incluidos)</h4>
+        <p class="subsection-description">Select a pre-styled complete look / Selecciona un look completo pre-estilizado</p>
+        <div id="complete-looks-container" class="cards-container"></div>
+       </div>
+       <div class="build-your-own-section">
+        <h4 class="subsection-title">Or Build Your Own Look / O Crea Tu Propio Look</h4>
+        <p class="subsection-description">Select outfit only (choose shoes separately) / Selecciona solo el outfit (elige zapatos por separado)</p>
+        <div id="build-your-own-container" class="buttons-container"></div>
+       </div>
+      </div>
+      <div id="hair-style-section" class="mb-8" style="display:none;">
+       <div class="section-title">Hair Style</div>
+       <div id="hair-style-container"></div>
+       <div id="custom-hair-style-container" class="custom-input-container hidden">
+        <input type="text" id="custom-hair-style-input" class="custom-text-input" placeholder="Describe your custom hair style (e.g., shoulder-length straight with bangs)" onchange="updateCustomHairStyle(this.value)">
+       </div>
+      </div>
       <div class="section" id="shoes-section" style="display: none;">
        <h3>Shoes / Zapatos</h3>
        <p class="section-description">Available only when building your own look / Disponible solo al crear tu propio look</p>
@@ -247,16 +283,13 @@
         <input type="text" id="custom-shoes-input" class="custom-text-input" placeholder="Describe your custom shoes / Describe tus zapatos personalizados" onchange="updateCustomShoes(this.value)">
        </div>
       </div>
-      <div id="accessories-section" class="mb-8">
+      <div id="accessories-section" class="mb-8" style="display:none;">
        <div class="section-title">Accessories / Accesorios</div>
        <div id="accessories-placeholder" class="accessories-placeholder">
         Primero selecciona Género (Hombre o Mujer) para ver los accesorios recomendados.
        </div>
        <div id="accessories-container"></div>
-       <div id="sunglasses-dropdown-container" style="display: none;">
-        <button id="sunglasses-toggle-btn" class="sunglasses-toggle-btn"><span id="sunglasses-btn-text">🕶️ Sunglasses</span> <span id="sunglasses-arrow" style="margin-left: 8px;">▼</span></button>
-        <div id="sunglasses-menu" class="sunglasses-menu hidden"></div>
-       </div>
+       <!-- sunglasses now in accessories categories -->
        <div id="custom-accessories-container" class="custom-accessories-section hidden">
         <div class="section-title">Custom Accessories / Accesorios Personalizados</div>
         <div class="custom-input-row">
@@ -267,24 +300,7 @@
        </div>
       </div>
 
-      <div id="hair-style-section" class="mb-8">
-       <div class="section-title">Hair Style</div>
-       <p class="section-description">Leave unselected for normal view. Click again to deselect.</p>
-       <div id="hair-style-container"></div>
-       <button class="option-button" onclick="selectHairStyle('Custom Hair Style')">✏️ Custom Hair Style</button>
-       <div id="custom-hair-style-container" class="custom-input-container hidden">
-        <input type="text" id="custom-hair-style-input" class="custom-text-input" placeholder="Describe your custom hair style (e.g., shoulder-length straight with bangs)" onchange="updateCustomHairStyle(this.value)">
-       </div>
-      </div>
-      <div id="hair-color-section" class="mb-8 hidden">
-       <div class="section-title">Hair Color</div>
-       <div id="hair-color-container"></div>
-       <button class="option-button" onclick="selectHairColor('Custom Hair Color')">✏️ Custom Hair Color</button>
-       <div id="custom-hair-color-container" class="custom-input-container hidden">
-        <input type="text" id="custom-hair-color-input" class="custom-text-input" placeholder="Describe your custom hair color (e.g., pastel pink with blue highlights)" onchange="updateCustomHairColor(this.value)">
-       </div>
-      </div>
-      <div id="pose-section" class="mb-8">
+      <div id="pose-section" class="mb-8" style="display:none;">
        <div class="section-title">Pose &amp; Expression / Pose y Expresión</div>
        <div id="pose-container"></div>
        <button class="option-button" onclick="selectPose('Custom Pose')">✏️ Custom Pose</button>
@@ -292,7 +308,7 @@
         <input type="text" id="custom-pose-input" class="custom-text-input" placeholder="Describe your custom pose (e.g., jumping with excitement, pointing at camera)" onchange="updateCustomPose(this.value)">
        </div>
       </div>
-      <div id="background-section" class="mb-8">
+      <div id="background-section" class="mb-8" style="display:none;">
        <div class="section-title">Background / Fondo</div>
        <div id="background-container"></div>
        <button class="option-button" onclick="selectBackground('Custom Background')">✏️ Custom Background</button>
@@ -300,7 +316,7 @@
         <input type="text" id="custom-background-input" class="custom-text-input" placeholder="Describe your custom background (e.g., cherry blossom park, neon city street)" onchange="updateCustomBackground(this.value)">
        </div>
       </div>
-      <div class="section">
+      <div class="section" id="camera-angle-section" style="display:none;">
        <h3>Camera Angle (Optional) / Ángulo de Cámara (Opcional)</h3>
        <p class="section-description">Leave unselected for normal view. Click again to deselect.</p>
        <div id="camera-angle-container" class="buttons-container"></div>
@@ -317,7 +333,7 @@
        </div>
       </div>
       </div>
-      <div class="section">
+      <div class="section" id="custom-action-section" style="display:none;">
        <h3>Custom Action / Scene (Optional) / Acción Personalizada (Opcional)</h3>
        <p class="section-description">Add a specific action or scene — it will be woven naturally into the prompt / Agrega una acción o escena — se integrará de forma natural en el prompt</p>
        <div class="custom-input-row">
@@ -382,7 +398,6 @@
      </div>
     </div>
    </div>
-  </div>
 
   <script>
     // ============ COLORING FUNCTIONS ============
@@ -426,6 +441,9 @@
 
     let currentLanguage = 'en';
     let selectedCategory = 'notebook';
+    let kdpFields = {};
+    let kdpSelectedBG = null;
+    let kdpSelectedExtras = [];
     let selectedStyle = '';
     let selectedCharacter = '';
     let selectedNeutralGender = null;
@@ -451,6 +469,17 @@
     let customColorPaletteValue = '';
     let customActionItems = [];
     let openOutfitCategories = [];
+    let openHairStyleCats = [];
+    let openHairColorCats = [];
+    let openAccessoryCats = [];
+    // Typography state
+    let typoLayout = null;
+    let typoFields = { f1: '', f2: '', f3: '' };
+    let typoLettering = null;
+    let typoDecoElements = [];
+    let typoPalette = null;
+    let typoOpenExCats = [];
+    let balloonNumber = '';
     let openPoseCategories = [];
 
     const categories = [
@@ -465,7 +494,14 @@
         { en: 'Minimalist', es: 'Minimalista' },
         { en: 'Watercolor', es: 'Acuarela' },
         { en: 'Geometric', es: 'Geométrico' },
-        { en: 'Kawaii', es: 'Kawaii' }
+        { en: 'Kawaii', es: 'Kawaii' },
+        { en: 'Hip Hop Chibi', es: 'Hip Hop Chibi', isKDP: true, icon: '🎤' },
+        { en: 'City Hustler', es: 'City Hustler', isKDP: true, icon: '🏙️' },
+        { en: 'Dark Power', es: 'Dark Power', isKDP: true, icon: '🌑' },
+        { en: 'Word Explosion', es: 'Word Explosion', isKDP: true, icon: '💥' },
+        { en: 'Nature Walk', es: 'Nature Walk', isKDP: true, icon: '🌿' },
+        { en: 'Energy Explosion', es: 'Energy Explosion', isKDP: true, icon: '⚡' },
+        { en: 'Boss Girl', es: 'Boss Girl', isKDP: true, icon: '👑' }
       ],
       coloring: [
         { en: 'Mandala', es: 'Mandala' },
@@ -578,57 +614,115 @@
       ]
     };
 
-    const hairStyles = {
+    // Hair styles organized by category
+    const hairStyleCategories = {
       female: [
-        { en: 'Long Straight Silky', es: 'Largo Liso Sedoso', desc_en: 'long straight silky hair', desc_es: 'cabello largo liso sedoso' },
-        { en: 'Long Loose Waves', es: 'Ondas Sueltas Largas', desc_en: 'long loose voluminous waves', desc_es: 'ondas largas sueltas y voluminosas' },
-        { en: 'Voluminous Curly Afro', es: 'Afro Rizado Voluminoso', desc_en: 'voluminous curly afro', desc_es: 'afro rizado voluminoso' },
-        { en: 'Long Box Braids', es: 'Trenzas Box Largas', desc_en: 'long box braids', desc_es: 'trenzas box largas' },
-        { en: 'Space Buns', es: 'Space Buns', desc_en: 'double space buns', desc_es: 'doble moños space buns' },
-        { en: 'Long Pigtails', es: 'Coletas Largas', desc_en: 'cute long pigtails', desc_es: 'lindas coletas largas' },
-        { en: 'High Ponytail', es: 'Coleta Alta', desc_en: 'sleek high ponytail', desc_es: 'coleta alta elegante' },
-        { en: 'Half-Up Half-Down', es: 'Mitad Arriba Mitad Abajo', desc_en: 'half-up half-down style', desc_es: 'estilo mitad arriba mitad abajo' },
-        { en: 'Sleek Bob Cut', es: 'Bob Elegante', desc_en: 'chin-length sleek bob cut', desc_es: 'corte bob elegante a la altura del mentón' },
-        { en: 'Messy Bun Color Highlights', es: 'Moño Desordenado con Mechas de Color', desc_en: 'high messy bun with loose falling strands, dark base hair with glossy pink teal and caramel color highlights, multi-color streaks with shine effect', desc_es: 'moño alto desordenado con mechones sueltos, cabello base oscuro con mechas glossy rosa teal y caramel, rayitos multicolor con efecto brillo' },
-        { en: 'Sleek High Bun', es: 'Moño Alto Elegante', desc_en: 'sleek tight high bun, polished and clean', desc_es: 'moño alto elegante y bien peinado' },
-        { en: 'Butterfly Locs', es: 'Butterfly Locs', desc_en: 'long butterfly locs with soft curled ends', desc_es: 'butterfly locs largas con puntas rizadas suaves' },
-        { en: 'Knotless Braids', es: 'Trenzas Knotless', desc_en: 'long knotless box braids, natural and neat', desc_es: 'trenzas knotless largas, naturales y ordenadas' },
-        { en: 'Passion Twists', es: 'Passion Twists', desc_en: 'long passion twists, bohemian textured look', desc_es: 'passion twists largas, look texturizado bohemio' },
-        { en: 'Wavy Bob with Highlights', es: 'Bob Ondulado con Mechas', desc_en: 'chin-length wavy bob with blonde or color highlights', desc_es: 'bob ondulado a la altura del mentón con mechas rubias o de color' },
-        { en: 'Side Swept Curls', es: 'Rizos a Un Lado', desc_en: 'voluminous curls swept to one side, glamorous look', desc_es: 'rizos voluminosos recogidos a un lado, look glamoroso' },
-        { en: 'Long Curly Bob', es: 'Bob Rizado Largo', desc_en: 'short curly dark bob with loose ringlets', desc_es: 'bob oscuro corto rizado con rizos sueltos' }
+        {
+          label_en: '✂️ Short Styles', label_es: '✂️ Estilos Cortos',
+          items: [
+            { en: 'Sleek Bob Cut', es: 'Bob Elegante', desc_en: 'chin-length sleek bob cut', desc_es: 'corte bob elegante a la altura del mentón' },
+            { en: 'Wavy Bob with Highlights', es: 'Bob Ondulado con Mechas', desc_en: 'chin-length wavy bob with blonde or color highlights', desc_es: 'bob ondulado a la altura del mentón con mechas rubias o de color' },
+            { en: 'Long Curly Bob', es: 'Bob Rizado Largo', desc_en: 'short curly dark bob with loose ringlets', desc_es: 'bob oscuro corto rizado con rizos sueltos' },
+            { en: 'Double Afro Puffs', es: 'Afro Puff Doble', desc_en: 'two cute afro puffs on each side of the head, natural curly texture', desc_es: 'dos afro puffs lindos a cada lado de la cabeza, textura rizada natural' }
+          ]
+        },
+        {
+          label_en: '💇 Medium Styles', label_es: '💇 Estilos Medianos',
+          items: [
+            { en: 'Half-Up Half-Down', es: 'Mitad Arriba Mitad Abajo', desc_en: 'half-up half-down style', desc_es: 'estilo mitad arriba mitad abajo' },
+            { en: 'Side Swept Curls', es: 'Rizos a Un Lado', desc_en: 'voluminous curls swept to one side, glamorous look', desc_es: 'rizos voluminosos recogidos a un lado, look glamoroso' },
+            { en: 'Space Buns', es: 'Space Buns', desc_en: 'double space buns', desc_es: 'doble moños space buns' },
+            { en: 'Long Pigtails', es: 'Coletas Largas', desc_en: 'cute long pigtails', desc_es: 'lindas coletas largas' }
+          ]
+        },
+        {
+          label_en: '🌊 Long Styles', label_es: '🌊 Estilos Largos',
+          items: [
+            { en: 'Long Straight Silky', es: 'Largo Liso Sedoso', desc_en: 'long straight silky hair', desc_es: 'cabello largo liso sedoso' },
+            { en: 'Long Loose Waves', es: 'Ondas Sueltas Largas', desc_en: 'long loose voluminous waves', desc_es: 'ondas largas sueltas y voluminosas' },
+            { en: 'High Ponytail', es: 'Coleta Alta', desc_en: 'sleek high ponytail', desc_es: 'coleta alta elegante' },
+            { en: 'Sleek CEO Ponytail', es: 'Coleta CEO Elegante', desc_en: 'ultra sleek high ponytail, straight and polished, CEO boss style', desc_es: 'coleta alta ultra elegante, lisa y pulida, estilo CEO jefa' },
+            { en: 'Sleek High Bun', es: 'Moño Alto Elegante', desc_en: 'sleek tight high bun, polished and clean', desc_es: 'moño alto elegante y bien peinado' },
+            { en: 'Messy Bun Color Highlights', es: 'Moño Desordenado con Mechas de Color', desc_en: 'high messy bun with loose falling strands, dark base hair with glossy pink teal and caramel color highlights', desc_es: 'moño alto desordenado con mechones sueltos, cabello base oscuro con mechas glossy rosa teal y caramel' }
+          ]
+        },
+        {
+          label_en: '🌀 Curly & Natural', label_es: '🌀 Rizado y Natural',
+          items: [
+            { en: 'Voluminous Curly Afro', es: 'Afro Rizado Voluminoso', desc_en: 'voluminous curly afro', desc_es: 'afro rizado voluminoso' },
+            { en: 'Butterfly Locs', es: 'Butterfly Locs', desc_en: 'long butterfly locs with soft curled ends', desc_es: 'butterfly locs largas con puntas rizadas suaves' },
+            { en: 'Passion Twists', es: 'Passion Twists', desc_en: 'long passion twists, bohemian textured look', desc_es: 'passion twists largas, look texturizado bohemio' }
+          ]
+        },
+        {
+          label_en: '🎀 Braids & Special', label_es: '🎀 Trenzas y Especiales',
+          items: [
+            { en: 'Long Box Braids', es: 'Trenzas Box Largas', desc_en: 'long box braids', desc_es: 'trenzas box largas' },
+            { en: 'Knotless Braids', es: 'Trenzas Knotless', desc_en: 'long knotless box braids, natural and neat', desc_es: 'trenzas knotless largas, naturales y ordenadas' }
+          ]
+        }
       ],
       male: [
-        { en: 'Long Straight', es: 'Largo Liso', desc_en: 'long straight hair', desc_es: 'cabello largo liso' },
-        { en: 'Long Waves', es: 'Ondas Largas', desc_en: 'long wavy hair', desc_es: 'cabello largo ondulado' },
-        { en: 'Curly Afro', es: 'Afro Rizado', desc_en: 'curly afro style', desc_es: 'estilo afro rizado' },
-        { en: 'Box Braids', es: 'Trenzas Box', desc_en: 'box braids', desc_es: 'trenzas box' },
-        { en: 'High Ponytail', es: 'Coleta Alta', desc_en: 'high ponytail', desc_es: 'coleta alta' }
+        {
+          label_en: '💈 Male Styles', label_es: '💈 Estilos Masculinos',
+          items: [
+            { en: 'Long Straight', es: 'Largo Liso', desc_en: 'long straight hair', desc_es: 'cabello largo liso' },
+            { en: 'Long Waves', es: 'Ondas Largas', desc_en: 'long wavy hair', desc_es: 'cabello largo ondulado' },
+            { en: 'Curly Afro', es: 'Afro Rizado', desc_en: 'curly afro style', desc_es: 'estilo afro rizado' },
+            { en: 'Box Braids', es: 'Trenzas Box', desc_en: 'box braids', desc_es: 'trenzas box' },
+            { en: 'High Ponytail', es: 'Coleta Alta', desc_en: 'high ponytail', desc_es: 'coleta alta' }
+          ]
+        }
       ]
     };
 
-    const hairColors = [
-      { en: 'Black Glossy', es: 'Negro Brilloso' },
-      { en: 'Brown', es: 'Marrón' },
-      { en: 'Honey Blonde', es: 'Rubio Miel' },
-      { en: 'Red', es: 'Rojo' },
-      { en: 'Blonde', es: 'Rubio' },
-      { en: 'Cotton Candy Pink', es: 'Rosa Chicle' },
-      { en: 'Platinum Silver Blonde', es: 'Rubio Platinado Plata' },
-      { en: 'Sunset Ombre', es: 'Ombré Atardecer' },
-      { en: 'Rose Gold', es: 'Oro Rosa' },
-      { en: 'Electric Blue to Pink', es: 'Azul Eléctrico a Rosa' },
-      { en: 'Mint to Teal', es: 'Menta a Azul Verdoso' },
-      { en: 'Bubblegum Purple', es: 'Púrpura Chicle' },
-      { en: 'Iridescent Holo', es: 'Holográfico Iridiscente' },
-      { en: 'Peach to Coral', es: 'Melocotón a Coral' },
-      { en: 'Black with Pink & Teal Highlights', es: 'Negro con Mechas Rosa y Teal' },
-      { en: 'Black with Blue Shimmer', es: 'Negro Azulado Brillante' },
-      { en: 'Brown with Caramel Highlights', es: 'Marrón con Mechas Caramel' },
-      { en: 'Black with Blonde Streaks', es: 'Negro con Rayitos Rubios' },
-      { en: 'Dark Brown with Auburn', es: 'Marrón Oscuro con Rojizo' },
-      { en: 'Black with Purple Streaks', es: 'Negro con Mechas Moradas' }
+    // Flat list for prompt use
+    const hairStyles = {
+      female: hairStyleCategories.female.flatMap(cat => cat.items),
+      male: hairStyleCategories.male.flatMap(cat => cat.items)
+    };
+
+    // Hair colors organized by category
+    const hairColorCategories = [
+      {
+        label_en: '🖤 Natural Tones', label_es: '🖤 Tonos Naturales',
+        items: [
+          { en: 'Black Glossy', es: 'Negro Brilloso' },
+          { en: 'Brown', es: 'Marrón' },
+          { en: 'Honey Blonde', es: 'Rubio Miel' },
+          { en: 'Blonde', es: 'Rubio' },
+          { en: 'Red', es: 'Rojo' },
+          { en: 'Dark Brown with Auburn', es: 'Marrón Oscuro con Rojizo' }
+        ]
+      },
+      {
+        label_en: '✨ Highlights & Ombre', label_es: '✨ Mechas y Ombré',
+        items: [
+          { en: 'Sunset Ombre', es: 'Ombré Atardecer' },
+          { en: 'Rose Gold', es: 'Oro Rosa' },
+          { en: 'Platinum Silver Blonde', es: 'Rubio Platinado Plata' },
+          { en: 'Black with Pink & Teal Highlights', es: 'Negro con Mechas Rosa y Teal' },
+          { en: 'Brown with Caramel Highlights', es: 'Marrón con Mechas Caramel' },
+          { en: 'Black with Blonde Streaks', es: 'Negro con Rayitos Rubios' },
+          { en: 'Black with Blue Shimmer', es: 'Negro Azulado Brillante' },
+          { en: 'Black with Purple Streaks', es: 'Negro con Mechas Moradas' }
+        ]
+      },
+      {
+        label_en: '🌈 Bold & Fantasy', label_es: '🌈 Atrevidos y Fantasy',
+        items: [
+          { en: 'Cotton Candy Pink', es: 'Rosa Chicle' },
+          { en: 'Electric Blue to Pink', es: 'Azul Eléctrico a Rosa' },
+          { en: 'Mint to Teal', es: 'Menta a Azul Verdoso' },
+          { en: 'Bubblegum Purple', es: 'Púrpura Chicle' },
+          { en: 'Iridescent Holo', es: 'Holográfico Iridiscente' },
+          { en: 'Peach to Coral', es: 'Melocotón a Coral' }
+        ]
+      }
     ];
+
+    // Flat list for prompt use
+    const hairColors = hairColorCategories.flatMap(cat => cat.items);
 
     // Poses organized by category for dropdown display
     const posesCategories = [
@@ -651,7 +745,9 @@
           { en: 'Blowing Kiss Classic', es: 'Soplando Beso Clásico' },
           { en: 'Heart Hands Shy Blush', es: 'Manos Corazón Tímida' },
           { en: 'Peace Sign Head Tilt', es: 'Señal Paz Inclinada' },
-          { en: 'Leaning Forward Playful', es: 'Inclinada Juguetona' }
+          { en: 'Leaning Forward Playful', es: 'Inclinada Juguetona' },
+          { en: 'Winking Cute', es: 'Guiñando Lindo' },
+          { en: 'Blowing A Kiss', es: 'Mandando un Besito' }
         ]
       },
       {
@@ -661,7 +757,9 @@
           { en: 'Victory Pose Big Grin', es: 'Pose Victoria Sonrisa Grande' },
           { en: 'Surprised Shocked', es: 'Sorprendida Impactada' },
           { en: 'Holding Accessory', es: 'Sosteniendo Accesorio' },
-          { en: 'Duo Group Pose', es: 'Pose Dúo Grupo' }
+          { en: 'Duo Group Pose', es: 'Pose Dúo Grupo' },
+          { en: 'Dancing Arms Up Celebrating', es: 'Bailando Brazos Arriba Celebrando' },
+          { en: 'Back To Back Two Girls', es: 'Espalda con Espalda Dos Chicas' }
         ]
       },
       {
@@ -780,13 +878,21 @@
         ]
       },
       {
-        label_en: '💅 Beauty & Nails', label_es: '💅 Belleza y Uñas',
+        label_en: '🕶️ Sunglasses & Nails', label_es: '🕶️ Lentes y Uñas',
         items: [
           { en: 'Rhinestone Nails', es: 'Uñas con Brillantes', desc: 'wearing long acrylic nails with rhinestone nail art' },
           { en: 'Nail Charms', es: 'Encantos Uñas', desc: 'wearing nail art with rhinestone charms' },
           { en: 'Lip Gloss', es: 'Brillo Labios', desc: 'wearing glossy sparkling lip gloss' },
           { en: 'Regular Glasses', es: 'Gafas Regulares', desc: 'wearing regular glasses, eyeglasses' },
-          { en: 'Tinted Sunglasses', es: 'Gafas de Sol Tintadas', desc: 'wearing tinted Y2K colored sunglasses' }
+          { en: 'Tinted Sunglasses', es: 'Gafas de Sol Tintadas', desc: 'wearing tinted Y2K colored sunglasses' },
+          { en: 'Chunky Oversized Aviator Sunglasses', es: 'Lentes Aviador Oversized', desc: 'wearing chunky bold black frame sunglasses with gradient orange pink lenses' },
+          { en: 'Cat-Eye Oversized Sunglasses', es: 'Lentes Cat-Eye Oversized', desc: 'wearing elevated cat-eye shaped sunglasses, metallic gold frame, pink tint lenses' },
+          { en: 'Shield Futuristic Sunglasses', es: 'Lentes Futuristas Shield', desc: 'wearing large futuristic shield sunglasses, continuous lenses, sci-fi matte white vibe' },
+          { en: 'Square Bold Sunglasses', es: 'Lentes Cuadrados Bold', desc: 'wearing angular geometric matte black frame sunglasses with gradient purple lenses' },
+          { en: 'Butterfly Rounded Sunglasses', es: 'Lentes Mariposa Redondeados', desc: 'wearing soft butterfly shaped sunglasses, transparent frame, ice blue lenses' },
+          { en: 'Rimless Minimalist Sunglasses', es: 'Lentes Sin Marco Minimalistas', desc: 'wearing rimless sunglasses with large gradient pink lavender lenses' },
+          { en: 'Vintage Cat-Eye Sunglasses', es: 'Lentes Cat-Eye Vintage', desc: 'wearing retro chunky vintage cat-eye sunglasses, pure white frame, peach tint lenses' },
+          { en: 'Transparent Clear Frame Sunglasses', es: 'Lentes Marco Transparente', desc: 'wearing transparent clear acrylic frame sunglasses with pastel pink tinted lenses' }
         ]
       },
       {
@@ -806,13 +912,49 @@
           { en: 'Butterfly Clips', es: 'Clips Mariposa', desc: 'wearing colorful butterfly hair clips' },
           { en: 'Star Hair Pins', es: 'Clips Estrellas', desc: 'wearing decorative gold star hair pins' },
           { en: 'Butterfly Clips Y2K', es: 'Clips Mariposa Y2K', desc: 'wearing colorful Y2K butterfly hair clips' },
-          { en: 'Beaded Necklaces', es: 'Collares de Cuentas', desc: 'wearing colorful Y2K beaded necklaces' }
+          { en: 'Beaded Necklaces', es: 'Collares de Cuentas', desc: 'wearing colorful Y2K beaded necklaces' },
+          { en: 'Flowers in Hair', es: 'Flores en el Cabello', desc: 'wearing beautiful flowers tucked in hair' }
+        ]
+      },
+      {
+        label_en: '🎂 Birthday & Special', label_es: '🎂 Cumpleaños y Especial',
+        items: [
+          { en: 'Birthday Girl Crown', es: 'Corona Birthday Girl', desc: 'wearing sparkly rhinestone Birthday Girl crown tiara', hasInput: false },
+          { en: 'Birthday Sash', es: 'Banda Birthday', desc: 'wearing diagonal sash that says Its My Birthday', hasInput: false },
+          { en: 'Birthday Number Balloon', es: 'Globo Número Cumpleaños', desc: 'holding birthday number balloon in hand', hasInput: true, inputKey: 'balloonNumber', inputPH_en: 'Enter number (e.g. 21, 30, 40...)', inputPH_es: 'Escribe el número (ej. 21, 30, 40...)' },
+          { en: 'Gold Heart Balloon', es: 'Globo Corazón Dorado', desc: 'holding shiny gold heart-shaped balloon', hasInput: false },
+          { en: 'Glitter Balloon', es: 'Globo Escarchado Glitter', desc: 'holding glitter confetti-filled transparent balloon', hasInput: false },
+          { en: 'Metallic Balloon', es: 'Globo Metalizado', desc: 'holding chrome metallic balloon', hasInput: false },
+          { en: 'Pink Metallic Balloon', es: 'Globo Rosado Metalizado', desc: 'holding shiny pink metallic balloon', hasInput: false },
+          { en: 'Heart Shaped Balloon', es: 'Globo Forma Corazón', desc: 'holding large pink heart-shaped balloon', hasInput: false },
+          { en: 'Cupcake with Candle', es: 'Cupcake con Velita', desc: 'holding cute birthday cupcake with lit candle', hasInput: false },
+          { en: 'Star Sunglasses', es: 'Lentes Estrella', desc: 'wearing fun star-shaped sunglasses', hasInput: false },
+          { en: 'Confetti Around', es: 'Confetti Alrededor', desc: 'colorful confetti falling all around', hasInput: false }
+        ]
+      },
+      {
+        label_en: '👑 CEO & Boss', label_es: '👑 CEO y Boss',
+        items: [
+          { en: 'Mini LV Bag', es: 'Bolso Mini LV', desc: 'carrying mini Louis Vuitton style designer bag', hasInput: false },
+          { en: 'Star Charm Chain', es: 'Cadena Dije Estrella', desc: 'wearing gold chain with star charm pendant', hasInput: false }
         ]
       }
     ];
 
     // Flat list for prompt generation (all items from all categories)
     const accessoriesList = accessoriesCategories.flatMap(cat => cat.items);
+
+    function getAccessoriesPromptParts() {
+      // Returns array of prompt strings for selected accessories
+      return selectedAccessories.map(function(accEN) {
+        const acc = accessoriesList.find(function(a) { return a.en === accEN; });
+        if (!acc) return accEN;
+        if (acc.hasInput && acc.inputKey === 'balloonNumber' && balloonNumber) {
+          return acc.desc.replace('birthday number', 'number ' + balloonNumber).replace('balloon', balloonNumber + ' balloon');
+        }
+        return acc.desc || accEN;
+      });
+    }
 
     const sunglassesVariations = [
       { id: 1, name: "Chunky Oversized Aviator", description: "thick bold black frame, gradient orange/pink lenses" },
@@ -863,6 +1005,9 @@
           { en: 'pink crop top with fluffy fur jacket and high-waisted jeans', es: 'crop top rosa con chaqueta de piel esponjosa y jeans tiro alto' },
           { en: 'tight mini dress with fur coat and heels', es: 'vestido mini ajustado con abrigo de piel y tacones' },
           { en: 'velvet bodycon dress with gold accessories', es: 'vestido bodycon de terciopelo con accesorios dorados' },
+          { en: 'black crop top with shiny black shorts and oversized white jacket', es: 'crop top negro con shorts brillosos negros y chaqueta blanca oversized' },
+          { en: 'silver or black bustier top with high waist pants', es: 'top bustier plateado o negro con pantalón de tiro alto' },
+          { en: 'pink crop top set with matching skirt or pants', es: 'set crop top rosa con falda o pantalón a juego' },
           { en: 'sparkly party dress with platform heels', es: 'vestido de fiesta brillante con tacones plataforma' },
           { en: 'sequined cocktail dress', es: 'vestido de cóctel con lentejuelas' },
           { en: 'silk slip dress', es: 'vestido slip de seda' },
@@ -881,7 +1026,9 @@
           { en: 'denim jacket with shorts', es: 'chaqueta de mezclilla con shorts' },
           { en: 'distressed boyfriend jeans with graphic tee', es: 'jeans boyfriend desgastados con camiseta gráfica' },
           { en: 'crop top with high-waisted jeans', es: 'crop top con jeans de tiro alto' },
-          { en: 'bodysuit with palazzo pants', es: 'bodysuit con pantalones palazzo' }
+          { en: 'bodysuit with palazzo pants', es: 'bodysuit con pantalones palazzo' },
+          { en: 'western cowboy outfit with denim and boots', es: 'outfit vaquero western con denim y botas' },
+          { en: 'black and white striped outfit', es: 'outfit a rayas blanco y negro' }
         ]
       },
       {
@@ -894,7 +1041,9 @@
           { en: 'oversized cozy sweater with leggings', es: 'suéter oversized con leggings' },
           { en: 'striped shirt with leggings', es: 'camisa a rayas con leggings' },
           { en: 'dungarees', es: 'peto' },
-          { en: 'overalls', es: 'overol' }
+          { en: 'overalls', es: 'overol' },
+          { en: 'chic school uniform with skirt and blazer', es: 'uniforme escolar chic con falda y blazer' },
+          { en: 'satin pajama set boss lady style', es: 'pijama de satén estilo boss lady' }
         ]
       },
       {
@@ -903,7 +1052,8 @@
           { en: 'athletic leggings with sports bra and zip up jacket', es: 'leggings atléticos con top deportivo y chaqueta' },
           { en: 'yoga set with sneakers', es: 'conjunto de yoga con tenis' },
           { en: 'basketball shorts with crop hoodie', es: 'shorts de básquet con crop hoodie' },
-          { en: 'linen button-up with chino shorts', es: 'camisa de lino con shorts chinos' }
+          { en: 'linen button-up with chino shorts', es: 'camisa de lino con shorts chinos' },
+          { en: 'athleisure sport outfit with matching set and sneakers', es: 'outfit athleisure deportivo con set combinado y tenis' }
         ]
       }
     ];
@@ -1041,17 +1191,26 @@
 
       const completeContainer = document.getElementById('complete-looks-container');
       if (completeContainer) {
-        completeContainer.innerHTML = completeOutfits.map((outfit, index) => {
+        const kdpRecsO = getKDPRecs();
+        const outfitRecs = kdpRecsO ? (kdpRecsO.outfit || []) : [];
+        if (outfitRecs.length > 0) {
+          let recHtml = '<div style="width:100%;font-size:11px;font-weight:700;color:#92400e;margin-bottom:8px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:5px 10px;">⭐ ';
+          recHtml += (currentLanguage === 'en' ? 'Recommended for this style' : 'Recomendado para este estilo') + '</div>';
+          completeContainer.innerHTML = recHtml;
+        } else {
+          completeContainer.innerHTML = '';
+        }
+        completeOutfits.forEach((outfit, index) => {
           const title = outfit.title[lang];
           const desc = outfit.desc[lang];
-          return `
-            <div class="outfit-card" onclick="selectCompleteOutfit(${index})">
-              <span class="outfit-card-checkmark">✓</span>
-              <span class="outfit-card-emoji">${outfit.emoji}</span>
-              <div class="outfit-card-title">${title}</div>
-              <div class="outfit-card-description">${desc.substring(0, 60)}...</div>
-            </div>`;
-        }).join('');
+          const isRec = isKDPRec(outfitRecs, outfit.title.en);
+          const card = document.createElement('div');
+          card.className = 'outfit-card';
+          if (isRec) card.style.cssText = 'border-color:#f59e0b;background:#fffbeb;';
+          card.onclick = function() { selectCompleteOutfit(index); };
+          card.innerHTML = '<span class="outfit-card-checkmark">✓</span><span class="outfit-card-emoji">' + outfit.emoji + '</span><div class="outfit-card-title">' + (isRec ? '⭐ ' : '') + title + '</div><div class="outfit-card-description">' + desc.substring(0, 60) + '...</div>';
+          completeContainer.appendChild(card);
+        });
       }
 
       const buildContainer = document.getElementById('build-your-own-container');
@@ -1396,15 +1555,21 @@
       const styleList = styles[selectedCategory] || [];
       styleList.forEach(style => {
         const btn = document.createElement('button');
-        const label = currentLanguage === 'en' ? style.en : style.es;
-        btn.className = `chip-btn ${selectedStyle === style.en ? 'active' : ''}`;
+        const label = currentLanguage === 'en' ? (style.icon ? style.icon + ' ' : '') + style.en : (style.icon ? style.icon + ' ' : '') + style.es;
+        btn.className = 'chip-btn ' + (selectedStyle === style.en ? 'active' : '');
+        if (style.isKDP) btn.style.cssText = 'border-color:#c4b5fd;background:' + (selectedStyle === style.en ? 'linear-gradient(135deg,#9333EA,#7c3aed)' : '#f5f3ff') + ';color:' + (selectedStyle === style.en ? 'white' : '#7c3aed') + ';';
         btn.textContent = label;
         btn.onclick = () => {
           selectedStyle = selectedStyle === style.en ? '' : style.en;
-          renderStyles(); hideColorPaletteIfColoring();
+          kdpFields = {}; kdpSelectedBG = null; kdpSelectedExtras = [];
+          renderStyles();
+          hideColorPaletteIfColoring();
+          renderKDPFields();
+          renderTypographySection();
         };
         container.appendChild(btn);
       });
+      renderKDPFields();
     }
 
     function hideColorPaletteIfColoring() {
@@ -1413,9 +1578,394 @@
       colorPaletteSection.style.display = (selectedCategory === 'coloring' && coloringStyles.includes(selectedStyle)) ? 'none' : 'block';
     }
 
+
+    // ═══════════════════════════════════════════════════════
+    // TYPOGRAPHY — DATA & FUNCTIONS
+    // ═══════════════════════════════════════════════════════
+
+    const TYPO_LAYOUTS = [
+      {
+        id: 'circular', icon: '🔵',
+        en: 'Circular / Badge', es: 'Circular / Badge',
+        fields: [
+          { key: 'f1', label_en: 'Text on top arc', label_es: 'Texto arriba (arco)', ph_en: 'e.g. She Believed She Could', ph_es: 'ej. She Believed She Could' },
+          { key: 'f2', label_en: 'Center word (large bold)', label_es: 'Palabra central (grande)', ph_en: 'e.g. SO SHE DID', ph_es: 'ej. SO SHE DID' },
+          { key: 'f3', label_en: 'Text on bottom arc', label_es: 'Texto abajo (arco)', ph_en: 'e.g. Faith Over Fear', ph_es: 'ej. Faith Over Fear' }
+        ],
+        prompt: function(f, deco, palette) {
+          return 'Sublimation PNG design · "' + (f.f1||'She Believed She Could') + '" curved on top arc · "' + (f.f2||'SO SHE DID') + '" in large bold script center · "' + (f.f3||'Faith Over Fear') + '" curved on bottom arc · ' + (deco||'wildflowers') + ' · mixed lettering style · ' + (palette||'black monochrome') + ' · white background · no characters';
+        }
+      },
+      {
+        id: 'floral', icon: '🌸',
+        en: 'Wrapped Floral', es: 'Wrapped Floral',
+        fields: [
+          { key: 'f1', label_en: 'Word on top (large script)', label_es: 'Palabra arriba (script grande)', ph_en: 'e.g. BLESSED', ph_es: 'ej. BLESSED' },
+          { key: 'f2', label_en: 'Center word (bold)', label_es: 'Palabra central (bold)', ph_en: 'e.g. Mama', ph_es: 'ej. Mama' },
+          { key: 'f3', label_en: 'Word on bottom (script)', label_es: 'Palabra abajo (script)', ph_en: 'e.g. & Loved', ph_es: 'ej. & Loved' }
+        ],
+        prompt: function(f, deco, palette) {
+          return 'Sublimation PNG design · "' + (f.f1||'BLESSED') + '" large script top · "' + (f.f2||'Mama') + '" bold center · "' + (f.f3||'& Loved') + '" script bottom · ' + (deco||'wildflowers and florals') + ' · ' + (palette||'pastel floral') + ' · white background · no characters';
+        }
+      },
+      {
+        id: 'stacked', icon: '📚',
+        en: 'Stacked Bold', es: 'Stacked Bold',
+        fields: [
+          { key: 'f1', label_en: 'Top line (bold)', label_es: 'Línea arriba (bold)', ph_en: 'e.g. FAITH OVER', ph_es: 'ej. FAITH OVER' },
+          { key: 'f2', label_en: 'Middle line (large script)', label_es: 'Línea centro (script grande)', ph_en: 'e.g. Fear', ph_es: 'ej. Fear' },
+          { key: 'f3', label_en: 'Bottom line (smaller)', label_es: 'Línea abajo (pequeña)', ph_en: 'e.g. Walk by Faith Not by Sight', ph_es: 'ej. Walk by Faith Not by Sight' }
+        ],
+        prompt: function(f, deco, palette) {
+          return 'Sublimation PNG design · "' + (f.f1||'FAITH OVER') + '" bold top line · "' + (f.f2||'Fear') + '" large script middle · "' + (f.f3||'Walk by Faith Not by Sight') + '" smaller bottom line · ' + (deco||'cross and vines') + ' · ' + (palette||'black monochrome') + ' · white background · no characters';
+        }
+      },
+      {
+        id: 'vertical', icon: '🌿',
+        en: 'Vertical Stem', es: 'Vertical Stem',
+        fields: [
+          { key: 'f1', label_en: 'Left bouquet label (optional)', label_es: 'Etiqueta izquierda (opcional)', ph_en: 'optional label', ph_es: 'etiqueta opcional' },
+          { key: 'f2', label_en: 'Center bouquet label (optional)', label_es: 'Etiqueta centro (opcional)', ph_en: 'optional label', ph_es: 'etiqueta opcional' },
+          { key: 'f3', label_en: 'Right bouquet label (optional)', label_es: 'Etiqueta derecha (opcional)', ph_en: 'optional label', ph_es: 'etiqueta opcional' }
+        ],
+        note_en: '🌿 Generates 3 wildflower bouquets side by side — no main text',
+        note_es: '🌿 Genera 3 ramos de flores silvestres — sin texto principal',
+        prompt: function(f, deco, palette) {
+          return 'Sublimation PNG design · 3 separate wildflower bouquets side by side · ' + (deco||'wildflowers with long visible stems') + ' · long visible stems · ' + (palette||'pastel floral') + ' · white background · no text · no characters · sublimation ready';
+        }
+      },
+      {
+        id: 'horizontal', icon: '➡️',
+        en: 'Horizontal', es: 'Horizontal',
+        fields: [
+          { key: 'f1', label_en: 'Left text', label_es: 'Texto izquierda', ph_en: 'e.g. Coffee', ph_es: 'ej. Coffee' },
+          { key: 'f2', label_en: 'Center symbol', label_es: 'Símbolo central', ph_en: 'e.g. ✝ or & or ♥', ph_es: 'ej. ✝ o & o ♥' },
+          { key: 'f3', label_en: 'Right text', label_es: 'Texto derecha', ph_en: 'e.g. Jesus', ph_es: 'ej. Jesus' }
+        ],
+        prompt: function(f, deco, palette) {
+          return 'Sublimation PNG design · "' + (f.f1||'Coffee') + '" left side · "' + (f.f2||'&') + '" center symbol · "' + (f.f3||'Jesus') + '" right side · all in one horizontal line · ' + (deco||'minimal accents') + ' · ' + (palette||'black monochrome') + ' · white background · no characters';
+        }
+      }
+    ];
+
+    const TYPO_EXAMPLES = [
+      { cat_en: '🙏 Faith', cat_es: '🙏 Fe', items: ['She Believed She Could So She Did', 'Jesus Saved My Life', 'God is Good All the Time', 'Be a Warrior Not a Worrier', 'Walk by Faith Not by Sight', 'Faith Over Fear', 'But First Jesus', 'God is Good'] },
+      { cat_en: '👑 Boss Babe', cat_es: '👑 Emprendedora', items: ['Boss Babe & Blessed', 'Built by Faith Fueled by Coffee', 'Girl Boss & God First', 'Hustle & Grace', 'She is Clothed in Strength', 'Dream Big Work Hard Stay Humble'] },
+      { cat_en: '🌸 Mama', cat_es: '🌸 Mamá', items: ['Blessed Mama', 'Mama Bear & Jesus', 'Coffee Chaos & Motherhood', 'Mom Life & Blessed', 'Raising Arrows for God', 'Blessed Beyond Measure', 'She is a Good Mama'] },
+      { cat_en: '☕ Lifestyle', cat_es: '☕ Lifestyle', items: ['But First Coffee & Jesus', 'Coffee Cats & Jesus', 'I Run on Coffee Prayer & Dry Shampoo', 'Cozy Season & Grace', 'Simple Life Blessed Life'] }
+    ];
+
+    const TYPO_LETTERING = [
+      { en: 'Script / Cursive', es: 'Script / Cursiva' },
+      { en: 'Bold Block', es: 'Block Bold' },
+      { en: 'Mixed Script + Block', es: 'Script + Block Mixto' },
+      { en: 'Hand-lettered', es: 'Hand-lettered' },
+      { en: 'Serif Elegante', es: 'Serif Elegante' }
+    ];
+
+    const TYPO_DECO = [
+      { en: 'Cross + Heart', es: 'Cruz + Corazón' },
+      { en: 'Wildflowers', es: 'Flores Silvestres' },
+      { en: 'Cross + Vines', es: 'Cruz + Enredaderas' },
+      { en: 'Butterflies + Florals', es: 'Mariposas + Flores' },
+      { en: 'Stars + Sparkles', es: 'Estrellas + Destellos' },
+      { en: 'Sunflowers', es: 'Girasoles' },
+      { en: 'Crown / Corona', es: 'Corona' },
+      { en: 'Coffee Cup + Steam', es: 'Taza de Café + Vapor' },
+      { en: 'Arrow Accents', es: 'Flechas Decorativas' },
+      { en: 'Laurel Wreath', es: 'Corona de Laurel' },
+      { en: 'Leopard Print Accents', es: 'Estampado Leopardo' },
+      { en: 'Watercolor Splashes', es: 'Manchas Acuarela' },
+      { en: 'Cactus + Flowers', es: 'Cactus + Flores' },
+      { en: 'Minimal', es: 'Minimal' }
+    ];
+
+    const TYPO_PALETTES = [
+      { en: 'Black Monochrome', es: 'Negro Monocromático' },
+      { en: 'Gold + Black', es: 'Dorado + Negro' },
+      { en: 'Rustic Brown', es: 'Marrón Rústico' },
+      { en: 'Pastel Floral', es: 'Floral Pastel' },
+      { en: 'Blush + Cream', es: 'Blush + Crema' }
+    ];
+
+    function isTypographyStyle() {
+      return selectedStyle === 'Typography';
+    }
+
+    function renderTypographySection() {
+      const section = document.getElementById('typography-section');
+      const charSection = document.getElementById('character-section');
+      const genderSection = document.getElementById('gender-section');
+      const physSection = document.getElementById('physical-traits-section');
+      const lang = currentLanguage;
+
+      if (!isTypographyStyle()) {
+        section.style.display = 'none';
+        // Restore ALL sections
+        const sectionsToRestore = [
+          'character-section', 'gender-section', 'physical-traits-section',
+          'accessories-section', 'hair-style-section', 'hair-color-section',
+          'pose-section', 'background-section', 'color-palette-section',
+          'shoes-section'
+        ];
+        sectionsToRestore.forEach(function(id) {
+          const el = document.getElementById(id);
+          if (el) { el.style.display = ''; el.classList.remove('hidden'); }
+        });
+        // Restore unnamed sections
+        document.querySelectorAll('[data-typo-hidden="true"]').forEach(function(el) {
+          el.style.display = '';
+          el.removeAttribute('data-typo-hidden');
+        });
+        charSection.style.display = '';
+        return;
+      }
+
+      // Hide ALL character and generation sections
+      const sectionsToHide = [
+        'character-section', 'gender-section', 'physical-traits-section',
+        'accessories-section', 'hair-style-section', 'hair-color-section',
+        'pose-section', 'background-section', 'color-palette-section',
+        'shoes-section'
+      ];
+      sectionsToHide.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) { el.style.display = 'none'; el.classList.add('hidden'); }
+      });
+      // Also hide outfit/camera/action sections (class="section" without id)
+      const allSections = document.querySelectorAll('.section');
+      allSections.forEach(function(el) {
+        if (!el.id || el.id === '') el.setAttribute('data-typo-hidden', 'true');
+        if (el.id !== 'color-palette-section') el.style.display = 'none';
+      });
+      section.style.display = 'block';
+      section.innerHTML = '';
+
+      const pink = '#d4537e';
+      const pinkLight = '#fbeaf0';
+      const pinkBorder = '#f4c0d1';
+      const pinkDark = '#993556';
+
+      // ── SECTION TITLE ──
+      const title = document.createElement('div');
+      title.style.cssText = 'font-family:Poppins,sans-serif;font-size:15px;font-weight:800;color:' + pink + ';margin-bottom:14px;';
+      title.textContent = lang === 'en' ? '✍️ Typography Design' : '✍️ Diseño Tipográfico';
+      section.appendChild(title);
+
+      // ── LAYOUT SELECTOR ──
+      const layoutLabel = document.createElement('div');
+      layoutLabel.style.cssText = 'font-size:12px;font-weight:700;color:' + pinkDark + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;';
+      layoutLabel.textContent = lang === 'en' ? '1. Choose Layout' : '1. Elige el Layout';
+      section.appendChild(layoutLabel);
+
+      const layoutRow = document.createElement('div');
+      layoutRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;';
+      TYPO_LAYOUTS.forEach(function(layout) {
+        const btn = document.createElement('button');
+        const isActive = typoLayout === layout.id;
+        btn.style.cssText = 'padding:10px 16px;border-radius:12px;border:2px solid ' + (isActive ? pink : pinkBorder) + ';background:' + (isActive ? pink : pinkLight) + ';color:' + (isActive ? 'white' : pinkDark) + ';font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all 0.2s;';
+        btn.textContent = layout.icon + ' ' + (lang === 'en' ? layout.en : layout.es);
+        btn.onclick = function() {
+          typoLayout = typoLayout === layout.id ? null : layout.id;
+          typoFields = { f1: '', f2: '', f3: '' };
+          renderTypographySection();
+        };
+        layoutRow.appendChild(btn);
+      });
+      section.appendChild(layoutRow);
+
+      // ── LAYOUT FIELDS ──
+      if (typoLayout) {
+        const layoutData = TYPO_LAYOUTS.find(function(l) { return l.id === typoLayout; });
+        if (layoutData) {
+          const fieldsCard = document.createElement('div');
+          fieldsCard.style.cssText = 'background:' + pinkLight + ';border:2px solid ' + pinkBorder + ';border-radius:14px;padding:14px;margin-bottom:16px;';
+
+          const fieldsTitle = document.createElement('div');
+          fieldsTitle.style.cssText = 'font-size:12px;font-weight:800;color:' + pinkDark + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;';
+          fieldsTitle.textContent = lang === 'en' ? '2. Your Text' : '2. Tu Texto';
+          fieldsCard.appendChild(fieldsTitle);
+
+          // Note for vertical stem
+          if (layoutData.note_en) {
+            const note = document.createElement('div');
+            note.style.cssText = 'font-size:12px;color:' + pinkDark + ';background:white;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-weight:600;';
+            note.textContent = lang === 'en' ? layoutData.note_en : layoutData.note_es;
+            fieldsCard.appendChild(note);
+          }
+
+          layoutData.fields.forEach(function(f) {
+            const wrap = document.createElement('div');
+            wrap.style.marginBottom = '10px';
+            const lbl = document.createElement('div');
+            lbl.style.cssText = 'font-size:11px;font-weight:700;color:' + pinkDark + ';margin-bottom:4px;';
+            lbl.textContent = lang === 'en' ? f.label_en : f.label_es;
+            wrap.appendChild(lbl);
+            const inp = document.createElement('input');
+            inp.type = 'text';
+            inp.value = typoFields[f.key] || '';
+            inp.placeholder = lang === 'en' ? f.ph_en : f.ph_es;
+            inp.style.cssText = 'width:100%;padding:9px 12px;border-radius:10px;border:1.5px solid ' + pinkBorder + ';font-size:13px;font-family:Quicksand,sans-serif;font-weight:600;color:#333;background:white;outline:none;box-sizing:border-box;';
+            const fkey = f.key;
+            inp.addEventListener('focus', function() { this.style.borderColor = pink; });
+            inp.addEventListener('blur', function() { this.style.borderColor = pinkBorder; });
+            inp.addEventListener('input', function() { typoFields[fkey] = this.value; });
+            wrap.appendChild(inp);
+            fieldsCard.appendChild(wrap);
+          });
+          section.appendChild(fieldsCard);
+
+          // ── EXAMPLES AS DROPDOWNS ──
+          const exTitle = document.createElement('div');
+          exTitle.style.cssText = 'font-size:12px;font-weight:800;color:' + pinkDark + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;margin-top:4px;';
+          exTitle.textContent = lang === 'en' ? '💡 Examples' : '💡 Ejemplos';
+          section.appendChild(exTitle);
+
+          const exHint = document.createElement('div');
+          exHint.style.cssText = 'font-size:11px;color:#999;margin-bottom:10px;font-style:italic;';
+          exHint.textContent = lang === 'en' ? 'Select a phrase — it will be distributed across the fields automatically' : 'Selecciona una frase — se distribuirá en los campos automáticamente';
+          section.appendChild(exHint);
+
+          TYPO_EXAMPLES.forEach(function(cat, catIdx) {
+            const catId = 'typo-ex-cat-' + catIdx;
+            const isOpen = typoOpenExCats.includes(catIdx);
+
+            const catWrap = document.createElement('div');
+            catWrap.style.cssText = 'width:100%;margin-bottom:6px;';
+
+            // Dropdown header button
+            const catBtn = document.createElement('button');
+            catBtn.style.cssText = 'width:100%;text-align:left;padding:9px 14px;border-radius:10px;cursor:pointer;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;border:1.5px solid ' + (isOpen ? pink : pinkBorder) + ';background:' + (isOpen ? pink : pinkLight) + ';color:' + (isOpen ? 'white' : pinkDark) + ';';
+            catBtn.innerHTML = '<span>' + (lang === 'en' ? cat.cat_en : cat.cat_es) + '</span><span style="font-size:11px;">' + (isOpen ? '▲' : '▼') + '</span>';
+            catBtn.onclick = function() {
+              const idx = typoOpenExCats.indexOf(catIdx);
+              if (idx > -1) typoOpenExCats.splice(idx, 1); else typoOpenExCats.push(catIdx);
+              renderTypographySection();
+            };
+            catWrap.appendChild(catBtn);
+
+            if (isOpen) {
+              const itemRow = document.createElement('div');
+              itemRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;padding:10px 4px 4px;';
+              cat.items.forEach(function(item) {
+                const chip = document.createElement('button');
+                chip.style.cssText = 'padding:6px 12px;border-radius:999px;border:1.5px solid ' + pinkBorder + ';background:white;color:' + pinkDark + ';font-size:11.5px;font-weight:600;cursor:pointer;font-family:Quicksand,sans-serif;transition:all 0.15s;';
+                chip.textContent = item;
+                chip.onmouseover = function() { this.style.background = pinkLight; this.style.borderColor = pink; };
+                chip.onmouseout = function() { this.style.background = 'white'; this.style.borderColor = pinkBorder; };
+                chip.onclick = function() {
+                  // Smart distribution across fields
+                  const words = item.trim().split(' ');
+                  const total = words.length;
+                  const layoutData2 = TYPO_LAYOUTS.find(function(l) { return l.id === typoLayout; });
+                  const fieldCount = layoutData2 ? layoutData2.fields.length : 3;
+                  if (fieldCount === 3) {
+                    const third = Math.ceil(total / 3);
+                    typoFields.f1 = words.slice(0, third).join(' ');
+                    typoFields.f2 = words.slice(third, third * 2).join(' ');
+                    typoFields.f3 = words.slice(third * 2).join(' ');
+                  } else if (fieldCount === 2) {
+                    const half = Math.ceil(total / 2);
+                    typoFields.f1 = words.slice(0, half).join(' ');
+                    typoFields.f2 = words.slice(half).join(' ');
+                  } else {
+                    typoFields.f1 = item;
+                  }
+                  renderTypographySection();
+                };
+                itemRow.appendChild(chip);
+              });
+              catWrap.appendChild(itemRow);
+            }
+            section.appendChild(catWrap);
+          });
+        }
+      }
+
+      // ── LETTERING STYLE ──
+      const letLabel = document.createElement('div');
+      letLabel.style.cssText = 'font-size:12px;font-weight:800;color:' + pinkDark + ';text-transform:uppercase;letter-spacing:1px;margin:14px 0 8px;';
+      letLabel.textContent = lang === 'en' ? '✍️ Lettering Style' : '✍️ Estilo de Letras';
+      section.appendChild(letLabel);
+      const letRow = document.createElement('div');
+      letRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;';
+      TYPO_LETTERING.forEach(function(l) {
+        const btn = document.createElement('button');
+        const isActive = typoLettering === l.en;
+        btn.className = 'chip-btn' + (isActive ? ' active' : '');
+        btn.textContent = lang === 'en' ? l.en : l.es;
+        btn.onclick = function() { typoLettering = typoLettering === l.en ? null : l.en; renderTypographySection(); };
+        letRow.appendChild(btn);
+      });
+      section.appendChild(letRow);
+
+      // ── DECORATIVE ELEMENTS ──
+      const decoLabel = document.createElement('div');
+      decoLabel.style.cssText = 'font-size:12px;font-weight:800;color:' + pinkDark + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;';
+      decoLabel.textContent = lang === 'en' ? '🌸 Decorative Elements' : '🌸 Elementos Decorativos';
+      section.appendChild(decoLabel);
+      const decoRow = document.createElement('div');
+      decoRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;';
+      TYPO_DECO.forEach(function(d) {
+        const isActive = typoDecoElements.includes(d.en);
+        const btn = document.createElement('button');
+        btn.className = 'chip-btn' + (isActive ? ' active' : '');
+        btn.textContent = lang === 'en' ? d.en : d.es;
+        btn.onclick = function() {
+          const idx = typoDecoElements.indexOf(d.en);
+          if (idx > -1) typoDecoElements.splice(idx, 1); else typoDecoElements.push(d.en);
+          renderTypographySection();
+        };
+        decoRow.appendChild(btn);
+      });
+      section.appendChild(decoRow);
+
+      // ── COLOR PALETTE ──
+      const palLabel = document.createElement('div');
+      palLabel.style.cssText = 'font-size:12px;font-weight:800;color:' + pinkDark + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;';
+      palLabel.textContent = lang === 'en' ? '🎨 Color Palette' : '🎨 Paleta de Colores';
+      section.appendChild(palLabel);
+      const palRow = document.createElement('div');
+      palRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;';
+      TYPO_PALETTES.forEach(function(p) {
+        const isActive = typoPalette === p.en;
+        const btn = document.createElement('button');
+        btn.className = 'chip-btn' + (isActive ? ' active' : '');
+        btn.textContent = lang === 'en' ? p.en : p.es;
+        btn.onclick = function() { typoPalette = typoPalette === p.en ? null : p.en; renderTypographySection(); };
+        palRow.appendChild(btn);
+      });
+      section.appendChild(palRow);
+    }
+
+    function generateTypographyPrompt() {
+      if (!isTypographyStyle()) return null;
+      const layout = TYPO_LAYOUTS.find(function(l) { return l.id === typoLayout; });
+      if (!layout) return (currentLanguage === 'en' ? 'Please select a layout first.' : 'Por favor selecciona un layout primero.');
+      const deco = typoDecoElements.length > 0 ? typoDecoElements.join(' · ') : 'minimal accents';
+      const decoStr = (typoLettering ? typoLettering + ' lettering · ' : '') + deco;
+      const palette = typoPalette || 'black monochrome';
+      return layout.prompt(typoFields, decoStr, palette);
+    }
+
+
     function renderCharacters() {
       const container = document.getElementById('character-container');
       container.innerHTML = '';
+      // Show/hide dependent sections based on character selection
+      const depIds = ['body-type-section','accessories-section',
+        'hair-style-section','hair-color-section','pose-section',
+        'background-section','camera-angle-section','custom-action-section',
+        'physical-traits-section'];
+      depIds.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (selectedCharacter) {
+          el.style.removeProperty('display');
+        } else {
+          el.style.display = 'none';
+        }
+      });
       characters.forEach(char => {
         const btn = document.createElement('button');
         const label = currentLanguage === 'en' ? char.en : char.es;
@@ -1452,6 +2002,20 @@
       document.getElementById('gender-male').classList.toggle('active', selectedNeutralGender === 'male');
     }
 
+    // ── KDP Recommendations helper ──
+    function getKDPRecs() {
+      if (!isKDPStyle()) return null;
+      const data = getKDPStyleData();
+      return data ? data.recs : null;
+    }
+
+    function isKDPRec(recs, itemEN) {
+      if (!recs) return false;
+      return recs.some(function(r) {
+        return itemEN.toLowerCase().includes(r.toLowerCase()) || r.toLowerCase().includes(itemEN.toLowerCase());
+      });
+    }
+
     function renderPhysicalTraits() {
       const container = document.getElementById('physical-traits-container');
       const section = document.getElementById('physical-traits-section');
@@ -1465,11 +2029,23 @@
       else if (gender === 'neutral') { section.classList.add('hidden'); return; }
       const traitsList = physicalTraits[gender] || [];
       const labelsList = physicalTraitLabels[gender] || [];
+      const kdpRecs = getKDPRecs();
+      const skinRecs = kdpRecs ? kdpRecs.skin || [] : [];
+      if (skinRecs.length > 0) {
+        const recLabel = document.createElement('div');
+        recLabel.style.cssText = 'width:100%;font-size:11px;font-weight:700;color:#f59e0b;margin-bottom:6px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:5px 10px;';
+        recLabel.textContent = '⭐ ' + (currentLanguage === 'en' ? 'Recommended for this style' : 'Recomendado para este estilo');
+        container.appendChild(recLabel);
+      }
       traitsList.forEach((trait, i) => {
         const btn = document.createElement('button');
         const label = labelsList[i] ? (currentLanguage === 'en' ? labelsList[i].en : labelsList[i].es) : trait.en;
+        const isRec = isKDPRec(skinRecs, trait.en);
         btn.className = `chip-btn ${selectedPhysicalTrait === trait.en ? 'active' : ''}`;
-        btn.textContent = label;
+        if (isRec && selectedPhysicalTrait !== trait.en) {
+          btn.style.cssText = 'border-color:#f59e0b;background:#fffbeb;color:#92400e;';
+        }
+        btn.textContent = (isRec ? '⭐ ' : '') + label;
         btn.onclick = () => {
           selectedPhysicalTrait = selectedPhysicalTrait === trait.en ? '' : trait.en;
           renderPhysicalTraits();
@@ -1482,31 +2058,81 @@
       const container = document.getElementById('hair-style-container');
       const section = document.getElementById('hair-style-section');
       const colorSection = document.getElementById('hair-color-section');
-      if (!selectedCharacter) { section.classList.add('hidden'); colorSection.classList.add('hidden'); return; }
-      section.classList.remove('hidden');
+      if (!selectedCharacter) { section.style.display='none'; colorSection.style.display='none'; return; }
+      section.style.removeProperty('display');
       container.innerHTML = '';
       const character = characters.find(c => c.en === selectedCharacter);
-      if (!character) { section.classList.add('hidden'); colorSection.classList.add('hidden'); return; }
+      if (!character) { section.style.display='none'; colorSection.style.display='none'; return; }
       let gender = character.gender || 'neutral';
       if (gender === 'neutral' && selectedNeutralGender) { gender = selectedNeutralGender; }
-      else if (gender === 'neutral') { section.classList.add('hidden'); colorSection.classList.add('hidden'); return; }
-      const styleList = gender === 'male' ? hairStyles['male'] : hairStyles['female'];
-      styleList.forEach(style => {
-        const btn = document.createElement('button');
-        const label = currentLanguage === 'en' ? style.en : style.es;
-        btn.className = `option-button ${selectedHairStyle === style.en ? 'selected' : ''}`;
-        btn.textContent = label;
-        btn.onclick = () => {
-          selectedHairStyle = selectedHairStyle === style.en ? '' : style.en;
-          const cs = document.getElementById('hair-color-section');
-          if (cs) cs.classList.toggle('hidden', !selectedHairStyle);
-          if (!selectedHairStyle) { selectedHairColor = ''; renderHairColors(); }
-          if (style.en !== 'Custom Hair Style') customHairStyleValue = '';
+      else if (gender === 'neutral') { section.style.display='none'; colorSection.style.display='none'; return; }
+      const cats = gender === 'male' ? hairStyleCategories['male'] : hairStyleCategories['female'];
+      const kdpRecsH = getKDPRecs();
+      const hairRecs = kdpRecsH ? kdpRecsH.hair || [] : [];
+      const lang = currentLanguage;
+
+      // KDP recs label
+      if (hairRecs.length > 0) {
+        const recLabel = document.createElement('div');
+        recLabel.style.cssText = 'width:100%;font-size:11px;font-weight:700;color:#92400e;margin-bottom:8px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:5px 10px;';
+        recLabel.textContent = '⭐ ' + (lang === 'en' ? 'Recommended for this style' : 'Recomendado para este estilo');
+        container.appendChild(recLabel);
+      }
+
+      // Render each category as dropdown
+      cats.forEach(function(cat, catIdx) {
+        const isOpen = openHairStyleCats.includes(catIdx);
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'width:100%;margin-bottom:6px;';
+
+        // Category header button
+        const header = document.createElement('button');
+        header.style.cssText = 'width:100%;text-align:left;padding:9px 14px;border-radius:10px;cursor:pointer;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;border:1.5px solid ' + (isOpen ? '#ff88cc' : '#ffb3d9') + ';background:' + (isOpen ? 'linear-gradient(135deg,#ff88cc,#e055b0)' : 'rgba(255,192,217,0.15)') + ';color:' + (isOpen ? 'white' : '#cc88bb') + ';';
+        header.innerHTML = '<span>' + (lang === 'en' ? cat.label_en : cat.label_es) + '</span><span style="font-size:11px;">' + (isOpen ? '▲' : '▼') + '</span>';
+        header.onclick = function() {
+          const idx = openHairStyleCats.indexOf(catIdx);
+          if (idx > -1) openHairStyleCats.splice(idx, 1); else openHairStyleCats.push(catIdx);
           renderHairStyles();
         };
-        container.appendChild(btn);
+        wrapper.appendChild(header);
+
+        // Items inside dropdown
+        if (isOpen) {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;padding:10px 4px 4px;';
+          cat.items.forEach(function(style) {
+            const btn = document.createElement('button');
+            const label = lang === 'en' ? style.en : style.es;
+            const isRec = isKDPRec(hairRecs, style.en);
+            const isActive = selectedHairStyle === style.en;
+            btn.className = 'chip-btn' + (isActive ? ' active' : '');
+            if (isRec && !isActive) btn.style.cssText = 'border-color:#f59e0b;background:#fffbeb;color:#92400e;';
+            btn.textContent = (isRec ? '⭐ ' : '') + label;
+            btn.onclick = function() {
+              selectedHairStyle = selectedHairStyle === style.en ? '' : style.en;
+              const cs = document.getElementById('hair-color-section');
+              if (cs) { if (selectedHairStyle) cs.style.removeProperty('display'); else cs.style.display='none'; }
+              if (!selectedHairStyle) { selectedHairColor = ''; renderHairColors(); }
+              customHairStyleValue = '';
+              renderHairStyles();
+            };
+            row.appendChild(btn);
+          });
+          wrapper.appendChild(row);
+        }
+        container.appendChild(wrapper);
       });
-      // Show custom hair style input if selected
+
+      // Custom Hair Style button
+      const customBtn = document.createElement('button');
+      customBtn.className = 'option-button' + (selectedHairStyle === 'Custom Hair Style' ? ' selected' : '');
+      customBtn.textContent = '✏️ ' + (lang === 'en' ? 'Custom Hair Style' : 'Estilo de Cabello Personalizado');
+      customBtn.onclick = function() {
+        selectedHairStyle = selectedHairStyle === 'Custom Hair Style' ? '' : 'Custom Hair Style';
+        renderHairStyles();
+      };
+      container.appendChild(customBtn);
+
       const customContainer = document.getElementById('custom-hair-style-container');
       if (customContainer) customContainer.classList.toggle('hidden', selectedHairStyle !== 'Custom Hair Style');
     }
@@ -1514,15 +2140,53 @@
     function renderHairColors() {
       const container = document.getElementById('hair-color-container');
       container.innerHTML = '';
-      hairColors.forEach(color => {
-        const btn = document.createElement('button');
-        const label = currentLanguage === 'en' ? color.en : color.es;
-        btn.className = `chip-btn ${selectedHairColor === color.en ? 'active' : ''}`;
-        btn.textContent = label;
-        btn.onclick = () => { selectedHairColor = selectedHairColor === color.en ? '' : color.en; renderHairColors(); };
-        container.appendChild(btn);
+      const lang = currentLanguage;
+
+      // Render each color category as dropdown
+      hairColorCategories.forEach(function(cat, catIdx) {
+        const isOpen = openHairColorCats.includes(catIdx);
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'width:100%;margin-bottom:6px;';
+
+        const header = document.createElement('button');
+        header.style.cssText = 'width:100%;text-align:left;padding:9px 14px;border-radius:10px;cursor:pointer;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;border:1.5px solid ' + (isOpen ? '#ff88cc' : '#ffb3d9') + ';background:' + (isOpen ? 'linear-gradient(135deg,#ff88cc,#e055b0)' : 'rgba(255,192,217,0.15)') + ';color:' + (isOpen ? 'white' : '#cc88bb') + ';';
+        header.innerHTML = '<span>' + (lang === 'en' ? cat.label_en : cat.label_es) + '</span><span style="font-size:11px;">' + (isOpen ? '▲' : '▼') + '</span>';
+        header.onclick = function() {
+          const idx = openHairColorCats.indexOf(catIdx);
+          if (idx > -1) openHairColorCats.splice(idx, 1); else openHairColorCats.push(catIdx);
+          renderHairColors();
+        };
+        wrapper.appendChild(header);
+
+        if (isOpen) {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;padding:10px 4px 4px;';
+          cat.items.forEach(function(color) {
+            const btn = document.createElement('button');
+            const label = lang === 'en' ? color.en : color.es;
+            btn.className = 'chip-btn' + (selectedHairColor === color.en ? ' active' : '');
+            btn.textContent = label;
+            btn.onclick = function() {
+              selectedHairColor = selectedHairColor === color.en ? '' : color.en;
+              renderHairColors();
+            };
+            row.appendChild(btn);
+          });
+          wrapper.appendChild(row);
+        }
+        container.appendChild(wrapper);
       });
-      // Show custom hair color input if selected
+
+      // Custom Hair Color button
+      const customBtn = document.createElement('button');
+      customBtn.className = 'option-button' + (selectedHairColor === 'Custom Hair Color' ? ' selected' : '');
+      customBtn.textContent = '✏️ ' + (lang === 'en' ? 'Custom Hair Color' : 'Color de Cabello Personalizado');
+      customBtn.onclick = function() {
+        selectedHairColor = selectedHairColor === 'Custom Hair Color' ? '' : 'Custom Hair Color';
+        renderHairColors();
+      };
+      container.appendChild(customBtn);
+
       const customContainer = document.getElementById('custom-hair-color-container');
       if (customContainer) customContainer.classList.toggle('hidden', selectedHairColor !== 'Custom Hair Color');
     }
@@ -1547,11 +2211,15 @@
         if (isOpen) {
           const row = document.createElement('div');
           row.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;padding:10px 4px 4px;';
+          const kdpRecsP = getKDPRecs();
+          const poseRecs = kdpRecsP ? (kdpRecsP.pose || []) : [];
           cat.items.forEach(function(pose) {
             const btn = document.createElement('button');
             const label = lang === 'en' ? pose.en : pose.es;
+            const isRec = isKDPRec(poseRecs, pose.en);
             btn.className = 'chip-btn ' + (selectedPose === pose.en ? 'active' : '');
-            btn.textContent = label;
+            if (isRec && selectedPose !== pose.en) btn.style.cssText = 'border-color:#f59e0b;background:#fffbeb;color:#92400e;';
+            btn.textContent = (isRec ? '⭐ ' : '') + label;
             btn.onclick = function() {
               selectedPose = selectedPose === pose.en ? '' : pose.en;
               customPoseValue = '';
@@ -1587,68 +2255,86 @@
       if (customContainer) customContainer.classList.toggle('hidden', selectedBackground !== 'Custom Background');
     }
 
-    // Track which accessory category is open
-    let openAccCategory = null;
-
     function renderAccessories() {
       const container = document.getElementById('accessories-container');
       const placeholder = document.getElementById('accessories-placeholder');
       const customSection = document.getElementById('custom-accessories-container');
-      const sunglassesDropdown = document.getElementById('sunglasses-dropdown-container');
       const character = characters.find(c => c.en === selectedCharacter);
       if (!character) {
         placeholder.style.display = 'block'; container.innerHTML = '';
-        sunglassesDropdown.style.display = 'none'; customSection.classList.add('hidden'); return;
+        customSection.classList.add('hidden'); return;
       }
       let gender = character.gender || 'neutral';
       if (gender === 'neutral' && !selectedNeutralGender) {
         placeholder.style.display = 'block'; container.innerHTML = '';
-        sunglassesDropdown.style.display = 'none'; customSection.classList.add('hidden'); return;
+        customSection.classList.add('hidden'); return;
       }
       if (gender === 'neutral') gender = selectedNeutralGender;
       placeholder.style.display = 'none';
-      sunglassesDropdown.style.display = 'block';
       customSection.classList.remove('hidden');
-
-      let html = '';
-      accessoriesCategories.forEach(function(cat, catIdx) {
-        const catLabel = currentLanguage === 'en' ? cat.label_en : cat.label_es;
-        const isOpen = openAccCategory === catIdx;
-        const btnStyle = isOpen
-          ? 'background:linear-gradient(135deg,#ff88cc,#e055b0);border:1.5px solid #ff88cc;color:white;'
-          : 'background:rgba(255,192,217,0.15);border:1.5px solid #ffb3d9;color:#cc88bb;';
-        html += '<div style="width:100%;margin-bottom:6px;">';
-        html += '<button onclick="toggleAccCategory(' + catIdx + ')" style="width:100%;text-align:left;padding:9px 14px;' + btnStyle + 'border-radius:10px;cursor:pointer;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s ease;">';
-        html += '<span>' + catLabel + '</span><span style="font-size:11px;">' + (isOpen ? '▲' : '▼') + '</span>';
-        html += '</button>';
-        if (isOpen) {
-          html += '<div style="display:flex;flex-wrap:wrap;gap:8px;padding:10px 4px 4px;">';
-          cat.items.forEach(function(acc) {
-            const label = currentLanguage === 'en' ? acc.en : acc.es;
-            const isSelected = selectedAccessories.includes(acc.en);
-            const safe = acc.en.replace(/'/g, "\\'");
-            html += '<button class="option-button ' + (isSelected ? 'selected' : '') + '" onclick="toggleAccessory(\'' + safe + '\')">' + label + '</button>';
-          });
-          html += '</div>';
-        }
-        html += '</div>';
-      });
-      container.innerHTML = html;
-      initSunglassesDropdown();
-    }
-
-    function toggleAccCategory(idx) {
-      openAccCategory = (openAccCategory === idx) ? null : idx;
-      renderAccessories();
-    }
-
-    function toggleAccessory(accEN) {
-      if (selectedAccessories.includes(accEN)) {
-        selectedAccessories = selectedAccessories.filter(a => a !== accEN);
-      } else {
-        selectedAccessories.push(accEN);
+      container.innerHTML = '';
+      const kdpRecsA = getKDPRecs();
+      const accRecs = kdpRecsA ? (kdpRecsA.acc || []) : [];
+      if (accRecs.length > 0) {
+        const recLabel = document.createElement('div');
+        recLabel.style.cssText = 'width:100%;font-size:11px;font-weight:700;color:#92400e;margin-bottom:8px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:5px 10px;';
+        recLabel.textContent = '⭐ ' + (currentLanguage === 'en' ? 'Recommended for this style' : 'Recomendado para este estilo');
+        container.appendChild(recLabel);
       }
-      renderAccessories();
+      const lang = currentLanguage;
+      accessoriesCategories.forEach(function(cat, catIdx) {
+        const isOpen = openAccessoryCats.includes(catIdx);
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'width:100%;margin-bottom:6px;';
+
+        // Dropdown header button
+        const header = document.createElement('button');
+        header.style.cssText = 'width:100%;text-align:left;padding:9px 14px;border-radius:10px;cursor:pointer;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;border:1.5px solid ' + (isOpen ? '#ff88cc' : '#ffb3d9') + ';background:' + (isOpen ? 'linear-gradient(135deg,#ff88cc,#e055b0)' : 'rgba(255,192,217,0.15)') + ';color:' + (isOpen ? 'white' : '#cc88bb') + ';';
+        header.innerHTML = '<span>' + (lang === 'en' ? cat.label_en : cat.label_es) + '</span><span style="font-size:11px;">' + (isOpen ? '▲' : '▼') + '</span>';
+        header.onclick = function() {
+          const idx = openAccessoryCats.indexOf(catIdx);
+          if (idx > -1) openAccessoryCats.splice(idx, 1); else openAccessoryCats.push(catIdx);
+          renderAccessories();
+        };
+        wrapper.appendChild(header);
+
+        // Items inside dropdown
+        if (isOpen) {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;padding:10px 4px 4px;';
+          cat.items.forEach(function(acc) {
+            const btn = document.createElement('button');
+            const label = lang === 'en' ? acc.en : acc.es;
+            const isSelected = selectedAccessories.includes(acc.en);
+            const isRec = isKDPRec(accRecs, acc.en);
+            btn.className = 'chip-btn ' + (isSelected ? 'active' : '');
+            if (isRec && !isSelected) btn.style.cssText = 'border-color:#f59e0b;background:#fffbeb;color:#92400e;';
+            btn.textContent = (isRec ? '⭐ ' : '') + label;
+            btn.onclick = function() {
+              if (isSelected) { selectedAccessories = selectedAccessories.filter(function(a) { return a !== acc.en; }); }
+              else { selectedAccessories.push(acc.en); }
+              renderAccessories();
+            };
+            row.appendChild(btn);
+            // Balloon number input
+            if (acc.hasInput && isSelected) {
+              const inputWrap = document.createElement('div');
+              inputWrap.style.cssText = 'width:100%;margin-top:6px;display:flex;align-items:center;gap:8px;';
+              const inp = document.createElement('input');
+              inp.type = 'text';
+              inp.value = balloonNumber;
+              inp.placeholder = lang === 'en' ? (acc.inputPH_en || 'Enter value...') : (acc.inputPH_es || 'Escribe el valor...');
+              inp.style.cssText = 'flex:1;padding:8px 12px;border-radius:10px;border:1.5px solid #ffb3d9;font-size:13px;font-family:Quicksand,sans-serif;font-weight:600;color:#333;background:white;outline:none;';
+              inp.addEventListener('input', function() { balloonNumber = this.value; });
+              inputWrap.appendChild(inp);
+              row.appendChild(inputWrap);
+            }
+          });
+          wrapper.appendChild(row);
+        }
+        container.appendChild(wrapper);
+      });
+
     }
 
     function initSunglassesDropdown() {
@@ -1704,6 +2390,305 @@
     function countWords(text) { return text.trim().split(/\s+/).filter(w => w.length > 0).length; }
 
     // Always returns the EN style string
+
+    // ═══════════════════════════════════════════════════════
+    // KDP NOTEBOOK COVER — DATA & FUNCTIONS
+    // ═══════════════════════════════════════════════════════
+
+    const KDP_STYLES = [
+      {
+        id: 'hiphop', icon: '🎤', en: 'Hip Hop Chibi', es: 'Hip Hop Chibi',
+        fields: [
+          { key: 'powerWord', label_en: '🎤 Power Word (giant letters in background)', label_es: '🎤 Palabra Poderosa (letras gigantes en fondo)', ph_en: 'e.g. HIP HOP, HUSTLE, KING...', ph_es: 'ej. HIP HOP, HUSTLE, KING...' }
+        ],
+        recs: { skin: ['Latina/Caramel','African/Black'], hair: ['Low Fade','Cornrows','360 Waves'], outfit: ['Hip Hop Star','Street King'], acc: ['Chunky Gold Chains','Iced Out Chain','Snapback Cap'], pose: ['Hands In Pockets Cool','Fierce Arms Crossed'], palette: ['Black, Red, Silver, Chrome'] },
+        promptEN: function(f,s,h,o,a,p,pal) {
+          const pw = f.powerWord||'HIP HOP';
+          return 'KDP notebook cover design, glossy 3D chibi hyperrealistic character'+(s?', '+s+' skin':'')+', big head small body'+(h?', '+h:'')+', wearing '+(o||'graphic hoodie with graffiti lettering, black cargo joggers, black and red Jordan 1s')+(a.length?', '+a.join(', '):', thick silver Cuban chain, fitted cap, holding a microphone')+(p?', '+p:', standing in a powerful wide stance')+', dark pitbull with chain beside him — background: massive chrome metallic letters spelling "'+pw+'" stacked behind the character, red paint splatter explosion, spray paint cans on the floor, dark brick wall — palette: '+(pal||'black, red, silver, chrome')+' — ultra detailed glossy 3D render, dramatic cinematic lighting, portrait 6x9 KDP format, no watermark, no text';
+        }
+      },
+      {
+        id: 'city', icon: '🏙️', en: 'City Hustler', es: 'City Hustler',
+        fields: [
+          { key: 'powerWord', label_en: '🏙️ Power Word (graffiti text)', label_es: '🏙️ Palabra Poderosa (texto graffiti)', ph_en: 'e.g. THRIVING, BOSS, QUEEN...', ph_es: 'ej. THRIVING, BOSS, QUEEN...' },
+          { key: 'cityName', label_en: '📍 City Name (on street signs)', label_es: '📍 Nombre de Ciudad (en señales)', ph_en: 'e.g. Seattle, Miami, Caracas...', ph_es: 'ej. Seattle, Miami, Caracas...' }
+        ],
+        recs: { skin: ['African/Black','Latina/Caramel'], hair: ['Long Waves','Long Box Braids','High Bun'], outfit: ['Fashionable','Glam Diva','Street Style'], acc: ['Iced Out Chain','Designer Bag'], pose: ['Leaning Cool','Sassy Standing','Looking Over Shoulder Attitude'], palette: ['Hot Pink, Teal, White, Gold'] },
+        promptEN: function(f,s,h,o,a,p,pal) {
+          const pw = f.powerWord||'THRIVING'; const city = f.cityName||'YOUR CITY';
+          return 'KDP notebook cover design, glossy 3D chibi hyperrealistic Latina girl'+(s?', '+s+' skin':'')+', big head small body'+(h?', '+h:'')+', wearing '+(o||'varsity bomber jacket, ripped white jeans, designer sneakers')+(a.length?', '+a.join(', '):', oversized fashion glasses, layered diamond necklaces, chain bag')+(p?', '+p:' — leaning against a street sign pole')+' — background: city skyline at golden hour, street signs with '+city+', graffiti drip text spelling "'+pw+'" in pink and teal, paint splatter accents — palette: '+(pal||'hot pink, teal, white, gold')+' — ultra detailed glossy 3D render, cinematic lighting, portrait 6x9 KDP format, no watermark, no text';
+        }
+      },
+      {
+        id: 'dark', icon: '🌑', en: 'Dark Power', es: 'Dark Power',
+        fields: [
+          { key: 'powerWord1', label_en: '✊ Power Word 1 (giant white letters)', label_es: '✊ Palabra 1 (letras blancas gigantes)', ph_en: 'e.g. HUSTLE', ph_es: 'ej. HUSTLE' },
+          { key: 'powerWord2', label_en: '💪 Power Word 2 (silver metallic)', label_es: '💪 Palabra 2 (letras plateadas)', ph_en: 'e.g. SEASON', ph_es: 'ej. SEASON' },
+          { key: 'monogram', label_en: '✦ Monogram / Initial', label_es: '✦ Monograma / Inicial', ph_en: 'e.g. M', ph_es: 'ej. M' },
+          { key: 'tagline1', label_en: '📝 Tagline 1 (below crown)', label_es: '📝 Frase 1', ph_en: 'e.g. FOCUS. COMMIT. CONQUER.', ph_es: 'ej. FOCUS. COMMIT. CONQUER.' },
+          { key: 'tagline2', label_en: '📝 Tagline 2 (below monogram)', label_es: '📝 Frase 2', ph_en: 'e.g. NO EXCUSES. JUST RESULTS.', ph_es: 'ej. NO EXCUSES. JUST RESULTS.' },
+          { key: 'bookType', label_en: '📖 Book Type', label_es: '📖 Tipo de Libro', ph_en: 'e.g. PLANNER, JOURNAL, NOTEBOOK', ph_es: 'ej. PLANNER, DIARIO, CUADERNO' },
+          { key: 'tagline3', label_en: '📝 Tagline 3 (below book type)', label_es: '📝 Frase 3', ph_en: 'e.g. PLAN YOUR WORK. WORK YOUR PLAN.', ph_es: 'ej. PLAN YOUR WORK. WORK YOUR PLAN.' }
+        ],
+        recs: { skin: ['Latina/Caramel','African/Black','Middle Eastern'], hair: ['Long Box Braids','Butterfly Locs','Knotless Braids','High Ponytail'], outfit: ['Edgy Art','Street Style'], acc: ['Chunky Gold Chains','Black Sunglasses'], pose: ['Hands In Pockets Cool','Fierce Arms Crossed','Looking Over Shoulder Attitude'], palette: ['Black, Charcoal, White, Silver'] },
+        promptEN: function(f,s,h,o,a,p,pal) {
+          const pw1=f.powerWord1||'HUSTLE', pw2=f.powerWord2||'SEASON', mono=f.monogram||'M';
+          const t1=f.tagline1||'FOCUS. COMMIT. CONQUER.', t2=f.tagline2||'NO EXCUSES. JUST RESULTS.';
+          const book=f.bookType||'PLANNER', t3=f.tagline3||'PLAN YOUR WORK. WORK YOUR PLAN.';
+          return 'KDP notebook planner cover design, dark cinematic composition — LEFT half: tall full-body photorealistic woman'+(s?' with '+s+' skin':'')+', wearing '+(o||'all-black oversized hoodie, chain necklace, black cargo jogger pants, black Jordan 1s')+(a.length?', '+a.join(', '):', black sunglasses')+(h?', '+h+' hair':'')+', '+(p||'hands relaxed in pockets, serious powerful expression')+' — dark moody urban cityscape silhouette behind — RIGHT half: massive rough brush-stroke typography "'+pw1+'" in giant white grunge letters, below it "'+pw2+'" in giant silver-gray metallic rough brush letters — top center: small elegant crown icon — below crown: "'+t1+'" — lower center: letter '+mono+' monogram with crown above it — below monogram: "'+t2+'" — bottom center: "'+book+'", below it "'+t3+'" — palette: '+(pal||'pure black, dark charcoal, white, silver gray metallic')+' — dramatic cinematic lighting, ultra detailed, no watermark, 6x9 portrait KDP format';
+        }
+      },
+      {
+        id: 'word', icon: '💥', en: 'Word Explosion', es: 'Word Explosion',
+        fields: [
+          { key: 'powerWord', label_en: '💥 Power Word (fills entire background)', label_es: '💥 Palabra Poderosa (llena el fondo)', ph_en: 'e.g. FOCUSED, COOL, BOSS, HUSTLE...', ph_es: 'ej. FOCUSED, COOL, BOSS, HUSTLE...' }
+        ],
+        recs: { skin: ['Latina/Caramel','African/Black'], hair: ['High Ponytail','Sleek Bob Cut','Long Waves'], outfit: ['Sporty Star','Fashionable'], acc: [], pose: ['Fierce Arms Crossed','Leaning Cool','Sassy Standing'], palette: ['Hot Pink, Magenta Monochromatic','Blue, Silver Monochromatic','Purple Monochromatic','Red, Black Monochromatic','Gold, Black Monochromatic'] },
+        promptEN: function(f,s,h,o,a,p,pal) {
+          const pw=f.powerWord||'FOCUSED'; const palette=pal||'hot pink and magenta monochromatic';
+          return 'Notebook cover design, the word "'+pw+'" repeated as large 3D background text filling the entire space in varying sizes and opacity, photorealistic woman'+(s?' with '+s+' skin':'')+' in '+palette+' '+(o||'matching streetwear outfit')+(h?', '+h+' hair':'')+(p?', '+p:', standing confidently with arms crossed, full body pose')+', '+palette+' color palette, studio lighting with subtle glow, cinematic composition, KDP notebook cover format, portrait 6x9, ultra high detail, no watermark';
+        }
+      },
+      {
+        id: 'nature', icon: '🌿', en: 'Nature Walk', es: 'Nature Walk',
+        hasBackgrounds: true,
+        fields: [
+          { key: 'powerWord', label_en: '🌿 Power Word (vertical brush lettering)', label_es: '🌿 Palabra Poderosa (letras verticales)', ph_en: 'e.g. FLORECIENDO, BLOOM, THRIVING...', ph_es: 'ej. FLORECIENDO, BLOOM, THRIVING...' }
+        ],
+        backgrounds: [
+          { en:'🌺 Botanical Garden', es:'🌺 Jardín Botánico', rec:true, prompt:'explosively colorful lush botanical garden overflowing with pink roses, white flowers, orange blooms, and dense green leaves, illuminated by soft warm golden light', palette:'teal, turquoise, warm pastels' },
+          { en:'🏖️ Tropical Beach', es:'🏖️ Playa Tropical', rec:false, prompt:'stunning tropical beach with turquoise crystal clear water, white sand, swaying palm trees, warm golden sunset light', palette:'turquoise, coral, white, sandy gold' },
+          { en:'🌊 Caribbean Paradise', es:'🌊 Paraíso Caribeño', rec:false, prompt:'Caribbean paradise with crystal blue water, colorful tropical flowers, lush palm trees, vibrant sunset sky', palette:'caribbean blue, hot pink, lime green, golden' },
+          { en:'🌵 Desert Sunset', es:'🌵 Desierto Atardecer', rec:false, prompt:'dramatic desert landscape with golden sand dunes, warm orange and red sunset sky, sparse cactus silhouettes', palette:'terracotta, gold, burnt orange, warm red' },
+          { en:'🌴 Palm Tree Forest', es:'🌴 Bosque de Palmas', rec:false, prompt:'lush tropical palm tree forest with tall swaying palms, dappled sunlight through leaves', palette:'tropical green, sky blue, golden yellow' },
+          { en:'🌌 Galaxy Universe', es:'🌌 Galaxia Universo', rec:false, prompt:'breathtaking cosmic galaxy background with colorful nebula, stars, cosmic dust, deep space atmosphere', palette:'deep purple, midnight blue, cosmic pink, silver stars' },
+          { en:'🌸 Cherry Blossom', es:'🌸 Flor de Cerezo', rec:false, prompt:'magical Japanese cherry blossom setting with pink petals falling softly, dreamy pastel pink sky', palette:'soft pink, white, blush, pale gold' },
+          { en:'💧 Waterfall Jungle', es:'💧 Cascada en Selva', rec:false, prompt:'lush jungle with magnificent waterfall, dense tropical green foliage, misty atmosphere, magical natural light', palette:'emerald green, turquoise, misty white, golden' }
+        ],
+        recs: { skin: ['Latina/Caramel','Fair European'], hair: ['Long Loose Waves','Long Box Braids'], outfit: ['Cozy Queen','Kawaii Cute','Sweet Baby'], acc: ['Flower Crown','Hair Bow'], pose: ['Walking Fashion Runway'], palette: ['Teal, Turquoise, Warm Pastels'] },
+        promptEN: function(f,s,h,o,a,p,pal,bg) {
+          const pw=f.powerWord||'FLORECIENDO';
+          const bgData=bg||{prompt:'explosively colorful lush botanical garden overflowing with pink roses, white flowers, orange blooms',palette:'teal, turquoise, warm pastels'};
+          const palette=pal||bgData.palette; const color=palette.split(',')[0].trim();
+          return 'A highly detailed 3D render of a KDP notebook cover. The word "'+pw+'" is painted vertically in large rough '+color+' brush strokes from top to bottom along the left third of the cover, with visible paint texture. The letters imperfectly overlap both the background and a photorealistic woman'+(s?' with '+s+' skin':'')+', shown in side profile walking toward the right'+(h?', '+h+' hair':'')+', wearing '+(o||'cream beige floral printed jacket and loose light-wash jeans')+(a.length?', '+a.join(', '):'')+(p?', '+p:', with a relaxed confident stride')+'. Behind her: '+bgData.prompt+'. Dreamy cinematic depth of field, soft bokeh background, movie poster layout, portrait orientation, 6x9 aspect ratio, ultra-photorealistic detail, no watermark';
+        }
+      },
+      {
+        id: 'energy', icon: '⚡', en: 'Energy Explosion', es: 'Energy Explosion',
+        hasExtras: true,
+        fields: [
+          { key: 'powerWord', label_en: '⚡ Power Word (giant graffiti letters)', label_es: '⚡ Palabra Poderosa (letras graffiti gigantes)', ph_en: 'e.g. IMPARABLE, ENERGY, UNSTOPPABLE...', ph_es: 'ej. IMPARABLE, ENERGY, UNSTOPPABLE...' },
+          { key: 'motivText', label_en: '💬 Motivational Text (bottom left)', label_es: '💬 Texto Motivacional (abajo izquierda)', ph_en: 'e.g. GOOD VIBES. BIG GOALS. HIGH ENERGY.', ph_es: 'ej. BUENA VIBRA. GRANDES METAS. ALTA ENERGÍA.' }
+        ],
+        recs: { skin: ['Latina/Caramel','African/Black'], hair: ['High Ponytail','Space Buns','Voluminous Curly Afro'], outfit: ['Sporty Star','Y2K Vibes','Fashionable'], acc: [], pose: ['Victory Pose Big Grin','Hair Flip Surprised','Leaning Forward Playful'], palette: ['Hot Pink, Purple, Neon Yellow','Orange, Black, Gold','Red, Black, White'] },
+        extras: [
+          {en:'Flying Cash Bills 💵',es:'Billetes Volando 💵',p:'flying cash dollar bills scattered'},
+          {en:'Gold Coins 🪙',es:'Monedas de Oro 🪙',p:'gold coins raining down'},
+          {en:'Diamonds 💎',es:'Diamantes 💎',p:'sparkling diamond gems floating'},
+          {en:'Floating Crowns 👑',es:'Coronas Flotantes 👑',p:'floating golden crowns'},
+          {en:'Gold Chains ⛓️',es:'Cadenas de Oro ⛓️',p:'flying gold chains'},
+          {en:'Trophies 🏆',es:'Trofeos 🏆',p:'golden trophy elements'},
+          {en:'Roses 🌹',es:'Rosas 🌹',p:'floating red roses petals'},
+          {en:'Tropical Flowers 🌺',es:'Flores Tropicales 🌺',p:'tropical hibiscus flowers scattered'},
+          {en:'Hearts 💕',es:'Corazones 💕',p:'hearts floating everywhere'},
+          {en:'Stars ⭐',es:'Estrellas ⭐',p:'golden stars scattered'},
+          {en:'Butterflies 🦋',es:'Mariposas 🦋',p:'colorful butterflies flying'},
+          {en:'Balloons 🎈',es:'Globos 🎈',p:'colorful balloons floating'},
+          {en:'Music Notes 🎵',es:'Notas Musicales 🎵',p:'musical notes floating'}
+        ],
+        promptEN: function(f,s,h,o,a,p,pal,bg,extras) {
+          const pw=f.powerWord||'ENERGY'; const mot=f.motivText||'GOOD VIBES. BIG GOALS. HIGH ENERGY.';
+          const palette=pal||'hot pink and purple'; const extraStr=extras&&extras.length?', '+extras.join(', '):'';
+          return 'Notebook cover design, explosive '+palette+' background with fire sparks and electric lightning bolt effects radiating from center, the word "'+pw+'" written in massive graffiti-style letters across the top, cartoon-style illustrated woman'+(s?' with '+s+' skin':'')+' in matching '+palette+' outfit: '+(o||'hoodie and sneakers')+(h?', '+h+' hair':'')+(a.length?', '+a.join(', '):'')+', '+(p||'jumping energetically with a big confident smile')+extraStr+', motivational text "'+mot+'" in bold black brush font bottom left, maximalist vibrant neon energy composition, KDP cover 6x9 portrait format, no watermark';
+        }
+      },
+      {
+        id: 'boss', icon: '👑', en: 'Boss Girl', es: 'Boss Girl',
+        hasExtras: true,
+        fields: [
+          { key: 'powerWord', label_en: '👑 Power Word (bubble letters top)', label_es: '👑 Palabra Poderosa (letras burbuja arriba)', ph_en: 'e.g. IMPARABLE, BOSS, THAT GIRL...', ph_es: 'ej. IMPARABLE, BOSS, THAT GIRL...' },
+          { key: 'phrase1', label_en: '✨ Phrase 1 (scattered on cover)', label_es: '✨ Frase 1', ph_en: 'e.g. SHE DID IT.', ph_es: 'ej. SHE DID IT.' },
+          { key: 'phrase2', label_en: '✨ Phrase 2 (scattered on cover)', label_es: '✨ Frase 2', ph_en: 'e.g. THAT GIRL ERA', ph_es: 'ej. THAT GIRL ERA' },
+          { key: 'phrase3', label_en: '✨ Phrase 3 (scattered on cover)', label_es: '✨ Frase 3', ph_en: 'e.g. PROTECT YOUR ENERGY', ph_es: 'ej. PROTECT YOUR ENERGY' }
+        ],
+        recs: { skin: ['Latina/Caramel','African/Black','Middle Eastern'], hair: ['Long Box Braids','Butterfly Locs','High Ponytail'], outfit: ['Boss Baddie','Glam Diva','Party Ready'], acc: ['Chunky Gold Chains','Designer Bag','Diamond Studs'], pose: ['Sassy Standing','Victory Pose Big Grin'], palette: ['Fuchsia Pink + Teal','Purple + Gold','Red + Black'] },
+        extras: [
+          {en:'Flying Cash 💵',es:'Billetes Volando 💵',p:'flying cash dollar bills'},
+          {en:'Gold Coins 🪙',es:'Monedas de Oro 🪙',p:'gold coins'},
+          {en:'Diamonds 💎',es:'Diamantes 💎',p:'sparkling diamonds'},
+          {en:'Floating Crowns 👑',es:'Coronas Flotantes 👑',p:'floating golden crowns'},
+          {en:'Gold Chains ⛓️',es:'Cadenas de Oro ⛓️',p:'gold chain elements'},
+          {en:'Roses 🌹',es:'Rosas 🌹',p:'rose elements scattered'},
+          {en:'Tropical Flowers 🌺',es:'Flores Tropicales 🌺',p:'tropical flowers'},
+          {en:'Hearts 💕',es:'Corazones 💕',p:'heart elements'},
+          {en:'Gold Stars ⭐',es:'Estrellas Doradas ⭐',p:'gold star sticker elements'},
+          {en:'Butterflies 🦋',es:'Mariposas 🦋',p:'butterfly elements floating'},
+          {en:'Cherry Blossoms 🌸',es:'Flores de Cerezo 🌸',p:'cherry blossom petals falling'}
+        ],
+        promptEN: function(f,s,h,o,a,p,pal,bg,extras) {
+          const pw=f.powerWord||'IMPARABLE';
+          const ph1=f.phrase1||'SHE DID IT.', ph2=f.phrase2||'THAT GIRL ERA', ph3=f.phrase3||'PROTECT YOUR ENERGY';
+          const extraStr=extras&&extras.length?', '+extras.join(', '):'';
+          const palette=pal||'fuchsia pink background with teal geometric color-block diagonal accent bottom right corner';
+          return 'Spiral notebook cover design, '+palette+', illustrated stylish curvy woman'+(s?' with '+s+' skin':'')+(h?' with '+h+' hair':'')+' wearing '+(o||'yellow crop top and wide-leg pants')+', '+(p||'posing confidently with one hand on hip and the other pointing up')+(a.length?', '+a.join(', '):'')+', large bubble letter typography "'+pw+'" in white with purple outline taking up the top third, small motivational phrases scattered around: "'+ph1+'" and "'+ph2+'" and "'+ph3+'", gold star and heart sticker elements'+extraStr+', vibrant empowerment aesthetic, KDP printable notebook cover 6x9 inches, flat illustration style with bold outlines, high quality, no watermark';
+        }
+      }
+    ];
+
+    // kdp state vars declared above with main state vars
+
+    function isKDPStyle() {
+      const styleList = styles[selectedCategory] || [];
+      const styleObj = styleList.find(s => s.en === selectedStyle);
+      return styleObj && styleObj.isKDP === true;
+    }
+
+    function getKDPStyleData() {
+      return KDP_STYLES.find(s => s.en === selectedStyle);
+    }
+
+    function renderKDPFields() {
+      const container = document.getElementById('kdp-fields-container');
+      const natureBgContainer = document.getElementById('kdp-nature-bg-container');
+      const extrasContainer = document.getElementById('kdp-extras-container');
+      const lang = currentLanguage;
+
+      if (!isKDPStyle()) {
+        container.style.display = 'none';
+        natureBgContainer.style.display = 'none';
+        extrasContainer.style.display = 'none';
+        return;
+      }
+
+      const data = getKDPStyleData();
+      if (!data) return;
+
+      // ── TEXT FIELDS ──
+      container.style.display = 'block';
+      container.innerHTML = '';
+      const card = document.createElement('div');
+      card.style.cssText = 'background:linear-gradient(135deg,rgba(147,51,234,0.08),white);border:2px solid #d8b4fe;border-radius:16px;padding:16px;';
+
+      const titleEl = document.createElement('div');
+      titleEl.style.cssText = 'font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#7c3aed;margin-bottom:12px;';
+      titleEl.textContent = '✏️ ' + (lang==='en' ? 'Cover Text / Texto de Portada' : 'Texto de Portada');
+      card.appendChild(titleEl);
+
+      const descEl = document.createElement('div');
+      descEl.style.cssText = 'font-size:12px;color:#999;margin-bottom:10px;font-style:italic;';
+      descEl.textContent = lang==='en' ? 'Fill in the words that will appear in your cover design' : 'Llena las palabras que aparecerán en tu diseño de portada';
+      card.appendChild(descEl);
+
+      data.fields.forEach(function(f) {
+        const wrap = document.createElement('div');
+        wrap.style.marginBottom = '12px';
+
+        const lbl = document.createElement('div');
+        lbl.style.cssText = 'font-size:12px;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;';
+        lbl.textContent = lang==='en' ? f.label_en : f.label_es;
+        wrap.appendChild(lbl);
+
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.value = kdpFields[f.key] || '';
+        inp.placeholder = lang==='en' ? f.ph_en : f.ph_es;
+        inp.style.cssText = 'width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e9d5ff;font-size:13px;font-family:Quicksand,sans-serif;font-weight:600;color:#333;background:white;outline:none;box-sizing:border-box;';
+        const fieldKey = f.key;
+        inp.addEventListener('input', function() { kdpFields[fieldKey] = this.value; });
+        wrap.appendChild(inp);
+        card.appendChild(wrap);
+      });
+      container.appendChild(card);
+
+      // ── NATURE BACKGROUNDS ──
+      if (data.hasBackgrounds) {
+        natureBgContainer.style.display = 'block';
+        natureBgContainer.innerHTML = '';
+        const bgCard = document.createElement('div');
+        bgCard.style.cssText = 'background:linear-gradient(135deg,rgba(147,51,234,0.08),white);border:2px solid #d8b4fe;border-radius:16px;padding:16px;';
+
+        const bgTitle = document.createElement('div');
+        bgTitle.style.cssText = 'font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#7c3aed;margin-bottom:10px;';
+        bgTitle.textContent = '🌿 ' + (lang==='en' ? 'Nature Background' : 'Fondo Natural');
+        bgCard.appendChild(bgTitle);
+
+        const bgRow = document.createElement('div');
+        bgRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;';
+
+        data.backgrounds.forEach(function(bg, i) {
+          const isActive = kdpSelectedBG && kdpSelectedBG.en === bg.en;
+          const btn = document.createElement('button');
+          btn.style.cssText = 'padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:Quicksand,sans-serif;border:2px solid ' + (isActive ? '#9333EA' : (bg.rec ? '#f59e0b' : '#d8b4fe')) + ';background:' + (isActive ? '#9333EA' : (bg.rec ? '#fffbeb' : '#f5f3ff')) + ';color:' + (isActive ? 'white' : (bg.rec ? '#92400e' : '#7c3aed')) + ';';
+          btn.textContent = (bg.rec ? '⭐ ' : '') + (lang==='en' ? bg.en : bg.es);
+          btn.addEventListener('click', function() { toggleKDPBG(i); });
+          bgRow.appendChild(btn);
+        });
+        bgCard.appendChild(bgRow);
+        natureBgContainer.appendChild(bgCard);
+      } else {
+        natureBgContainer.style.display = 'none';
+      }
+
+      // ── EXTRA ELEMENTS ──
+      if (data.hasExtras) {
+        extrasContainer.style.display = 'block';
+        extrasContainer.innerHTML = '';
+        const extCard = document.createElement('div');
+        extCard.style.cssText = 'background:linear-gradient(135deg,rgba(147,51,234,0.08),white);border:2px solid #d8b4fe;border-radius:16px;padding:16px;';
+
+        const extTitle = document.createElement('div');
+        extTitle.style.cssText = 'font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#7c3aed;margin-bottom:6px;';
+        extTitle.textContent = '🎨 ' + (lang==='en' ? 'Extra Elements (optional)' : 'Elementos Extra (opcional)');
+        extCard.appendChild(extTitle);
+
+        const extDesc = document.createElement('div');
+        extDesc.style.cssText = 'font-size:12px;color:#999;margin-bottom:10px;font-style:italic;';
+        extDesc.textContent = lang==='en' ? 'Add decorative elements to your cover' : 'Agrega elementos decorativos a tu portada';
+        extCard.appendChild(extDesc);
+
+        const extRow = document.createElement('div');
+        extRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;';
+
+        (data.extras || []).forEach(function(e, idx) {
+          const isActive = kdpSelectedExtras.includes(e.en);
+          const btn = document.createElement('button');
+          btn.style.cssText = 'padding:7px 12px;border-radius:10px;border:2px solid ' + (isActive ? '#EC4899' : '#fce7f3') + ';background:' + (isActive ? '#EC4899' : 'white') + ';color:' + (isActive ? 'white' : '#8b6b7d') + ';font-size:12px;font-weight:700;cursor:pointer;font-family:Quicksand,sans-serif;';
+          btn.textContent = lang==='en' ? e.en : e.es;
+          const enVal = e.en;
+          btn.addEventListener('click', function() { toggleKDPExtra(enVal); });
+          extRow.appendChild(btn);
+        });
+        extCard.appendChild(extRow);
+        extrasContainer.appendChild(extCard);
+      } else {
+        extrasContainer.style.display = 'none';
+      }
+    }
+
+        function toggleKDPBG(i) {
+      const data = getKDPStyleData();
+      const bg = data.backgrounds[i];
+      kdpSelectedBG = kdpSelectedBG && kdpSelectedBG.en===bg.en ? null : bg;
+      renderKDPFields();
+    }
+
+    function toggleKDPExtra(enVal) {
+      const i = kdpSelectedExtras.indexOf(enVal);
+      if (i > -1) kdpSelectedExtras.splice(i, 1); else kdpSelectedExtras.push(enVal);
+      renderKDPFields();
+    }
+
+    function generateKDPPromptEN() {
+      const data = getKDPStyleData();
+      if (!data) return '';
+      const extraPrompts = kdpSelectedExtras.map(function(enVal) {
+        const e = (data.extras||[]).find(function(x){return x.en===enVal;});
+        return e ? e.p : null;
+      }).filter(Boolean);
+      return data.promptEN(kdpFields, null, null, null, [], null, null, kdpSelectedBG, extraPrompts);
+    }
+
+
     function getStyleEN() {
       if (!selectedStyle) return '';
       // selectedStyle is always stored as .en key
@@ -1795,6 +2780,8 @@
 
     // ============ FIX 3: generatePromptEN — ALWAYS 100% ENGLISH ============
     function generatePromptEN() {
+      if (isTypographyStyle()) return generateTypographyPrompt();
+      if (isKDPStyle()) return generateKDPPromptEN();
       const styleEN = getStyleEN();
       const characterEN = getCharacterEN();
       const gender = getGender();
@@ -1913,6 +2900,8 @@
 
     // ============ FIX 4: generatePromptES — ALWAYS 100% SPANISH ============
     function generatePromptES() {
+      if (isTypographyStyle()) return generateTypographyPrompt();
+      if (isKDPStyle()) return generateKDPPromptEN(); // KDP prompts are always in EN for best AI results
       const styleEN = getStyleEN();
       const styleES = getStyleES();
       const characterES = getCharacterES();
