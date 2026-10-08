@@ -55,6 +55,44 @@
     .word-count.warning { color: #ff6b35; }
     .prompt-text { color: #333; font-size: 14px; line-height: 1.6; word-break: break-word; }
     .text-label { color: #d888cc; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── Promo Élite Creativa ── */
+    .promo-wrap { padding: 16px 16px 0; }
+    .promo-box {
+      display: block; max-width: 860px; margin: 0 auto; text-align: center;
+      padding: 16px 20px; border-radius: 16px; text-decoration: none;
+      background: linear-gradient(135deg, #ffd9ec 0%, #ffe3f3 45%, #e9dcff 100%);
+      border: 1.5px solid #ffc0d9;
+      box-shadow: 0 5px 18px rgba(255, 170, 210, 0.3);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .promo-box:hover { transform: translateY(-3px); box-shadow: 0 9px 26px rgba(255,150,200,.4); }
+    .promo-title {
+      font-family: 'Poppins', sans-serif; font-weight: 900; color: #b83280;
+      font-size: 15px; letter-spacing: .4px; line-height: 1.3; margin-bottom: 5px;
+    }
+    .promo-sub {
+      font-family: 'Quicksand', sans-serif; font-weight: 800; color: #9b5fa8;
+      font-size: 13px; margin-bottom: 10px;
+    }
+    .promo-code-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; flex-wrap: wrap;
+    }
+    .promo-code-label {
+      font-family: 'Quicksand', sans-serif; font-weight: 700;
+      font-size: 11.5px; color: #a8709c;
+    }
+    .promo-code {
+      font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 13.5px;
+      color: #fff; background: linear-gradient(135deg,#ff88cc,#e879c6); padding: 6px 16px; border-radius: 999px;
+      letter-spacing: .6px; box-shadow: 0 2px 8px rgba(255,140,200,.35); cursor: pointer;
+    }
+    .promo-code:hover { background: linear-gradient(135deg,#ff6fbd,#d95fb3); }
+    @media (max-width: 420px) {
+      .promo-title { font-size: 13.5px; }
+      .promo-sub { font-size: 12px; }
+    }
     .custom-input-row { display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: nowrap; }
     .custom-input-row .input-field,
     .custom-input-row .custom-text-input { flex: 1 1 auto; min-width: 0; width: auto; }
@@ -213,6 +251,7 @@
        <div class="section-title" id="t-style">Visual Style</div>
        <div id="style-container"></div>
       </div>
+      <div id="tshirt-text-section" class="mb-8" style="display:none;"></div>
       <!-- KDP Fields — shown only for KDP notebook styles -->
       <div id="kdp-fields-container" style="display:none;" class="mb-8"></div>
       <div id="kdp-nature-bg-container" style="display:none;" class="mb-8"></div>
@@ -597,6 +636,249 @@
       detS.appendChild(dRow);
     }
 
+
+
+
+    // ── Promo Élite Creativa: copy code + bilingual text ──
+    function copyPromoCode(e, el) {
+      e.preventDefault();
+      e.stopPropagation();
+      const code = 'EverCreative5';
+      const done = function() {
+        const prev = el.textContent;
+        el.textContent = currentLanguage === 'en' ? '✓ Copied!' : '✓ ¡Copiado!';
+        setTimeout(function() { el.textContent = prev; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(done).catch(done);
+      } else {
+        const t = document.createElement('textarea');
+        t.value = code; document.body.appendChild(t); t.select();
+        try { document.execCommand('copy'); } catch (err) {}
+        document.body.removeChild(t);
+        done();
+      }
+    }
+
+    function updatePromoLang() {
+      const isES = currentLanguage !== 'en';
+      const T = {
+        title: isES ? 'PÁSATE A LA SUITE DE ÉLITE CREATIVA ESTUDIO' : 'UPGRADE TO THE ÉLITE CREATIVA ESTUDIO SUITE',
+        sub:   isES ? '50% OFF solo para miembros' : '50% OFF members only',
+        label: isES ? 'Código de descuento' : 'Discount code'
+      };
+      ['top', 'bot'].forEach(function(p) {
+        const t = document.getElementById('promo-title-' + p);
+        const s = document.getElementById('promo-sub-' + p);
+        const l = document.getElementById('promo-label-' + p);
+        if (t) t.textContent = T.title;
+        if (s) s.textContent = T.sub;
+        if (l) l.textContent = T.label;
+      });
+    }
+
+
+    // ── T-Shirt poses: only what reads well as a printed graphic ──
+    const TSHIRT_POSES = [
+      { en: 'Bust / Close-up',   es: 'Busto / Primer Plano',
+        p_en: 'head and shoulders bust composition, close-up crop',
+        p_es: 'composición de busto, cabeza y hombros en primer plano' },
+      { en: 'Full Body Front',   es: 'Cuerpo Completo de Frente',
+        p_en: 'full body standing front-facing, confident stance',
+        p_es: 'cuerpo completo de pie de frente, postura segura' },
+      { en: 'Arms Crossed',      es: 'Brazos Cruzados',
+        p_en: 'arms crossed, strong readable silhouette',
+        p_es: 'brazos cruzados, silueta fuerte y legible' },
+      { en: 'Action Pose',       es: 'Pose de Acción',
+        p_en: 'dynamic action pose with raised fist and bold energy',
+        p_es: 'pose dinámica de acción con el puño en alto y mucha energía' }
+    ];
+
+    let tshirtPose = null;
+
+    function tshirtPoseClause(lang) {
+      const p = TSHIRT_POSES.find(function(x) { return x.en === tshirtPose; });
+      return p ? (lang === 'es' ? p.p_es : p.p_en) : '';
+    }
+
+    function selectTshirtPose(en) {
+      tshirtPose = (tshirtPose === en) ? null : en;
+      renderTshirtSection();
+    }
+
+    // ── T-Shirt text panel + hide what fights a print design ──
+    function renderTshirtSection() {
+      const sec = document.getElementById('tshirt-text-section');
+      if (!sec) return;
+      const lang = currentLanguage;
+      const hideForTshirt = ['background-section','camera-angle-section','pose-section'];
+
+      if (!isTshirtIllustrationStyle()) {
+        sec.style.display = 'none';
+        hideForTshirt.forEach(function(id) {
+          const el = document.getElementById(id);
+          if (el && el.dataset.hiddenByTshirt === '1') {
+            el.style.removeProperty('display');
+            delete el.dataset.hiddenByTshirt;
+          }
+        });
+        return;
+      }
+
+      hideForTshirt.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) { el.style.display = 'none'; el.dataset.hiddenByTshirt = '1'; }
+      });
+
+      sec.style.display = 'block';
+      sec.innerHTML = '';
+
+      const title = document.createElement('div');
+      title.className = 'section-title';
+      title.textContent = lang === 'en' ? 'Design Text' : 'Texto del Diseño';
+      sec.appendChild(title);
+
+      const hint = document.createElement('p');
+      hint.className = 'section-description';
+      hint.textContent = lang === 'en'
+        ? 'Turn text off to get the illustration only.'
+        : 'Apaga el texto para recibir solo la ilustración.';
+      sec.appendChild(hint);
+
+      // ── Pose (print-friendly only) ──
+      const poseLbl = document.createElement('div');
+      poseLbl.style.cssText = 'font-size:11px;font-weight:700;color:#cc6699;margin-bottom:6px;';
+      poseLbl.textContent = lang === 'en' ? 'Pose' : 'Pose';
+      sec.appendChild(poseLbl);
+
+      const poseRow = document.createElement('div');
+      poseRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;';
+      TSHIRT_POSES.forEach(function(p) {
+        const b = document.createElement('button');
+        b.className = 'chip-btn' + (tshirtPose === p.en ? ' active' : '');
+        b.textContent = lang === 'en' ? p.en : p.es;
+        b.addEventListener('click', function() { selectTshirtPose(p.en); });
+        poseRow.appendChild(b);
+      });
+      sec.appendChild(poseRow);
+
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;gap:8px;margin-bottom:10px;';
+      [[true, '🔤 ' + (lang === 'en' ? 'With text' : 'Con texto')],
+       [false, '🖼️ ' + (lang === 'en' ? 'No text' : 'Sin texto')]].forEach(function(o) {
+        const b = document.createElement('button');
+        b.className = 'chip-btn' + (tshirtWithText === o[0] ? ' active' : '');
+        b.textContent = o[1];
+        b.addEventListener('click', function() { tshirtWithText = o[0]; renderTshirtSection(); });
+        row.appendChild(b);
+      });
+      sec.appendChild(row);
+
+      if (tshirtWithText) {
+        [['top', lang === 'en' ? 'Top line (curved above)' : 'Línea de arriba (curva)', tshirtTopText,
+          lang === 'en' ? 'e.g. TODAY WAS GOING GREAT UNTIL' : 'ej. HOY IBA TODO BIEN HASTA'],
+         ['bottom', lang === 'en' ? 'Bottom line (bold below)' : 'Línea de abajo (en negrita)', tshirtBottomText,
+          lang === 'en' ? 'e.g. PEOPLE' : 'ej. LA GENTE']].forEach(function(f) {
+          const w = document.createElement('div');
+          w.style.marginBottom = '10px';
+          const l = document.createElement('div');
+          l.style.cssText = 'font-size:11px;font-weight:700;color:#cc6699;margin-bottom:4px;';
+          l.textContent = f[1];
+          w.appendChild(l);
+          const i = document.createElement('input');
+          i.type = 'text';
+          i.className = 'custom-text-input';
+          i.style.cssText = 'width:100%;';
+          i.value = f[2];
+          i.placeholder = f[3];
+          i.addEventListener('input', function() {
+            if (f[0] === 'top') tshirtTopText = this.value; else tshirtBottomText = this.value;
+          });
+          w.appendChild(i);
+          sec.appendChild(w);
+        });
+      }
+    }
+
+    // ════════ T-SHIRT: print-ready design formula ════════
+    // Illustration styles only — "Typography" keeps its own layout system.
+
+    const TSHIRT_PRINT_BASE_EN = 'isolated centered composition, transparent background, '
+      + 'bold solid shapes, limited print-ready color palette, high contrast, '
+      + 'vector screen-print style, chest-print proportions, '
+      + 'no scene, no background elements, no mockup, no shirt, no watermark, '
+      + 'no occult symbols, no pentagrams, no skulls, no demonic imagery, '
+      + 'no anarchy symbols, no dark or disturbing iconography';
+
+    const TSHIRT_PRINT_BASE_ES = 'composición aislada y centrada, fondo transparente, '
+      + 'formas sólidas marcadas, paleta de colores limitada lista para imprimir, alto contraste, '
+      + 'estilo vectorial de serigrafía, proporción para estampado de pecho, '
+      + 'sin escena, sin elementos de fondo, sin maqueta, sin camiseta, sin marca de agua, '
+      + 'sin símbolos ocultistas, sin pentagramas, sin calaveras, sin imágenes demoníacas, '
+      + 'sin símbolos de anarquía, sin iconografía oscura o perturbadora';
+
+    let tshirtWithText = true;
+    let tshirtTopText = '';
+    let tshirtBottomText = '';
+
+    function isTshirtIllustrationStyle() {
+      return selectedCategory === 'tshirt' && selectedStyle && selectedStyle !== 'Typography';
+    }
+
+    function tshirtTextClause(lang) {
+      if (!tshirtWithText) {
+        return lang === 'es'
+          ? ', sin texto, sin letras, sin palabras, solo la ilustración'
+          : ', no text, no lettering, no words, illustration only';
+      }
+      const parts = [];
+      if (tshirtTopText) {
+        parts.push(lang === 'es'
+          ? '"' + tshirtTopText + '" en mayúsculas condensadas en negrita curvadas en el arco superior'
+          : '"' + tshirtTopText + '" in condensed bold uppercase curved along the top arc');
+      }
+      if (tshirtBottomText) {
+        parts.push(lang === 'es'
+          ? '"' + tshirtBottomText + '" en letras gruesas tipo slab cruzando la parte inferior'
+          : '"' + tshirtBottomText + '" in heavy slab letters across the bottom');
+      }
+      return parts.length ? ', ' + parts.join(', ') : '';
+    }
+
+    function getTshirtPromptEN(subject, extras) {
+      const style = getStyleEN();
+      const extra = (extras && extras.length) ? ', ' + extras.join(', ') : '';
+      const txt = tshirtTextClause('en');
+      const M = {
+        'Retro Sunburst': 'Retro t-shirt design, bold silhouette of ' + subject + ' centered over a vintage sunburst arc of horizontal stripes, distressed grainy texture overlay, 1970s vintage print style',
+        'Vintage Distressed': 'Vintage distressed t-shirt design, ' + subject + ' illustrated in muted faded tones, heavy grain and crackle texture, worn screen-print look, washed-out retro palette, simple two-tone shapes',
+        'Bold Vector': 'Bold vector t-shirt graphic, ' + subject + ' illustrated with thick black outlines, flat saturated color blocks, dynamic exaggerated expression, sharp clean edges, comic-poster energy',
+        'Pop Art': 'Pop art t-shirt design, ' + subject + ' in comic-book style, halftone dot shading, thick black outlines, flat primary colors, bold Ben-Day dots, retro comic panel energy',
+        'Mascot': 'Mascot t-shirt design, ' + subject + ' drawn as a confident athletic mascot, thick outlines, strong angular shapes, team-logo energy, three-color palette',
+        'Minimal Line Art': 'Minimal line art t-shirt design, ' + subject + ' drawn in a single continuous thin line, one or two colors only, generous negative space, modern understated aesthetic',
+        'Faith': 'Faith-based t-shirt design, ' + subject + ' paired with a simple cross and delicate florals, warm uplifting palette of sage green, cream, terracotta and soft gold, hand-lettered inspirational feel, clean modern Christian apparel aesthetic'
+      };
+      const head = M[style] || ('Bold t-shirt graphic of ' + subject);
+      return head + extra + txt + ', ' + TSHIRT_PRINT_BASE_EN;
+    }
+
+    function getTshirtPromptES(subject, extras) {
+      const style = getStyleEN();
+      const extra = (extras && extras.length) ? ', ' + extras.join(', ') : '';
+      const txt = tshirtTextClause('es');
+      const M = {
+        'Retro Sunburst': 'Diseño retro para camiseta, silueta marcada de ' + subject + ' centrada sobre un arco de rayos vintage con franjas horizontales, textura granulada desgastada, estilo de impresión vintage de los años 70',
+        'Vintage Distressed': 'Diseño vintage desgastado para camiseta, ' + subject + ' ilustrado en tonos apagados y descoloridos, textura de grano y craquelado, aspecto de serigrafía gastada, paleta retro lavada, formas simples a dos tonos',
+        'Bold Vector': 'Gráfico vectorial marcado para camiseta, ' + subject + ' ilustrado con contornos negros gruesos, bloques de color plano saturado, expresión dinámica y exagerada, bordes limpios y definidos, energía de póster cómic',
+        'Pop Art': 'Diseño pop art para camiseta, ' + subject + ' en estilo cómic, sombreado de puntos de medio tono, contornos negros gruesos, colores primarios planos, puntos Ben-Day marcados, energía de viñeta retro',
+        'Mascot': 'Diseño de mascota para camiseta, ' + subject + ' dibujado como mascota atlética y segura, contornos gruesos, formas angulares fuertes, energía de logo deportivo, paleta de tres colores',
+        'Minimal Line Art': 'Diseño minimalista de línea para camiseta, ' + subject + ' dibujado con una sola línea continua y delgada, uno o dos colores solamente, amplio espacio negativo, estética moderna y sobria',
+        'Faith': 'Diseño de fe para camiseta, ' + subject + ' acompañado de una cruz simple y florales delicados, paleta cálida y edificante de verde salvia, crema, terracota y dorado suave, sensación de letras hechas a mano, estética limpia y moderna de ropa cristiana'
+      };
+      const head = M[style] || ('Gráfico marcado para camiseta de ' + subject);
+      return head + extra + txt + ', ' + TSHIRT_PRINT_BASE_ES;
+    }
+
     // ════════ COLORING: audience, character details & outfits ════════
     const COLORING_AUDIENCE = [
       { id:'kids',   en:'🧒 Kids',     es:'🧒 Niños',
@@ -816,9 +1098,13 @@
         { en: 'Cottagecore', es: 'Cottagecore' }
       ],
       tshirt: [
-        { en: 'Retro', es: 'Retro' },
+        { en: 'Retro Sunburst', es: 'Retro Sunburst' },
+        { en: 'Vintage Distressed', es: 'Vintage Desgastado' },
+        { en: 'Bold Vector', es: 'Vector Bold' },
         { en: 'Pop Art', es: 'Pop Art' },
-        { en: 'Grunge', es: 'Grunge' },
+        { en: 'Mascot', es: 'Mascota' },
+        { en: 'Minimal Line Art', es: 'Línea Minimalista' },
+        { en: 'Faith', es: 'Fe' },
         { en: 'Typography', es: 'Tipografía' }
       ],
       '3d': [
@@ -2095,6 +2381,8 @@
       renderAccessories(); renderCustomAccessories(); renderOutfits();
       if (typeof renderColorPalettes === 'function') renderColorPalettes();
       if (typeof renderColoringSections === 'function') renderColoringSections();
+      if (typeof renderTshirtSection === 'function') renderTshirtSection();
+      if (typeof updatePromoLang === 'function') updatePromoLang();
     }
 
     function renderCategories() {
@@ -2110,6 +2398,7 @@
           selectedCategory = cat.id; selectedStyle = ''; selectedBackground = '';
           renderCategories(); renderStyles(); renderBackgrounds();
           if (typeof renderColoringSections === 'function') renderColoringSections();
+          if (typeof renderTshirtSection === 'function') renderTshirtSection();
         };
         container.appendChild(btn);
       });
@@ -2133,10 +2422,12 @@
           hideColorPaletteIfColoring();
           renderKDPFields();
           renderTypographySection();
+          renderTshirtSection();
         };
         container.appendChild(btn);
       });
       renderKDPFields();
+      if (typeof renderTshirtSection === 'function') renderTshirtSection();
     }
 
     function hideColorPaletteIfColoring() {
@@ -2160,7 +2451,7 @@
           { key: 'f3', label_en: 'Text on bottom arc', label_es: 'Texto abajo (arco)', ph_en: 'e.g. Faith Over Fear', ph_es: 'ej. Faith Over Fear' }
         ],
         prompt: function(f, deco, palette) {
-          return 'Sublimation PNG design · "' + (f.f1||'She Believed She Could') + '" curved on top arc · "' + (f.f2||'SO SHE DID') + '" in large bold script center · "' + (f.f3||'Faith Over Fear') + '" curved on bottom arc · ' + (deco||'wildflowers') + ' · mixed lettering style · ' + (palette||'black monochrome') + ' · white background · no characters';
+          return 'Sublimation PNG design · "' + (f.f1||'She Believed She Could') + '" curved on top arc · "' + (f.f2||'SO SHE DID') + '" in large bold script center · "' + (f.f3||'Faith Over Fear') + '" curved on bottom arc · ' + (deco||'wildflowers') + ' · mixed lettering style · ' + (palette||'black monochrome') + ' · transparent background, isolated PNG with no backdrop · no characters · no occult symbols, no pentagrams, no skulls, no dark iconography';
         }
       },
       {
@@ -2172,7 +2463,7 @@
           { key: 'f3', label_en: 'Word on bottom (script)', label_es: 'Palabra abajo (script)', ph_en: 'e.g. & Loved', ph_es: 'ej. & Loved' }
         ],
         prompt: function(f, deco, palette) {
-          return 'Sublimation PNG design · "' + (f.f1||'BLESSED') + '" large script top · "' + (f.f2||'Mama') + '" bold center · "' + (f.f3||'& Loved') + '" script bottom · ' + (deco||'wildflowers and florals') + ' · ' + (palette||'pastel floral') + ' · white background · no characters';
+          return 'Sublimation PNG design · "' + (f.f1||'BLESSED') + '" large script top · "' + (f.f2||'Mama') + '" bold center · "' + (f.f3||'& Loved') + '" script bottom · ' + (deco||'wildflowers and florals') + ' · ' + (palette||'pastel floral') + ' · transparent background, isolated PNG with no backdrop · no characters · no occult symbols, no pentagrams, no skulls, no dark iconography';
         }
       },
       {
@@ -2184,7 +2475,7 @@
           { key: 'f3', label_en: 'Bottom line (smaller)', label_es: 'Línea abajo (pequeña)', ph_en: 'e.g. Walk by Faith Not by Sight', ph_es: 'ej. Walk by Faith Not by Sight' }
         ],
         prompt: function(f, deco, palette) {
-          return 'Sublimation PNG design · "' + (f.f1||'FAITH OVER') + '" bold top line · "' + (f.f2||'Fear') + '" large script middle · "' + (f.f3||'Walk by Faith Not by Sight') + '" smaller bottom line · ' + (deco||'cross and vines') + ' · ' + (palette||'black monochrome') + ' · white background · no characters';
+          return 'Sublimation PNG design · "' + (f.f1||'FAITH OVER') + '" bold top line · "' + (f.f2||'Fear') + '" large script middle · "' + (f.f3||'Walk by Faith Not by Sight') + '" smaller bottom line · ' + (deco||'cross and vines') + ' · ' + (palette||'black monochrome') + ' · transparent background, isolated PNG with no backdrop · no characters · no occult symbols, no pentagrams, no skulls, no dark iconography';
         }
       },
       {
@@ -2198,7 +2489,7 @@
         note_en: '🌿 Generates 3 wildflower bouquets side by side — no main text',
         note_es: '🌿 Genera 3 ramos de flores silvestres — sin texto principal',
         prompt: function(f, deco, palette) {
-          return 'Sublimation PNG design · 3 separate wildflower bouquets side by side · ' + (deco||'wildflowers with long visible stems') + ' · long visible stems · ' + (palette||'pastel floral') + ' · white background · no text · no characters · sublimation ready';
+          return 'Sublimation PNG design · 3 separate wildflower bouquets side by side · ' + (deco||'wildflowers with long visible stems') + ' · long visible stems · ' + (palette||'pastel floral') + ' · transparent background, isolated PNG with no backdrop · no text · no characters · no occult symbols, no pentagrams, no skulls, no dark iconography · sublimation ready';
         }
       },
       {
@@ -2210,7 +2501,7 @@
           { key: 'f3', label_en: 'Right text', label_es: 'Texto derecha', ph_en: 'e.g. Jesus', ph_es: 'ej. Jesus' }
         ],
         prompt: function(f, deco, palette) {
-          return 'Sublimation PNG design · "' + (f.f1||'Coffee') + '" left side · "' + (f.f2||'&') + '" center symbol · "' + (f.f3||'Jesus') + '" right side · all in one horizontal line · ' + (deco||'minimal accents') + ' · ' + (palette||'black monochrome') + ' · white background · no characters';
+          return 'Sublimation PNG design · "' + (f.f1||'Coffee') + '" left side · "' + (f.f2||'&') + '" center symbol · "' + (f.f3||'Jesus') + '" right side · all in one horizontal line · ' + (deco||'minimal accents') + ' · ' + (palette||'black monochrome') + ' · transparent background, isolated PNG with no backdrop · no characters · no occult symbols, no pentagrams, no skulls, no dark iconography';
         }
       }
     ];
@@ -2235,7 +2526,7 @@
       { en: 'Wildflowers', es: 'Flores Silvestres' },
       { en: 'Cross + Vines', es: 'Cruz + Enredaderas' },
       { en: 'Butterflies + Florals', es: 'Mariposas + Flores' },
-      { en: 'Stars + Sparkles', es: 'Estrellas + Destellos' },
+      { en: 'Hearts + Sparkles', es: 'Corazones + Destellos' },
       { en: 'Sunflowers', es: 'Girasoles' },
       { en: 'Crown / Corona', es: 'Corona' },
       { en: 'Coffee Cup + Steam', es: 'Taza de Café + Vapor' },
@@ -2277,7 +2568,13 @@
         ];
         sectionsToRestore.forEach(function(id) {
           const el = document.getElementById(id);
-          if (el) { el.style.display = ''; el.classList.remove('hidden'); }
+          if (!el) return;
+          // Leave alone whatever T-Shirt or Coloring deliberately hid
+          if (el.dataset.hiddenByTshirt === '1' || el.dataset.hiddenByColoring === '1') return;
+          // Shoes has its own rule (build-your-own only) — don't force it open
+          if (id === 'shoes-section') { el.classList.remove('hidden'); return; }
+          el.style.display = '';
+          el.classList.remove('hidden');
         });
         // Restore unnamed sections
         document.querySelectorAll('[data-typo-hidden="true"]').forEach(function(el) {
@@ -2549,6 +2846,11 @@
       depIds.forEach(function(id) {
         const el = document.getElementById(id);
         if (!el) return;
+        // Never re-show a section that T-Shirt or Coloring deliberately hid
+        if (el.dataset.hiddenByTshirt === '1' || el.dataset.hiddenByColoring === '1') {
+          el.style.display = 'none';
+          return;
+        }
         if (selectedCharacter) {
           el.style.removeProperty('display');
         } else {
@@ -2572,6 +2874,8 @@
           customShoesValue = ''; customPoseValue = ''; customBackgroundValue = '';
           renderCharacters(); renderGenderSection(); renderPhysicalTraits();
           renderHairStyles(); renderHairColors(); renderAccessories(); renderOutfits();
+          if (typeof renderColoringSections === 'function') renderColoringSections();
+          if (typeof renderTshirtSection === 'function') renderTshirtSection();
         };
         container.appendChild(btn);
       });
@@ -3632,18 +3936,17 @@
         if (selectedBuildYourOwnOutfitEN === 'Custom Outfit') {
           if (customOutfitValue) parts.push(customOutfitValue); else if (customOutfitItems.length > 0) parts.push(customOutfitItems.join(', '));
         } else {
-          const gender = getGender();
-          const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
-          const outfitObj = buildYourOwn.find(o => o.en === selectedBuildYourOwnOutfitEN);
-          if (outfitObj) parts.push(outfitObj.en);
+          // Look in both lists — a neutral character (animal) must not lose the outfit
+          const allOutfits = [].concat(buildYourOwnFemale, buildYourOwnMale);
+          const outfitObj = allOutfits.find(o => o.en === selectedBuildYourOwnOutfitEN);
+          parts.push(outfitObj ? outfitObj.en : selectedBuildYourOwnOutfitEN);
         }
         if (selectedShoes) {
           if (selectedShoes === 'Custom Shoes') { if (customShoesValue) parts.push(customShoesValue); }
           else {
-            const gender = getGender();
-            const shoes = gender === 'female' ? shoesFemale : shoesMale;
-            const shoeObj = shoes.find(s => s.name.en === selectedShoes);
-            if (shoeObj) parts.push(shoeObj.name.en);
+            const allShoes = [].concat(shoesFemale, shoesMale);
+            const shoeObj = allShoes.find(s => s.name.en === selectedShoes);
+            parts.push(shoeObj ? shoeObj.name.en : selectedShoes);
           }
         }
       }
@@ -3666,18 +3969,16 @@
         if (selectedBuildYourOwnOutfitEN === 'Custom Outfit') {
           if (customOutfitValue) parts.push(customOutfitValue); else if (customOutfitItems.length > 0) parts.push(customOutfitItems.join(', '));
         } else {
-          const gender = getGender();
-          const buildYourOwn = gender === 'female' ? buildYourOwnFemale : buildYourOwnMale;
-          const outfitObj = buildYourOwn.find(o => o.en === selectedBuildYourOwnOutfitEN);
-          if (outfitObj) parts.push(outfitObj.es);
+          const allOutfits = [].concat(buildYourOwnFemale, buildYourOwnMale);
+          const outfitObj = allOutfits.find(o => o.en === selectedBuildYourOwnOutfitEN);
+          parts.push(outfitObj ? outfitObj.es : selectedBuildYourOwnOutfitEN);
         }
         if (selectedShoes) {
           if (selectedShoes === 'Custom Shoes') { if (customShoesValue) parts.push(customShoesValue); }
           else {
-            const gender = getGender();
-            const shoes = gender === 'female' ? shoesFemale : shoesMale;
-            const shoeObj = shoes.find(s => s.name.en === selectedShoes);
-            if (shoeObj) parts.push(shoeObj.name.es);
+            const allShoes = [].concat(shoesFemale, shoesMale);
+            const shoeObj = allShoes.find(s => s.name.en === selectedShoes);
+            parts.push(shoeObj ? shoeObj.name.es : selectedShoes);
           }
         }
       }
@@ -3753,6 +4054,26 @@
         colorPrompt = `color palette: ${customColorPaletteValue}`;
       } else if (selectedColorPalette && typeof selectedColorPalette === 'object') {
         colorPrompt = selectedColorPalette.prompt;
+      }
+
+      // T-Shirt illustration styles — print-ready formula
+      if (isTshirtIllustrationStyle()) {
+        let tSubj = characterEN || (gender === 'female' ? 'a girl' : gender === 'male' ? 'a boy' : 'a character');
+        if (kdpCustomCharacter) tSubj = kdpCustomCharacter;
+        if (kdpCharacterCount === 2) tSubj = 'two ' + tSubj.toLowerCase() + 's side by side';
+        const tParts = [];
+        if (isAnimalCharacter() && animalTraitPrompt('en')) tParts.push(animalTraitPrompt('en'));
+        if (physTraitEN && !isAnimalCharacter()) tParts.push(physTraitEN);
+        const tHair = hairColorEN && hairStyleDesc ? (hairColorEN + ' ' + hairStyleDesc) : (hairStyleDesc || hairColorEN);
+        if (tHair) tParts.push(tHair);
+        if (wearingPartsEN.length > 0) tParts.push('wearing ' + wearingPartsEN.join(', '));
+        const tPose = tshirtPoseClause('en');
+        if (tPose) tParts.push(tPose);
+        const sceneCols = buildSceneColorPhrase('en');
+        if (sceneCols) tParts.push(sceneCols);
+        else if (colorPrompt) tParts.push(colorPrompt);
+        if (customAction) tParts.push('actively ' + customAction);
+        return getTshirtPromptEN(tSubj, tParts);
       }
 
       // Coloring style special case
@@ -3895,6 +4216,26 @@
       }
 
       // Coloring style special case
+      // T-Shirt illustration styles — print-ready formula (ES)
+      if (isTshirtIllustrationStyle()) {
+        let tSubj = characterES || (gender === 'female' ? 'una chica' : gender === 'male' ? 'un chico' : 'un personaje');
+        if (kdpCustomCharacter) tSubj = kdpCustomCharacter;
+        if (kdpCharacterCount === 2) tSubj = 'dos ' + tSubj.toLowerCase() + 's lado a lado';
+        const tParts = [];
+        if (isAnimalCharacter() && animalTraitPrompt('es')) tParts.push(animalTraitPrompt('es'));
+        if (physTraitES && !isAnimalCharacter()) tParts.push(physTraitES);
+        const tHair = hairColorES && hairStyleDescES ? (hairColorES + ' ' + hairStyleDescES) : (hairStyleDescES || hairColorES);
+        if (tHair) tParts.push(tHair);
+        if (wearingPartsES.length > 0) tParts.push('vistiendo ' + wearingPartsES.join(', '));
+        const tPose = tshirtPoseClause('es');
+        if (tPose) tParts.push(tPose);
+        const sceneCols = buildSceneColorPhrase('es');
+        if (sceneCols) tParts.push(sceneCols);
+        else if (colorPrompt) tParts.push(colorPrompt);
+        if (customAction) tParts.push('haciendo ' + customAction);
+        return getTshirtPromptES(tSubj, tParts);
+      }
+
       if (isColoringStyle()) {
         let subject = characterES || (gender === 'female' ? 'Chica' : gender === 'male' ? 'Chico' : 'Personaje');
         if (kdpCustomCharacter) subject = kdpCustomCharacter;
@@ -4066,6 +4407,7 @@
       sceneColors = ['','','']; sceneColorHex = ['','',''];
       coloringAudience = null; coloringDetails = []; coloringOutfit = null; coloringCustomOutfit = '';
       coloringAccessories = []; coloringAccOpen = false;
+      tshirtWithText = true; tshirtTopText = ''; tshirtBottomText = ''; tshirtPose = null;
       selectedOutfitType = null; selectedCompleteOutfit = null; selectedBuildYourOwnOutfitEN = null; selectedShoes = null;
       document.getElementById('custom-accessory-input').value = '';
       renderCustomAccessories(); renderOutfits();
@@ -4094,6 +4436,18 @@
     renderAll();
     renderGenderSection();
   </script>
+
+   <!-- ═══════ PROMO ÉLITE CREATIVA ═══════ -->
+   <div class="promo-wrap">
+    <a href="https://johannadigitalseattle.com/elite-creativa-landing" target="_blank" rel="noopener" class="promo-box">
+     <div class="promo-title" id="promo-title-bot">PÁSATE A LA SUITE DE ÉLITE CREATIVA ESTUDIO</div>
+     <div class="promo-sub" id="promo-sub-bot">50% OFF solo para miembros</div>
+     <div class="promo-code-row">
+      <span class="promo-code-label" id="promo-label-bot">Código de descuento</span>
+      <span class="promo-code" onclick="copyPromoCode(event, this)">EverCreative5</span>
+     </div>
+    </a>
+   </div>
 
   <!-- ═══════════ FOOTER ═══════════ -->
   <footer style="margin-top:32px;padding:18px 16px 20px;background:transparent;text-align:center;border-top:1px solid #f5d0e8;">
